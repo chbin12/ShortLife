@@ -1,0 +1,1 @@
+[["ID","NameKey","GID","PrefabName","AtkActName","AtkEffect","MaxUseTimes","Damage","Defense","HP","Lan","Projectile"],[1,"PropName1",1,"props/1","attack","",10,10,0,0,0,0],[2,"PropName2",1,"props/2","attack2","",1,30,0,0,0,0],[3,"PropName3",1,"props/3","","",10,20,0,0,0,1],[4,"PropName4",2,"props/4","","",1,0,0,200,0,0],[5,"PropName5",2,"props/5","","",1,0,0,0,30,0]]
