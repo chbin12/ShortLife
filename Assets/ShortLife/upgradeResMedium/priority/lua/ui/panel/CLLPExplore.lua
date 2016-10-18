@@ -49,9 +49,11 @@ do
 
             local angle = SCfg.self.player.transform.localEulerAngles;
             angle.y = angle.y + flag*60;
-            SCfg.self.player.transform.localEulerAngles = angle;
+            local unit =SCfg.self.player;
+            unit.transform.localEulerAngles = angle;
+            unit.luaTable.onTurn(unit.transform.position);
         elseif goName == "ButtonPlayAgain" then
-            CLLExplore.exit();
+            CLLExplore.clean();
             CLLScene.clean();
             CLPanelManager.getPanelAsy("PanelLoadScene", onLoadedPanel, {type="home"});
         elseif goName == "ButtonPause" then
@@ -66,18 +68,24 @@ do
 
     -- 编辑器模式下使用
     function CLLPExplore.onKeyLeftArrow()
+        if(SCfg.self.player == nil) then return end;
         local flag = -1;
         local angle = SCfg.self.player.transform.localEulerAngles;
         angle.y = angle.y + flag*60;
-        SCfg.self.player.transform.localEulerAngles = angle;
+        local unit =SCfg.self.player;
+        unit.transform.localEulerAngles = angle;
+        unit.luaTable.onTurn(unit.transform.position);
     end
 
     -- 编辑器模式下使用
     function CLLPExplore.onKeyRightArrow()
+        if(SCfg.self.player == nil) then return end;
         local flag = 1;
         local angle = SCfg.self.player.transform.localEulerAngles;
         angle.y = angle.y + flag*60;
-        SCfg.self.player.transform.localEulerAngles = angle;
+        local unit =SCfg.self.player;
+        unit.transform.localEulerAngles = angle;
+        unit.luaTable.onTurn(unit.transform.position);
     end
 
     function CLLPExplore.onPlayerDead()

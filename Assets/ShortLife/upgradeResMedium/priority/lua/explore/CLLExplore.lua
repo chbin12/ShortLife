@@ -7,6 +7,7 @@ do
     local csSelf = nil;
     local transform = nil;
     local MaxStep = 300;
+    local offense = ArrayList();
 
     -- 初始化，只会调用一次
     function CLLExplore.init(csObj)
@@ -47,9 +48,46 @@ do
 
         NGUITools.SetActive(SCfg.self.player.gameObject, true);
         SCfg.self.player:init(bio2Int(playerData.gid), 0, bio2Int(playerData.lev), true, nil);
+        SCfg.self.player.luaTable.setFollower(nil);
+        SCfg.self.player.luaTable.setLeader(nil);
+        offense:Add(SCfg.self.player);
+        ---------------------------------
+        CLLExplore.loadFollowers();
         ---------------------------------
         -- 地图块掉落
         CLLScene.checkLeftSideTilesTimeout(4);
+    end
+
+    -- 加载跟随者
+    function CLLExplore.loadFollowers()
+        local playerData = CLLData.player;
+        local attr = CLLDBCfg.getRoleByGIDAndLev(bio2Int(playerData.gid), bio2Int(playerData.lev));
+        CLRolePool.borrowUnitAsyn(attr.base.PrefabName, CLLExplore.onLoadedFollower, { playerData, attr, 1, SCfg.self.player});
+    end
+
+    function CLLExplore.onLoadedFollower(name, unit, orgs)
+        local playerData = orgs[1];
+        local attr = orgs[2];
+        local index = orgs[3];
+        local leader = orgs[4];
+
+        local tile =  CLLScene.getCenterTile();
+        local x = tile.mapX - index;
+        local y = tile.mapY;
+        tile = CLLScene.GetTileAt(x, y, 0);
+        unit.transform.parent = CLBattle.self.transform;
+        unit.transform.position = tile.transform.position;
+        unit.transform.localScale = Vector3.one*1.5;
+        unit.transform.localEulerAngles = Vector3(0, 90, 0);
+
+        unit:init(bio2Int(playerData.gid), 0, bio2Int(playerData.lev), true, nil);
+        leader.luaTable.setFollower(unit);
+        unit.luaTable.setLeader(leader);
+        offense:Add(unit);
+
+        if(index < 4) then
+            CLRolePool.borrowUnitAsyn(attr.base.PrefabName, CLLExplore.onLoadedFollower, { playerData, attr, index+1, unit});
+        end
     end
 
     function CLLExplore.onMoving(role)
@@ -65,16 +103,33 @@ do
             CLLScene.addRightSideTiles(0.0, nil, offset);
             CLLPExplore.refreshStep(curStep);
             -- 重新设置角色移动速度
-            role.luaTable.setMoveSpeed(bio2Int(role.luaTable.attr.base.MoveSpeed) * (1 + offset));
+
+            local count = offense.Count;
+            local unit;
+            for i = 0, count - 1 do
+                unit = offense:get_Item(i);
+                unit.luaTable.setMoveSpeed(bio2Int(unit.luaTable.attr.base.MoveSpeed) * (1 + offset));
+            end
         end
     end
 
     function CLLExplore.someOnDead(csSelf)
         CLLPExplore.onPlayerDead();
+        offense:Remove(csSelf);
     end
 
-    function CLLExplore.exit()
+    function CLLExplore.clean()
         smoothFollow.target = nil;
+
+        local count = offense.Count;
+        local unit;
+        for i = 0, count - 1 do
+            unit = offense:get_Item(i);
+            unit:clean();
+            NGUITools.SetActive(unit.gameObject, false);
+            CLRolePool.returnUnit(unit);
+        end
+        offense:Clear();
     end
 
     --------------------------------------------
