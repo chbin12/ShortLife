@@ -570,7 +570,7 @@ do
                 end
 
                 if (turnPoints.Count > 0) then
-                    CLLRole.moveTo(turnPoints:Peek());
+                    CLLRole.doOnTurn();
                 else
                     if (leader ~= nil) then
                         --                        local dir = leader.transform.position - transform.position;
@@ -988,10 +988,26 @@ do
 
         turnPoints:Enqueue(pos);
         if (turnPoints.Count == 1) then
-            CLLRole.moveTo(turnPoints:Peek())
+            CLLRole.doOnTurn();
         end
     end
 
+    function CLLRole.doOnTurn()
+        if(leader ~= nil) then
+            local dis = Vector3.Distance(transform.position, leader.transform.position);
+            if(dis < 1.3) then
+                csSelf.aiPath:stop();
+                csSelf.tween:stopMoveForward();
+                CLLRole.setAction("idel");
+
+                csSelf:fixedInvoke4Lua("doOnTurn", NumEx.NextInt(10, 40)/100);
+            else
+                CLLRole.moveTo(turnPoints:Peek())
+            end
+        else
+            CLLRole.moveTo(turnPoints:Peek())
+        end
+    end
 
 
     function CLLRole.log(msg)
