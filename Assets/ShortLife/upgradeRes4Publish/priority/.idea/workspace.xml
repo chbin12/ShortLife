@@ -96,8 +96,18 @@
       <file leaf-file-name="CLLRole.lua" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/lua/Role/CLLRole.lua">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.13203883">
-              <caret line="466" column="0" selection-start-line="466" selection-start-column="0" selection-end-line="466" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.65339804">
+              <caret line="1006" column="12" selection-start-line="1006" selection-start-column="12" selection-end-line="1006" selection-end-column="12" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Vector3.lua" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lua/uLua/Lua/System/Vector3.lua">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-12.703704">
+              <caret line="71" column="25" selection-start-line="71" selection-start-column="17" selection-end-line="71" selection-end-column="25" />
               <folding />
             </state>
           </provider>
@@ -188,6 +198,46 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="lua" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ShortLife" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="priority" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lua" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Lua" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ShortLife" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="priority" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="lua" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Lua" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="System" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -413,12 +463,12 @@
       <created>1476756884038</created>
       <option name="number" value="Default" />
       <updated>1476756884038</updated>
-      <workItem from="1476756885626" duration="13851000" />
+      <workItem from="1476756885626" duration="14865000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="13851000" />
+    <option name="totallyTimeSpent" value="14865000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1846" y="23" width="1846" height="1177" extended-state="6" />
@@ -514,10 +564,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/lua/uLua/Lua/System/Vector3.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-12.703704">
+          <caret line="71" column="25" selection-start-line="71" selection-start-column="17" selection-end-line="71" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/lua/Role/CLLRole.lua">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.13203883">
-          <caret line="466" column="0" selection-start-line="466" selection-start-column="0" selection-end-line="466" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.65339804">
+          <caret line="1006" column="12" selection-start-line="1006" selection-start-column="12" selection-end-line="1006" selection-end-column="12" />
           <folding />
         </state>
       </provider>
