@@ -54,19 +54,19 @@ do
         local tileInforList = {}
         for y = 0, mapSizeY - 1 do
             for x = 0, mapSizeX - 1 do
-                table.insert(tileInforList, { x, y, terrainInfor,  x, false});
+                table.insert(tileInforList, { x, y, terrainInfor, x, false ,1});
             end
         end
 
         local b = 0;
-        if(SCfg.self.mode == GameMode.explore) then
+        if (SCfg.self.mode == GameMode.explore) then
             b = 2
         end
         for y = b, mapSizeY - 1 do
             lastRightSideState[sideRight .. "_" .. y] = true;
         end
 
-        CLLScene.createTile({ tileInforList, 1, speed, onFinishLoadMap});
+        CLLScene.createTile({ tileInforList, 1, speed, onFinishLoadMap });
     end
 
     function CLLScene.createTile(orgs)
@@ -79,20 +79,21 @@ do
         local x = data[1];
         local y = data[2];
         local terrainInfor = data[3];
---        local _sideRight = data[4];
+        --        local _sideRight = data[4];
         -- 是否空tile
-        local isEmptyTile =  data[5];
+        local isEmptyTile = data[5];
+        local fallSpeed = data[6];
 
         local index = NumEx.NextInt(0, terrainInfor.tileTypes.Count);
         local tileType = terrainInfor.tileTypes:get_Item(index);
         local tileName = "";
-        if(isEmptyTile) then
+        if (isEmptyTile) then
             tileName = "tiles/s_00";
         else
             tileName = "tiles/" .. tileType:ToString();
         end
 
-        CLThingsPool.borrowObjAsyn(tileName, CLLScene.onGetTile, { x, y, speed, terrainInfor, list, i, onFinishLoadMap});
+        CLThingsPool.borrowObjAsyn(tileName, CLLScene.onGetTile, { x, y, speed, terrainInfor, list, i, onFinishLoadMap, fallSpeed});
     end
 
     function CLLScene.onGetTile(name, obj, orgs)
@@ -101,7 +102,7 @@ do
             tile:setLua();
             tile.luaTable.init(tile);
         end
-        CLLScene.addMapTileToMap(tile, orgs[1], orgs[2], 0);
+        CLLScene.addMapTileToMap(tile, orgs[1], orgs[2], 0, orgs[8]);
         local speed = orgs[3];
         local list = orgs[5];
         local i = orgs[6];
@@ -110,7 +111,7 @@ do
         local _sideRight = data[4];
 
         if (#(list) > i) then
-            csSelf:invoke4Lua("createTile", { list, i + 1, speed, onFinishLoadMap}, speed);
+            csSelf:invoke4Lua("createTile", { list, i + 1, speed, onFinishLoadMap }, speed);
         else
             -- 已经加载完成
             list = nil;
@@ -124,8 +125,8 @@ do
     function CLLScene.addRightSideTiles(speed, onFinishAddSideTiles, coefficient)
         sideRight = sideRight + 1;
         --切换地图风格
-        local switchStep = NumEx.getIntPart(CLLScene.getSteps()/10);
-        if(switchStep ~= oldSwitchMapeStep) then
+        local switchStep = NumEx.getIntPart(CLLScene.getSteps() / 10);
+        if (switchStep ~= oldSwitchMapeStep) then
             oldSwitchMapeStep = switchStep;
             currTerrain = csSelf.terrainInfor[NumEx.NextInt(0, csSelf.terrainInfor.Count)];
         end
@@ -135,15 +136,23 @@ do
         local tmpLastRightSideState = {};
 
         local list = CLLScene.getTileList(coefficient);
+        local fallSpeed = 1;
+        if(coefficient ~= nil) then
+            fallSpeed = 1- coefficient;
+            if(fallSpeed <= 0.2) then
+                fallSpeed = 0.2;
+            end
+        end
+
         for i = 0, mapSizeY - 1 do
             local key = sideRight .. "_" .. i;
---            local key2 = (sideRight - 1) .. "_" .. i;
+            --            local key2 = (sideRight - 1) .. "_" .. i;
 
-            if(SCfg.self.mode ~= GameMode.explore and (i == 0 or i == 1)) then
+            if (SCfg.self.mode ~= GameMode.explore and (i == 0 or i == 1)) then
                 isEmptyTile = false;
                 tmpLastRightSideState[key] = false;
             else
-                if(list[key]) then
+                if (list[key]) then
                     isEmptyTile = false;
                     tmpLastRightSideState[key] = true;
                 else
@@ -151,25 +160,25 @@ do
                     tmpLastRightSideState[key] = false;
                 end
             end
-            table.insert(tileInforList, {sideRight, i, currTerrain, sideRight, isEmptyTile});
+            table.insert(tileInforList, { sideRight, i, currTerrain, sideRight, isEmptyTile,  fallSpeed});
         end
         lastRightSideState = tmpLastRightSideState;
 
-        CLLScene.createTile({ tileInforList, 1, speed, onFinishAddSideTiles});
+        CLLScene.createTile({ tileInforList, 1, speed, onFinishAddSideTiles });
     end
 
     --
     function CLLScene.getTileList(coefficient)
         -- 至少有一个tile
         local n = 1;
-        if(coefficient == nil) then
+        if (coefficient == nil) then
             n = NumEx.NextInt(1, mapSizeY);
         else
-            n = (mapSizeY)*(1 - coefficient);
-            local s = n/2;
+            n = (mapSizeY) * (1 - coefficient);
+            local s = n / 2;
             s = s < 1 and 1 or s;
             n = n < 1 and 1 or n;
-            n = NumEx.getIntPart(n+0.5);
+            n = NumEx.getIntPart(n + 0.5);
             n = NumEx.NextInt(s, n);
         end
 
@@ -185,63 +194,72 @@ do
         local ret = {};
         local i = 0;
 
-        for _i=0,endIndex do
+        -- 先取得一个可以通行的格子
+        for _i = 0, endIndex do
             i = _i + index;
 
-            if(i > endIndex) then
+            if (i > endIndex) then
                 i = i - mapSizeY;
             end
 
             key = sideRight .. "_" .. i;
-            key2 = sideRight .. "_" .. (i+1);
-            key3 = sideRight .. "_" .. (i-1);
+            key2 = sideRight .. "_" .. (i + 1);
+            key3 = sideRight .. "_" .. (i - 1);
 
-            key4 = (sideRight -1) .. "_" .. i;
-            key5 = (sideRight -1) .. "_" .. (i+1);
-            key6 = (sideRight -1) .. "_" .. (i-1);
-            if(i%2 == 1 or i%2 == -1) then
-                if(lastRightSideState[key4]) then
+            key4 = (sideRight - 1) .. "_" .. i;
+            key5 = (sideRight - 1) .. "_" .. (i + 1);
+            key6 = (sideRight - 1) .. "_" .. (i - 1);
+            if (i % 2 == 1 or i % 2 == -1) then
+                if (lastRightSideState[key4]) then
                     count = count + 1;
                     ret[key] = true;
-                    index = i+1;
+                    index = i + 1;
                     break;
                 end
             else
-                if(lastRightSideState[key4] or lastRightSideState[key5] or lastRightSideState[key6]) then
+                if (lastRightSideState[key4] or lastRightSideState[key5] or lastRightSideState[key6]) then
                     count = count + 1;
                     ret[key] = true;
-                    index = i+1;
+                    index = i + 1;
                     break;
                 end
             end
         end
 
-        for _i=0,endIndex do
-            i = _i + index;
+        -- 递增或递减
+        local random = NumEx.NextBool();
+        for _i = 0, endIndex do
+            if (random) then
+                i = _i;
+            else
+                i = endIndex - _i;
+            end
 
-            if(i > endIndex) then
+            i = i + index;
+
+            if (i > endIndex) then
                 i = i - endIndex;
             end
 
-            if(count >= n) then
+            if (count >= n) then
                 break;
             end
 
             key = sideRight .. "_" .. i;
-            key2 = sideRight .. "_" .. (i+1);
-            key3 = sideRight .. "_" .. (i-1);
+            key2 = sideRight .. "_" .. (i + 1);
+            key3 = sideRight .. "_" .. (i - 1);
 
-            key4 = (sideRight -1) .. "_" .. i;
-            key5 = (sideRight -1) .. "_" .. (i+1);
-            key6 = (sideRight -1) .. "_" .. (i-1);
+            key4 = (sideRight - 1) .. "_" .. i;
+            key5 = (sideRight - 1) .. "_" .. (i + 1);
+            key6 = (sideRight - 1) .. "_" .. (i - 1);
 
-            if(i%2 == 1 or i%2 == -1) then
-                if(lastRightSideState[key4] or ret[key2] or ret[key3]) then
+            if (i % 2 == 1 or i % 2 == -1) then
+                if (lastRightSideState[key4] or ret[key2] or ret[key3]) then
                     count = count + 1;
                     ret[key] = true;
                 end
             else
-                if(lastRightSideState[key4] or lastRightSideState[key5] or lastRightSideState[key6]  or ret[key2] or ret[key3]) then
+                if (lastRightSideState[key4] or lastRightSideState[key5] or lastRightSideState[key6] or ret[key2] or ret[key3]) then
                     count = count + 1;
                     ret[key] = true;
                 end
@@ -250,7 +268,7 @@ do
         return ret;
     end
 
-    function CLLScene.addMapTileToMap(tile, x, y, z)
+    function CLLScene.addMapTileToMap(tile, x, y, z, fallSpeed)
         if (z == nil) then
             z = 0;
         end
@@ -266,7 +284,7 @@ do
         tile.transform.parent = transform;
         tile.transform.localEulerAngles = Vector3(-90, 90, 0);
         tile.transform.localScale = Vector3.one * 2;
-        tile.luaTable.effectNew(tilePos, CLLScene.onFinishLoadOneTile);
+        tile.luaTable.effectNew(tilePos, fallSpeed, CLLScene.onFinishLoadOneTile);
         NGUITools.SetActive(tile.gameObject, true);
     end
 
@@ -282,7 +300,7 @@ do
 
     function CLLScene.onFinishLoadOneTile(tile)
         -- tiles/s_00 是一个空六边形
-        if(tile.name == "tiles/s_00") then return end;
+        if (tile.name == "tiles/s_00") then return end;
 
         if ((tile.mapY == 0 or tile.mapY == 1) and SCfg.self.mode ~= GameMode.explore) then
             -- 说明是最边上的两排，添加装饰物品
@@ -291,7 +309,7 @@ do
             CLThingsPool.borrowObjAsyn(ornName, CLLScene.addOrnament, tile);
         else
             local persent = 0.01;
-            if(SCfg.self.mode == GameMode.explore) then
+            if (SCfg.self.mode == GameMode.explore) then
                 persent = 0.001;
             else
                 persent = 0.02;
@@ -417,15 +435,15 @@ do
 
     -- 取得中心点的tile
     function CLLScene.getCenterTile()
-        local x = NumEx.getIntPart(sideLeft + (sideRight - sideLeft)/2);
-        local y = NumEx.getIntPart(mapSizeY/2);
+        local x = NumEx.getIntPart(sideLeft + (sideRight - sideLeft) / 2);
+        local y = NumEx.getIntPart(mapSizeY / 2);
         return CLLScene.GetTileAt(x, y);
     end
 
     -- 取得右边列中的一个空闲地块
     function CLLScene.getRightSieFreeTile(defaultSideRight)
         local x = 0;
-        if(defaultSideRight == nil) then
+        if (defaultSideRight == nil) then
             x = sideRight;
         else
             x = defaultSideRight;
@@ -433,7 +451,7 @@ do
         local y = NumEx.NextInt(2, mapSizeY);
 
         local tile = CLLScene.GetTileAt(x, y);
-        if(tile ~= nil) then
+        if (tile ~= nil) then
             if (tile.CanMoveTo) then
                 return tile;
             else
@@ -454,7 +472,7 @@ do
         local y = NumEx.NextInt(0, mapSizeY);
 
         local tile = CLLScene.GetTileAt(x, y);
-        if(tile ~= nil) then
+        if (tile ~= nil) then
             if (tile.CanMoveTo) then
                 return tile;
             else
@@ -500,19 +518,19 @@ do
         end
 
         local topLeftPosition = Vector3(-0.5 * mapSizeX * CLMapTile.OffsetX, 0, 0.5 * mapSizeY * CLMapTile.OffsetY);
---        local tilePos = topLeftPosition + CLLScene.getPos(x, -y, z);
+        --        local tilePos = topLeftPosition + CLLScene.getPos(x, -y, z);
         pos = pos - topLeftPosition;
 
---        y = (pos.z + flagY * (CLMapTile.OffsetY / 2)) / CLMapTile.OffsetY;
+        --        y = (pos.z + flagY * (CLMapTile.OffsetY / 2)) / CLMapTile.OffsetY;
         y = (pos.z - (CLMapTile.OffsetY / 2)) / CLMapTile.OffsetY;
         y = NumEx.getIntPart(y);
 
         local off = NumEx.getIntPart(y % 2);
         local rowIndexIsUneven = (off == 1 or off == -1);
         if (rowIndexIsUneven) then
-            x = (pos.x + flagX *(-CLMapTile.RowOffsetX + CLMapTile.OffsetX / 2)) / CLMapTile.OffsetX;
+            x = (pos.x + flagX * (-CLMapTile.RowOffsetX + CLMapTile.OffsetX / 2)) / CLMapTile.OffsetX;
         else
---            x = (pos.x + flagX * (CLMapTile.OffsetX / 2)) / CLMapTile.OffsetX;
+            --            x = (pos.x + flagX * (CLMapTile.OffsetX / 2)) / CLMapTile.OffsetX;
             x = (pos.x + (CLMapTile.OffsetX / 2)) / CLMapTile.OffsetX;
         end
         x = NumEx.getIntPart(x);
@@ -537,6 +555,7 @@ do
     function CLLScene.getRightSide()
         return sideRight;
     end
+
     --------------------------------------------
     return CLLScene;
 end

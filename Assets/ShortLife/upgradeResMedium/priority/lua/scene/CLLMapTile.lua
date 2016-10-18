@@ -58,14 +58,14 @@ do
 
     end
 
-    function _cell.effectNew(pos, callback)
+    function _cell.effectNew(pos, speed, callback)
         onFinishEffectNew = callback;
 
         isPlayFall = false;
         local offset = NumEx.NextInt(1, 10) / 20;
         csSelf.tweenPosition.from = pos + Vector3.up * 20;
         csSelf.tweenPosition.to = pos;
-        csSelf.tweenPosition.duration = 1 + offset;
+        csSelf.tweenPosition.duration = speed + offset;
         csSelf.tweenPosition.animationCurve = csSelf.fallCurve;
 
         csSelf.tweenPosition:ResetToBeginning();

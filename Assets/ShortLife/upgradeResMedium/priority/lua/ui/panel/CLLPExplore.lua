@@ -64,6 +64,22 @@ do
         end
     end
 
+    -- 编辑器模式下使用
+    function CLLPExplore.onKeyLeftArrow()
+        local flag = -1;
+        local angle = SCfg.self.player.transform.localEulerAngles;
+        angle.y = angle.y + flag*60;
+        SCfg.self.player.transform.localEulerAngles = angle;
+    end
+
+    -- 编辑器模式下使用
+    function CLLPExplore.onKeyRightArrow()
+        local flag = 1;
+        local angle = SCfg.self.player.transform.localEulerAngles;
+        angle.y = angle.y + flag*60;
+        SCfg.self.player.transform.localEulerAngles = angle;
+    end
+
     function CLLPExplore.onPlayerDead()
         NGUITools.SetActive(ButtonPlayAgain, true);
     end

@@ -104,7 +104,7 @@ do
         SCfg.self.mode = GameMode.normal;
 --        PanelLoadScene.loadCityRes();
         CLLScene.stopSpin();
-        CLLScene.loadInfiniteMap(12, 8, 0.01, 5, -1, PanelLoadScene.onLoadMap);
+        CLLScene.loadInfiniteMap(20, 8, 0.01, 5, -1, PanelLoadScene.onLoadMap);
     end
 
     function PanelLoadScene.onLoadMap()

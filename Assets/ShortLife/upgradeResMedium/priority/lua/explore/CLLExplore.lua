@@ -41,7 +41,7 @@ do
 --        SCfg.self.mLookatTarget.transform.parent = SCfg.self.player.transform;
         SCfg.self.mLookatTarget.transform.parent = CLBattle.self.transform;
         SCfg.self.mLookatTarget.transform.position = SCfg.self.player.transform.position;
-        SCfg.self.mLookatTarget.transform.localEulerAngles = Vector3(0, 60, 0);
+        SCfg.self.mLookatTarget.transform.localEulerAngles = Vector3(0, 70, 0);
 --        local smoothFollow = SCfg.self.mLookatTarget:GetComponent("CLSmoothFollow");
         smoothFollow.target = SCfg.self.player.transform;
 
@@ -49,7 +49,7 @@ do
         SCfg.self.player:init(bio2Int(playerData.gid), 0, bio2Int(playerData.lev), true, nil);
         ---------------------------------
         -- 地图块掉落
-        CLLScene.checkLeftSideTilesTimeout(5);
+        CLLScene.checkLeftSideTilesTimeout(4);
     end
 
     function CLLExplore.onMoving(role)
@@ -58,7 +58,7 @@ do
         if(tile == nil) then return end;
         local x = tile.mapX;
         local right = CLLScene.getRightSide();
-        if(right - x < 6) then
+        if(right - x < 8) then
             local curStep = CLLScene.getSteps();
             local offset = curStep/MaxStep;
             -- 增加一列地块
