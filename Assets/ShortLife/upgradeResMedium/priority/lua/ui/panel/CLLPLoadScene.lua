@@ -171,7 +171,7 @@ do
         SCfg.self.mode = GameMode.normal;
         ---------------------------------
         smoothFollow.distance = 10;
-        smoothFollow.height = 15;
+        smoothFollow.height = 17;
         SCfg.self.mLookatTarget.localEulerAngles = Vector3(0, 0, 0);
         SCfg.self.mLookatTarget.position = Vector3(0, 0,-10);
 

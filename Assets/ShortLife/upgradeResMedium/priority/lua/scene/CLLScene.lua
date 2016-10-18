@@ -60,7 +60,7 @@ do
 
         local b = 0;
         if (SCfg.self.mode == GameMode.explore) then
-            b = 2
+            b = 3
         end
         for y = b, mapSizeY - 1 do
             lastRightSideState[sideRight .. "_" .. y] = true;

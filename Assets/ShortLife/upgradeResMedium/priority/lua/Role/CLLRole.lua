@@ -177,9 +177,11 @@ do
                 CLLRole.doSearchTarget();
             end
         elseif (SCfg.self.mode == GameMode.explore) then
-            --            if (SCfg.self.player == csSelf) then
-            CLLRole.moveForward(Vector3.zero);
-            --            end
+            if (SCfg.self.player == csSelf) then
+                CLLRole.moveForward(Vector3.zero);
+            else
+                csSelf:fixedInvoke4Lua("moveForward", Vector3.zero, NumEx.NextInt(10, 30)/100);
+            end
         else
             CLLRole.IamIdel(false);
         end
@@ -993,14 +995,14 @@ do
     end
 
     function CLLRole.doOnTurn()
-        if(leader ~= nil) then
+        if (leader ~= nil) then
             local dis = Vector3.Distance(transform.position, leader.transform.position);
-            if(dis < 1.3) then
+            if (dis < 1.5) then
                 csSelf.aiPath:stop();
                 csSelf.tween:stopMoveForward();
                 CLLRole.setAction("idel");
 
-                csSelf:fixedInvoke4Lua("doOnTurn", NumEx.NextInt(10, 40)/100);
+                csSelf:fixedInvoke4Lua("doOnTurn", NumEx.NextInt(10, 40) / 100);
             else
                 CLLRole.moveTo(turnPoints:Peek())
             end
