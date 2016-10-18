@@ -308,14 +308,15 @@ do
             local ornName = "tiles/" .. currTerrain.ornTypes[index]:ToString();
             CLThingsPool.borrowObjAsyn(ornName, CLLScene.addOrnament, tile);
         else
-            local persent = 0.01;
+            local createOrn = false;
             if (SCfg.self.mode == GameMode.explore) then
-                persent = 0.001;
+                createOrn = false;
             else
-                persent = 0.02;
+--                createOrn = NumEx.NextBool(0.02);
+                createOrn = false;
             end
 
-            if (NumEx.NextBool(persent)) then
+            if (createOrn) then
                 -- 有概率出现障碍物
                 local index = NumEx.NextInt(0, currTerrain.ornTypes.Count);
                 local ornName = "tiles/" .. currTerrain.ornTypes[index]:ToString();

@@ -72,6 +72,9 @@ do
     local mState = State.idel
     CLLRole.targets = {}; -- 所有可攻击的目标
     local hitEffectCount = 0;
+    local leader;
+    local follower; -- 跟随者
+    local turnPoints = Queue();
 
     function CLLRole.init(selfObj, id, star, lev, _isOffense, other)
         if (not isInited) then
@@ -116,11 +119,16 @@ do
 
         -- 设置aiPath
         local r = bio2Int(attr.base.AttackRadius) / 10;
-        local offset = csSelf:fakeRandom(0, 50);
+        local offset = csSelf:fakeRandom(1, 10);
         --        csSelf.aiPath.endReachedDistance = r * (1 - offset / 100);
         csSelf.aiPath.endReachedDistance = 0.2;
         if (csSelf.isOffense) then
-            csSelf.aiPath.speed = data.moveSpeed;
+            if (SCfg.self.player == csSelf) then
+                csSelf.aiPath.speed = data.moveSpeed;
+            else
+                -- 跟随者的速度要快一点，不然追不主角
+                csSelf.aiPath.speed = data.moveSpeed * (1 + offset / 100);
+            end
         else
             csSelf.aiPath.speed = data.moveSpeed * (1 + offset / 100);
         end
@@ -144,7 +152,7 @@ do
 
         -- 设置血条
         lifeBar = csSelf.lifeBar; -- 在创建的时候已经设置了anchor
-        if(lifeBar ~= nil) then
+        if (lifeBar ~= nil) then
             NGUITools.SetActive(csSelf.lifeBar.gameObject, true);
             lifeBar.luaTable.init(csSelf.lifeBar.gameObject);
             lifeBar.luaTable.show(csSelf.lifeBar.gameObject, csSelf);
@@ -153,7 +161,7 @@ do
         -- 影子
         NGUITools.SetActive(csSelf.shadow, true);
         if (isOffense) then
-            if(SCfg.self.mode == GameMode.explore) then
+            if (SCfg.self.mode == GameMode.explore) then
                 NGUITools.SetActive(csSelf.shadow2, false);
             else
                 NGUITools.SetActive(csSelf.shadow2, true);
@@ -168,10 +176,10 @@ do
             if (SCfg.self.player ~= csSelf) then
                 CLLRole.doSearchTarget();
             end
-        elseif(SCfg.self.mode == GameMode.explore) then
-            if (SCfg.self.player == csSelf) then
-                CLLRole.moveForward(Vector3.zero);
-            end
+        elseif (SCfg.self.mode == GameMode.explore) then
+            --            if (SCfg.self.player == csSelf) then
+            CLLRole.moveForward(Vector3.zero);
+            --            end
         else
             CLLRole.IamIdel(false);
         end
@@ -197,13 +205,23 @@ do
     function CLLRole.setMoveSpeed(speed)
         data.moveSpeed = speed;
         CLLRole.data.moveSpeed = speed;
-        csSelf.aiPath.speed = data.moveSpeed;
-        CLLRole.moveForward(Vector3.zero);
+
+        if (SCfg.self.player == csSelf) then
+            csSelf.aiPath.speed = data.moveSpeed;
+        else
+            local offset = csSelf:fakeRandom(1, 10);
+            -- 跟随者的速度要快一点，不然追不主角
+            csSelf.aiPath.speed = data.moveSpeed * (1 + offset / 100);
+        end
+        if (turnPoints.Count <= 0) then
+            -- 说明不是在寻路中
+            CLLRole.moveForward(Vector3.zero);
+        end
     end
 
     function CLLRole.addEquipAttr(equipAttr)
         local addHP = bio2Int(equipAttr.HP);
-        if(addHP > 0) then
+        if (addHP > 0) then
             local tmpHP = bio2Int(data.currHP) + addHP;
             if (tmpHP > bio2Int(data.HP)) then
                 data.currHP = data.HP;
@@ -254,6 +272,8 @@ do
 
     -- 清除数据，最好不要直接调用lua的clean，而是调用cs对象的clean。因为cs那边还有做其它的清理工作
     function CLLRole.clean(...)
+        follower = nil;
+        leader = nil;
         if (speciLua ~= nil and speciLua.clean ~= nil) then
             speciLua.clean();
         end
@@ -410,7 +430,7 @@ do
         Utl.RotateTowards(transform, dir);
         csSelf.tween:moveForward(data.moveSpeed, CLLRole.onMoving);
 
-        if(not CLLRole.checkFall()) then
+        if (not CLLRole.checkFall()) then
             -- 判断是否捡到装备、道具
             CLLRole.checkPickupProp();
             if ((not isPlayingSkill) and csSelf.action.currAction ~= getAction("attack2")) then
@@ -457,14 +477,14 @@ do
             end
         end
 
-        if(not CLLRole.checkFall()) then
+        if (not CLLRole.checkFall()) then
             if (isOffense) then
                 -- 判断是否捡到装备、道具
                 CLLRole.checkPickupProp();
             end
             -- 如果是探索模式时，需要加载地图
-            if(SCfg.self.mode == GameMode.explore) then
---                csSelf:invoke4Lua("onMoving4Explore", 0)
+            if (SCfg.self.mode == GameMode.explore) then
+                --                csSelf:invoke4Lua("onMoving4Explore", 0)
                 CLLRole.onMoving4Explore();
             end
         end
@@ -520,7 +540,9 @@ do
     -- 当移动到达目标地
     function CLLRole.onArrived()
         CLLRole.log("onArrived");
-        csSelf.aiPath:stop();
+        if (SCfg.self.mode ~= GameMode.explore) then
+            csSelf.aiPath:stop();
+        end
 
         if (isFalling or csSelf.isDead) then
             CLLRole.setAction("idel");
@@ -541,6 +563,25 @@ do
                 else
                     CLLRole.IamIdel(true);
                     CLLRole.doSearchTarget();
+                end
+            elseif (SCfg.self.mode == GameMode.explore) then
+                if (turnPoints.Count > 0) then
+                    turnPoints:Dequeue();
+                end
+
+                if (turnPoints.Count > 0) then
+                    CLLRole.moveTo(turnPoints:Peek());
+                else
+                    if (leader ~= nil) then
+                        --                        local dir = leader.transform.position - transform.position;
+                        transform.transform.localEulerAngles = leader.transform.localEulerAngles;
+                        --                        Utl.RotateTowards(transform, dir);
+                        csSelf.aiPath:stop();
+                        CLLRole.moveForward(Vector3.zero);
+                    else
+                        csSelf.aiPath:stop();
+                        CLLRole.moveForward(Vector3.zero);
+                    end
                 end
             else
                 CLLRole.IamIdel(false);
@@ -585,6 +626,7 @@ do
 
     function CLLRole.moveTo(pos)
         CLLRole.log("moveTo");
+        csSelf.tween:stopMoveForward();
         pathRay:searchPath(pos, CLLRole.onGetPath);
     end
 
@@ -815,7 +857,7 @@ do
     end
 
     function CLLRole.IamDead(...)
-        if(SCfg.self.mode == GameMode.battle) then
+        if (SCfg.self.mode == GameMode.battle) then
             -- 从战场中的进攻方、防守方中移除，不然可能会被多次还回对象池，使用时就会出问题
             if (csSelf.isOffense) then
                 CLBattle.self.offense:Remove(csSelf);
@@ -825,7 +867,7 @@ do
 
             -- 通知其它目标，我已经嗝屁了，就不要再攻击我了
             CLLBattle.someOnDead(csSelf);
-        elseif(SCfg.self.mode == GameMode.explore) then
+        elseif (SCfg.self.mode == GameMode.explore) then
             CLLExplore.someOnDead(csSelf);
         end
 
@@ -926,6 +968,31 @@ do
     function CLLRole.onSomeOneDead(unit)
         CLLRole.targets[unit.instanceID] = nil;
     end
+
+    function CLLRole.setFollower(role)
+        follower = role;
+    end
+
+    function CLLRole.setLeader(role)
+        leader = role;
+    end
+
+    -- 当转向时
+    function CLLRole.onTurn(pos)
+        -- 通知跟随者
+        if (follower ~= nil) then
+            follower.luaTable.onTurn(pos);
+        end
+
+        if (csSelf == SCfg.self.player) then return end;
+
+        turnPoints:Enqueue(pos);
+        if (turnPoints.Count == 1) then
+            CLLRole.moveTo(turnPoints:Peek())
+        end
+    end
+
+
 
     function CLLRole.log(msg)
         --        if (not csSelf.isOffense) then
