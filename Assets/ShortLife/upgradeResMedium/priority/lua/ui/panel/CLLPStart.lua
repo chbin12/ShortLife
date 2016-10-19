@@ -440,9 +440,17 @@ do
         local guidStep = CLLData.getGuidStep();
         if guidStep <= 0 then
             -- 动画
-            Handheld.PlayFullScreenMovie("Sequence 03.mp4", Color.black, FullScreenMovieControlMode.Hidden);
+--            Handheld.PlayFullScreenMovie("Sequence 03.mp4", Color.black, FullScreenMovieControlMode.Hidden);
             -- 新手引导里面跳入
-            CLPanelManager.getPanelAsy("PanelGuid", PanelStart.onloadedGuid);
+
+            local onLoadPlot =  function(name, go, orgs)
+                go.transform.position = Vector3.zero;
+                go.transform.localScale = Vector3.one;
+                go.transform.localEulerAngles = Vector3(0, 0, 0);
+                NGUITools.SetActive(go, true);
+                CLPanelManager.getPanelAsy("PanelOpeningPlot", PanelStart.onloadedGuid);
+            end
+            CLThingsPool.borrowObjAsyn("BegainingPlot", onLoadPlot );
         else
             -- CLPanelManager.getPanelAsy ("PanelMain", PanelStart.onLoadedPanel);
             CLPanelManager.getPanelAsy("PanelLoadScene", PanelStart.onLoadedPanel);
@@ -457,7 +465,9 @@ do
 
     function PanelStart.onloadedGuid(p)
         -- LuaUtl.hideHotWheel();
-        CLPanelManager.showPanel(p);
+        CLPanelManager.hideTopPanel();
+        CLPanelManager.hideTopPanel();
+        CLPanelManager.showTopPanel(p);
     end
 
     ----------------------------------------------

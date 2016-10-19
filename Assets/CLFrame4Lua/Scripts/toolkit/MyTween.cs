@@ -24,6 +24,10 @@ public class MyTween : MonoBehaviour
 	bool isTurning = false;
 	Vector3 subDiff = Vector3.zero;
 
+	public bool runOnStart = false;
+	public UITweener.Style style = UITweener.Style.Once;
+	public Vector3 from = Vector3.zero;
+	public Vector3 to = Vector3.zero;
 
 	// cach transform
 	Transform _transform;
@@ -41,6 +45,24 @@ public class MyTween : MonoBehaviour
 	{
 		isMoveNow = false;
 //		enabled = false;
+
+		if(runOnStart) {
+			doTween();
+		}
+	}
+		
+	void doTween() {
+		float dis = Vector3.Distance(from, to);
+		object onFinishCallback = null;
+		transform.position = from;
+		if(style == UITweener.Style.Loop) {
+			onFinishCallback = (Callback)(onFinishFlyout4Loop);
+		}
+		flyout(from, to, dis, speed, 0.55f, null, onFinishCallback, true);
+		
+	}
+	void onFinishFlyout4Loop(params object[] orgs) {
+		doTween();
 	}
 	
 	public void flyout(Vector3 dirFrom, Vector3 dirTo, float distance, float speed, float hight, object onMovingCallback,object finishCallback, bool isWoldPos = true)

@@ -67,7 +67,7 @@ do
 
     -- 取得新手步骤
     function CLLData.getGuidStep()
-        return 99;
+        return 0;
     end
 
     function CLLData.login()

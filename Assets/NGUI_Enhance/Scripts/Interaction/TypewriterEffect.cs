@@ -65,8 +65,16 @@ public class TypewriterEffect : MonoBehaviour
 	/// </summary>
 
 	public List<EventDelegate> onFinished = new List<EventDelegate>();
-
-	UILabel mLabel;
+	
+	UILabel _mLabel;	// add by chenbin
+	UILabel mLabel {	// modify by chenbin
+		get {
+			if(_mLabel == null) {
+				_mLabel = GetComponent<UILabel>();
+			}
+			return _mLabel;
+		}
+	}
 	string mFullText = "";
 	int mCurrentOffset = 0;
 	float mNextChar = 0f;
@@ -81,13 +89,24 @@ public class TypewriterEffect : MonoBehaviour
 
 	public bool isActive { get { return mActive; } }
 
+	#region add by chenbin
+	public string text {	
+		set {
+			mLabel.text = value;
+			ResetToBeginning ();
+		}
+		get {
+			return mLabel.text;
+		}
+	}
+	#endregion
+
 	/// <summary>
 	/// Reset the typewriter effect to the beginning of the label.
 	/// </summary>
-
 	public void ResetToBeginning ()
 	{
-		Finish();
+//		Finish();
 		mReset = true;
 		mActive = true;
 		mNextChar = 0f;
@@ -123,7 +142,7 @@ public class TypewriterEffect : MonoBehaviour
 
 	void OnEnable () { mReset = true; mActive = true; }
 
-	void Update ()
+	public void Update ()
 	{
 		if (!mActive) return;
 
@@ -132,7 +151,6 @@ public class TypewriterEffect : MonoBehaviour
 			mCurrentOffset = 0;
 			mNextChar = 0f;
 			mReset = false;
-			mLabel = GetComponent<UILabel>();
 			mFullText = mLabel.processedText;
 			mFade.Clear();
 

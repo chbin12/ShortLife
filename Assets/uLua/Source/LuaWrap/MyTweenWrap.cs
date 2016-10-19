@@ -32,6 +32,10 @@ public class MyTweenWrap
 			new LuaField("curveSpeed", get_curveSpeed, set_curveSpeed),
 			new LuaField("curveHigh", get_curveHigh, set_curveHigh),
 			new LuaField("isMoveNow", get_isMoveNow, set_isMoveNow),
+			new LuaField("runOnStart", get_runOnStart, set_runOnStart),
+			new LuaField("style", get_style, set_style),
+			new LuaField("from", get_from, set_from),
+			new LuaField("to", get_to, set_to),
 			new LuaField("transform", get_transform, null),
 		};
 
@@ -291,6 +295,102 @@ public class MyTweenWrap
 		}
 
 		LuaScriptMgr.Push(L, obj.isMoveNow);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_runOnStart(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		MyTween obj = (MyTween)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name runOnStart");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index runOnStart on a nil value");
+			}
+		}
+
+		LuaScriptMgr.Push(L, obj.runOnStart);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_style(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		MyTween obj = (MyTween)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name style");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index style on a nil value");
+			}
+		}
+
+		LuaScriptMgr.Push(L, obj.style);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_from(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		MyTween obj = (MyTween)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name from");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index from on a nil value");
+			}
+		}
+
+		LuaScriptMgr.Push(L, obj.from);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_to(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		MyTween obj = (MyTween)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name to");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index to on a nil value");
+			}
+		}
+
+		LuaScriptMgr.Push(L, obj.to);
 		return 1;
 	}
 
@@ -555,6 +655,102 @@ public class MyTweenWrap
 		}
 
 		obj.isMoveNow = LuaScriptMgr.GetBoolean(L, 3);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_runOnStart(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		MyTween obj = (MyTween)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name runOnStart");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index runOnStart on a nil value");
+			}
+		}
+
+		obj.runOnStart = LuaScriptMgr.GetBoolean(L, 3);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_style(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		MyTween obj = (MyTween)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name style");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index style on a nil value");
+			}
+		}
+
+		obj.style = (UITweener.Style)LuaScriptMgr.GetNetObject(L, 3, typeof(UITweener.Style));
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_from(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		MyTween obj = (MyTween)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name from");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index from on a nil value");
+			}
+		}
+
+		obj.from = LuaScriptMgr.GetVector3(L, 3);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_to(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		MyTween obj = (MyTween)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name to");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index to on a nil value");
+			}
+		}
+
+		obj.to = LuaScriptMgr.GetVector3(L, 3);
 		return 0;
 	}
 
