@@ -27,6 +27,11 @@ do
         dragSetting.canRotation = false;
         dragSetting.canScale = false;
         LabelContentTyperWriter.text = Localization.Get("OpeningPlot");
+        csSelf:invoke4Lua("showPlot", 5);
+    end
+
+    function CLLPOpeningPlot.showPlot()
+        CLLBegainingPlot.show4Start();
     end
 
     -- 刷新

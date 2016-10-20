@@ -19,6 +19,7 @@ public class MyTween : MonoBehaviour
 	Vector3 origin = Vector3.zero;
 	Vector3 v3Diff = Vector3.zero;
 	float curveTime = 0;
+	float curveTime2 = 0;
 	public bool isMoveNow = false;
 	bool isWoldPos = true;
 	bool isTurning = false;
@@ -28,6 +29,7 @@ public class MyTween : MonoBehaviour
 	public UITweener.Style style = UITweener.Style.Once;
 	public Vector3 from = Vector3.zero;
 	public Vector3 to = Vector3.zero;
+	int flag = 1;
 
 	// cach transform
 	Transform _transform;
@@ -54,15 +56,23 @@ public class MyTween : MonoBehaviour
 	void doTween() {
 		float dis = Vector3.Distance(from, to);
 		object onFinishCallback = null;
-		transform.position = from;
-		if(style == UITweener.Style.Loop) {
-			onFinishCallback = (Callback)(onFinishFlyout4Loop);
+		if (style == UITweener.Style.Loop) {
+			flag = 1;
+			transform.position = from;
+			flyout(from, to, dis, speed, high, null, onFinishCallback, true);
+		} else if (style == UITweener.Style.PingPong) {
+			if(flag > 0) {
+				transform.position = from;
+				flyout(from, to, dis, speed, high, null, onFinishCallback, true);
+			} else {
+				transform.position = to;
+				flyout(to, from, dis, speed, high, null, onFinishCallback, true);
+			}
+		} else if (style == UITweener.Style.Once) {
+			return;
+		} else {
+			return;
 		}
-		flyout(from, to, dis, speed, 0.55f, null, onFinishCallback, true);
-		
-	}
-	void onFinishFlyout4Loop(params object[] orgs) {
-		doTween();
 	}
 	
 	public void flyout(Vector3 dirFrom, Vector3 dirTo, float distance, float speed, float hight, object onMovingCallback,object finishCallback, bool isWoldPos = true)
@@ -101,7 +111,6 @@ public class MyTween : MonoBehaviour
 			v3Diff = toPos - transform.localPosition;
 		}
 		curveTime = 0;
-		
 		isMoveNow = true;
 		enabled = true;
 	}
@@ -118,6 +127,11 @@ public class MyTween : MonoBehaviour
 				((LuaFunction)onFinishCallback).Call(this);
 			}
 		}
+		
+		if (style == UITweener.Style.PingPong) {
+			flag = -1 * flag;
+		}
+		doTween();
 	}
 
 	void print(string msg) {
@@ -157,8 +171,13 @@ public class MyTween : MonoBehaviour
 			}
 			curveTime += Time.fixedDeltaTime * speed;
 			subDiff = v3Diff * curveSpeed.Evaluate(curveTime);//*SCfg.self.fps.fpsRate;
+			
+			curveTime2 = curveTime*flag;
+			if(curveTime2 < 0) {
+				curveTime2 = 1 + curveTime2;
+			}
 	//		subDiff = v3Diff.normalized*curveSpeed.Evaluate(curveTime)*Time.deltaTime;
-			subDiff.y += high * curveHigh.Evaluate(curveTime);//*SCfg.self.fps.fpsRate;
+			subDiff.y += high * curveHigh.Evaluate(curveTime2);//*SCfg.self.fps.fpsRate;
 			if (isWoldPos) {
 				dis = origin + subDiff - transform.position;
 			} else {

@@ -447,7 +447,12 @@ do
                 go.transform.position = Vector3.zero;
                 go.transform.localScale = Vector3.one;
                 go.transform.localEulerAngles = Vector3(0, 0, 0);
-                NGUITools.SetActive(go, true);
+                local plot = go:GetComponent("CLBehaviour4Lua");
+                if(plot.luaTable == nil) then
+                    plot:setLua();
+                    plot.luaTable.init(plot);
+                end
+                NGUITools.SetActive(go, false);
                 CLPanelManager.getPanelAsy("PanelOpeningPlot", PanelStart.onloadedGuid);
             end
             CLThingsPool.borrowObjAsyn("BegainingPlot", onLoadPlot );
