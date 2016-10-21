@@ -129,7 +129,6 @@ public class CLUIDrag4World : MonoBehaviour
 	void Start() {
 		float size = Screen.width < Screen.height ? Screen.height : Screen.width;
 		_scaleOffsetVal_ = size / 5;
-		Debug.Log ("_scaleOffsetVal_========================" + _scaleOffsetVal_);
 	}
 	void OnEnable ()
 	{

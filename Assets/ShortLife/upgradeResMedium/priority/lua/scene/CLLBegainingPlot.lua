@@ -90,7 +90,7 @@ do
             type = 1, -- 移动lookatTarget
             from = pulse.transform.localPosition,
             to = Vector3(0.11, 0.68, -0.59),
-            speed = 0.01,
+            speed = 0.3,
             next = nil, -- 下一个任务
             nextDelaySec = 2, -- 下一个任务等待时间
             finishCallback = nil,
@@ -100,7 +100,7 @@ do
             type = 1, -- 移动lookatTarget
             from = Vector3(0.11, 0.68, -0.59),
             to = Vector3.zero,
-            speed = 0.6,
+            speed = 0.3,
             next = nil, -- 下一个任务
             nextDelaySec = 0, -- 下一个任务等待时间
             finishCallback = nil,
@@ -119,14 +119,23 @@ do
         local _task3 = {
             type=3, --改变smoothFollow的heigh
             from = 0.5,
+            to = 10,
+            speed = 0.2,
+            next=nil,
+            nextDelaySec = 0,
+            finishCallback=nil,
+        }
+        _task3.next = {
+            type=3, --改变smoothFollow的heigh
+            from = 10,
             to = 1530,
             speed = 0.2,
             next=nil,
             nextDelaySec = 0,
             finishCallback=CLLBegainingPlot.onFinshShowPlot,
         }
-        csSelf:invoke4Lua("doTask2", _task2, 2);
-        csSelf:invoke4Lua("doTask3", _task3, 2);
+        csSelf:invoke4Lua("doTask2", _task2, 3);
+        csSelf:invoke4Lua("doTask3", _task3, 5);
     end
 
     function CLLBegainingPlot.onFinshShowPlot()
