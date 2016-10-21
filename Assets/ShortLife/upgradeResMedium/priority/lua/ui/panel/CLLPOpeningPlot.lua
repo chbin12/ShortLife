@@ -72,6 +72,11 @@ do
         return true;
     end
 
+    function CLLPOpeningPlot.onFinshShowPlot()
+        CLLBegainingPlot.hide();
+        CLPanelManager.getPanelAsy("PanelLoadScene", onLoadedPanel, {type = "home"});
+    end
+
     --------------------------------------------
     return CLLPOpeningPlot;
 end

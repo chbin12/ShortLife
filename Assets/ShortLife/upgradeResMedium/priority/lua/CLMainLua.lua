@@ -39,6 +39,7 @@ do
     -- require("CLLDataProc");
     -- require("ChnNetHandle");
     require("CLLData");
+    require("CLLDB");
 
     CLMainLua = {};
 

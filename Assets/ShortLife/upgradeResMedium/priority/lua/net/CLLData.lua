@@ -67,7 +67,11 @@ do
 
     -- 取得新手步骤
     function CLLData.getGuidStep()
-        return 0;
+        return bio2Int(CLLData.player.guidStep);
+    end
+
+    function CLLData.setGuidStep(step)
+
     end
 
     function CLLData.login()
@@ -75,7 +79,34 @@ do
             CLLData.player = {};
             CLLData.player.gid = int2Bio(1);
             CLLData.player.lev = int2Bio(1);
+            CLLData.player.guidStep = int2Bio(0);
+
         end
+    end
+
+    function CLLData.luaTable2Map(d)
+        local m = Hashtable();
+        for k,v in pairs(d) do
+            if(type(v) == "table") then
+                m:Set_Item(k, CLLData.luaTable2Map(v));
+            else
+                m:Set_Item(k, v);
+            end
+        end
+        return m;
+    end
+
+    function CLLData.map2LuaTable(d)
+        local ret = {};
+
+        for k,v in pairs(d) do
+            if(type(v) == "table") then
+                ret[k]= CLLData.map2LuaTable(v);
+            else
+                ret[k]= v;
+            end
+        end
+        return ret;
     end
 
     ------------------------------------

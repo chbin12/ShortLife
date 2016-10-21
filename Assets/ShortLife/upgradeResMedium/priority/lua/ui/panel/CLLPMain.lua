@@ -60,7 +60,6 @@ do
         elseif (goName == "ButtonCell3") then
             -- setting
         elseif (goName == "ButtonStartGame") then
-            CLLData.login();
 --            CLPanelManager.getPanelAsy("PanelLoadScene", onLoadedPanel, {type="battle"});
             CLPanelManager.getPanelAsy("PanelLoadScene", onLoadedPanel, {type="explore"});
 

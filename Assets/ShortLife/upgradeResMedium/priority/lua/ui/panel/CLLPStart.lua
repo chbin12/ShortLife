@@ -437,6 +437,7 @@ do
     end
 
     function PanelStart.doEnterGame()
+        CLLData.login();
         local guidStep = CLLData.getGuidStep();
         if guidStep <= 0 then
             -- 动画
