@@ -44,6 +44,7 @@ public class Toolkit_MapExWrap
 			new LuaMethod("keys2List", keys2List),
 			new LuaMethod("vals2List", vals2List),
 			new LuaMethod("cloneMap", cloneMap),
+			new LuaMethod("isHashtable", isHashtable),
 			new LuaMethod("New", _CreateToolkit_MapEx),
 			new LuaMethod("GetClassType", GetClassType),
 		};
@@ -693,6 +694,16 @@ public class Toolkit_MapExWrap
 		Hashtable arg1 = (Hashtable)LuaScriptMgr.GetNetObject(L, 2, typeof(Hashtable));
 		Hashtable o = Toolkit.MapEx.cloneMap(arg0,arg1);
 		LuaScriptMgr.PushObject(L, o);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int isHashtable(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 1);
+		object arg0 = LuaScriptMgr.GetVarObject(L, 1);
+		bool o = Toolkit.MapEx.isHashtable(arg0);
+		LuaScriptMgr.Push(L, o);
 		return 1;
 	}
 }

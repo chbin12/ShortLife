@@ -2,6 +2,7 @@
 do
     CLLData = {};
     CLLData.player = nil;
+    CLLData.needSave = false;
     -- 场景数据
     --[[
     --key:sceneName
@@ -71,42 +72,19 @@ do
     end
 
     function CLLData.setGuidStep(step)
-
+        CLLData.player.guidStep = int2Bio(step);
+        CLLData.needSave = true;
     end
 
     function CLLData.login()
-        if(CLLData.player == nil) then
+        CLLData.player = CLLDB.getPlayer();
+        if(CLLData.player == nil or CLLData.player.gid == nil) then
             CLLData.player = {};
             CLLData.player.gid = int2Bio(1);
             CLLData.player.lev = int2Bio(1);
             CLLData.player.guidStep = int2Bio(0);
-
+            CLLData.needSave = true;
         end
-    end
-
-    function CLLData.luaTable2Map(d)
-        local m = Hashtable();
-        for k,v in pairs(d) do
-            if(type(v) == "table") then
-                m:Set_Item(k, CLLData.luaTable2Map(v));
-            else
-                m:Set_Item(k, v);
-            end
-        end
-        return m;
-    end
-
-    function CLLData.map2LuaTable(d)
-        local ret = {};
-
-        for k,v in pairs(d) do
-            if(type(v) == "table") then
-                ret[k]= CLLData.map2LuaTable(v);
-            else
-                ret[k]= v;
-            end
-        end
-        return ret;
     end
 
     ------------------------------------

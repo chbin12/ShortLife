@@ -556,6 +556,14 @@ namespace Toolkit
             }
             return nwMap;
         }
+
+		public static bool isHashtable(object obj) {
+			if (obj.GetType () == typeof(Hashtable)) {
+				return true;
+			}
+			return false;
+
+		}
 	}
 
 }

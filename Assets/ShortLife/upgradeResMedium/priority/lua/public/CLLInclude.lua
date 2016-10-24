@@ -19,6 +19,7 @@ do
   MyMainCamera = luanet.import_type('MyMainCamera')
   FogMode = luanet.import_type('UnityEngine.FogMode')
   LayerMask= luanet.import_type('UnityEngine.LayerMask')
+  Directory = luanet.import_type('System.IO.Directory');
   
   -------------------------------------------------------
   -- 重新命名

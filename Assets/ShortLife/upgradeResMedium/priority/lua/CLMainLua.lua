@@ -99,12 +99,15 @@ do
     -- 暂停游戏或恢复游戏
     function CLMainLua.OnApplicationPause(isPause)
         if (isPause) then
+            CLLDB.saveAll();
+
             -- 内存释放
             GC.Collect(); -- 内存释放
         end
     end
 
     function CLMainLua.OnApplicationQuit(...)
+        CLLDB.saveAll();
     end
 
     -- 当横竖屏切换时
