@@ -128,7 +128,7 @@ do
         _task3.next = {
             type=3, --改变smoothFollow的heigh
             from = 10,
-            to = 1400,
+            to = 500,
             speed = 0.2,
             next=nil,
             nextDelaySec = 0,

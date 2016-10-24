@@ -59,6 +59,7 @@ do
             -- share
         elseif (goName == "ButtonCell3") then
             -- setting
+            CLPanelManager.getPanelAsy("PanelSet", onLoadedPanelTT);
         elseif (goName == "ButtonStartGame") then
 --            CLPanelManager.getPanelAsy("PanelLoadScene", onLoadedPanel, {type="battle"});
             CLPanelManager.getPanelAsy("PanelLoadScene", onLoadedPanel, {type="explore"});

@@ -75,7 +75,7 @@ do
     function CLLPOpeningPlot.onFinshShowPlot()
         CLLData.setGuidStep(1);
         CLLBegainingPlot.hide();
-        CLPanelManager.getPanelAsy("PanelLoadScene", onLoadedPanel, {type = "home"});
+        CLPanelManager.getPanelAsy("PanelLoadScene", onLoadedPanel, {type = "home", isGuid = true});
     end
 
     --------------------------------------------

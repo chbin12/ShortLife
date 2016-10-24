@@ -37,9 +37,9 @@ do
         LabelTips.text = Localization.Get("Loading");
         if (data.type == "home") then
             csSelf:invoke4Lua("gotoHome", 0.1);
-        elseif(data.type == "battle") then
+        elseif (data.type == "battle") then
             csSelf:invoke4Lua("gotoBattle", 0.1);
-        elseif(data.type == "explore") then
+        elseif (data.type == "explore") then
             csSelf:invoke4Lua("gotoExplore", 0.1);
         end
     end
@@ -74,7 +74,7 @@ do
         smoothFollow.distance = 8;
         smoothFollow.height = 4;
         SCfg.self.mLookatTarget.localEulerAngles = Vector3(0, 0, 0);
-        SCfg.self.mLookatTarget.position = Vector3(0, 9,-10);
+        SCfg.self.mLookatTarget.position = Vector3(0, 9, -10);
 
         SCfg.self.mainCamera.fieldOfView = 50;
         SCfg.self.mainCamera.clearFlags = CameraClearFlags.Skybox;
@@ -102,7 +102,7 @@ do
 
         ---------------------------------
         SCfg.self.mode = GameMode.normal;
---        PanelLoadScene.loadCityRes();
+        --        PanelLoadScene.loadCityRes();
         CLLScene.stopSpin();
         CLLScene.loadInfiniteMap(20, 8, 0.01, 5, -1, PanelLoadScene.onLoadMap);
     end
@@ -114,14 +114,14 @@ do
     function PanelLoadScene.gotoBattle()
         PanelLoadScene.releaseRes();
 
---        spriteBg.color = NewColor(0, 0, 0, 64);
+        --        spriteBg.color = NewColor(0, 0, 0, 64);
         -- 设置模式
         SCfg.self.mode = GameMode.normal;
         ---------------------------------
         smoothFollow.distance = 7;
         smoothFollow.height = 6;
         SCfg.self.mLookatTarget.localEulerAngles = Vector3(0, 0, 0);
-        SCfg.self.mLookatTarget.position = Vector3(0, 0,-10);
+        SCfg.self.mLookatTarget.position = Vector3(0, 0, -10);
 
         SCfg.self.mainCamera.fieldOfView = 60;
         SCfg.self.mainCamera.clearFlags = CameraClearFlags.Skybox;
@@ -173,7 +173,7 @@ do
         smoothFollow.distance = 10;
         smoothFollow.height = 17;
         SCfg.self.mLookatTarget.localEulerAngles = Vector3(0, 0, 0);
-        SCfg.self.mLookatTarget.position = Vector3(0, 0,-10);
+        SCfg.self.mLookatTarget.position = Vector3(0, 0, -10);
 
         SCfg.self.mainCamera.fieldOfView = 60;
         SCfg.self.mainCamera.clearFlags = CameraClearFlags.Skybox;
@@ -210,7 +210,12 @@ do
 
     function PanelLoadScene.showCityUI(...)
         CLPanelManager.hideTopPanel();
-        CLPanelManager.getPanelAsy("PanelMain", onLoadedPanel);
+
+        if (data.isGuid) then
+            CLPanelManager.getPanelAsy("PanelLoadScene", onLoadedPanel, { type = "explore", isGuid = true });
+        else
+            CLPanelManager.getPanelAsy("PanelMain", onLoadedPanel);
+        end
     end
 
     function PanelLoadScene.showBattleUI()
