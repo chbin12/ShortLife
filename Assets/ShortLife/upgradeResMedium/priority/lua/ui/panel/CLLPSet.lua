@@ -46,6 +46,16 @@ do
         local goName = go.name;
         if (goName == "ButtonClearData") then
             CLLDB.cleanDB();
+
+            ------------------------
+            if(CLLScene ~= nil) then
+                CLLScene.clean();
+            end
+            if(CLLExplore ~= nil) then
+                CLLExplore.clean();
+            end
+            CLPanelManager.hideTopPanel();
+            CLPanelManager.getPanelAsy("PanelStart", onLoadedPanel);
         end
     end
 
