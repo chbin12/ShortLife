@@ -13,6 +13,11 @@ public class CameraWrap
 			new LuaMethod("ResetWorldToCameraMatrix", ResetWorldToCameraMatrix),
 			new LuaMethod("ResetProjectionMatrix", ResetProjectionMatrix),
 			new LuaMethod("ResetAspect", ResetAspect),
+			new LuaMethod("ResetFieldOfView", ResetFieldOfView),
+			new LuaMethod("SetStereoViewMatrices", SetStereoViewMatrices),
+			new LuaMethod("ResetStereoViewMatrices", ResetStereoViewMatrices),
+			new LuaMethod("SetStereoProjectionMatrices", SetStereoProjectionMatrices),
+			new LuaMethod("ResetStereoProjectionMatrices", ResetStereoProjectionMatrices),
 			new LuaMethod("WorldToScreenPoint", WorldToScreenPoint),
 			new LuaMethod("WorldToViewportPoint", WorldToViewportPoint),
 			new LuaMethod("ViewportToWorldPoint", ViewportToWorldPoint),
@@ -1850,6 +1855,55 @@ public class CameraWrap
 		LuaScriptMgr.CheckArgsCount(L, 1);
 		Camera obj = (Camera)LuaScriptMgr.GetUnityObjectSelf(L, 1, "Camera");
 		obj.ResetAspect();
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int ResetFieldOfView(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 1);
+		Camera obj = (Camera)LuaScriptMgr.GetUnityObjectSelf(L, 1, "Camera");
+		obj.ResetFieldOfView();
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int SetStereoViewMatrices(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 3);
+		Camera obj = (Camera)LuaScriptMgr.GetUnityObjectSelf(L, 1, "Camera");
+		Matrix4x4 arg0 = (Matrix4x4)LuaScriptMgr.GetNetObject(L, 2, typeof(Matrix4x4));
+		Matrix4x4 arg1 = (Matrix4x4)LuaScriptMgr.GetNetObject(L, 3, typeof(Matrix4x4));
+		obj.SetStereoViewMatrices(arg0,arg1);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int ResetStereoViewMatrices(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 1);
+		Camera obj = (Camera)LuaScriptMgr.GetUnityObjectSelf(L, 1, "Camera");
+		obj.ResetStereoViewMatrices();
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int SetStereoProjectionMatrices(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 3);
+		Camera obj = (Camera)LuaScriptMgr.GetUnityObjectSelf(L, 1, "Camera");
+		Matrix4x4 arg0 = (Matrix4x4)LuaScriptMgr.GetNetObject(L, 2, typeof(Matrix4x4));
+		Matrix4x4 arg1 = (Matrix4x4)LuaScriptMgr.GetNetObject(L, 3, typeof(Matrix4x4));
+		obj.SetStereoProjectionMatrices(arg0,arg1);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int ResetStereoProjectionMatrices(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 1);
+		Camera obj = (Camera)LuaScriptMgr.GetUnityObjectSelf(L, 1, "Camera");
+		obj.ResetStereoProjectionMatrices();
 		return 0;
 	}
 

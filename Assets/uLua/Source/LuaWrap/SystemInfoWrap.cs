@@ -18,6 +18,7 @@ public class SystemInfoWrap
 		{
 			new LuaField("operatingSystem", get_operatingSystem, null),
 			new LuaField("processorType", get_processorType, null),
+			new LuaField("processorFrequency", get_processorFrequency, null),
 			new LuaField("processorCount", get_processorCount, null),
 			new LuaField("systemMemorySize", get_systemMemorySize, null),
 			new LuaField("graphicsMemorySize", get_graphicsMemorySize, null),
@@ -30,6 +31,7 @@ public class SystemInfoWrap
 			new LuaField("graphicsShaderLevel", get_graphicsShaderLevel, null),
 			new LuaField("graphicsMultiThreaded", get_graphicsMultiThreaded, null),
 			new LuaField("supportsShadows", get_supportsShadows, null),
+			new LuaField("supportsRawShadowDepthSampling", get_supportsRawShadowDepthSampling, null),
 			new LuaField("supportsRenderTextures", get_supportsRenderTextures, null),
 			new LuaField("supportsRenderToCubemap", get_supportsRenderToCubemap, null),
 			new LuaField("supportsImageEffects", get_supportsImageEffects, null),
@@ -93,6 +95,13 @@ public class SystemInfoWrap
 	static int get_processorType(IntPtr L)
 	{
 		LuaScriptMgr.Push(L, SystemInfo.processorType);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_processorFrequency(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, SystemInfo.processorFrequency);
 		return 1;
 	}
 
@@ -177,6 +186,13 @@ public class SystemInfoWrap
 	static int get_supportsShadows(IntPtr L)
 	{
 		LuaScriptMgr.Push(L, SystemInfo.supportsShadows);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_supportsRawShadowDepthSampling(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, SystemInfo.supportsRawShadowDepthSampling);
 		return 1;
 	}
 

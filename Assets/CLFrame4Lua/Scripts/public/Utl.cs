@@ -384,7 +384,7 @@ public static class Utl
                 assetsMap[assetName] = null;
             }
         }
-        AssetBundleCreateRequest abc = AssetBundle.CreateFromMemory(buff);
+        AssetBundleCreateRequest abc = AssetBundle.LoadFromMemoryAsync(buff);
         yield return abc;
         if (abc != null)
         {
@@ -463,7 +463,7 @@ public static class Utl
     /// </param>
     public static IEnumerator loadAssetsBunldeOnly(byte[] buff, string assetName, object onGetAssetsBundle, object original)
     {
-        AssetBundleCreateRequest abc = AssetBundle.CreateFromMemory(buff);
+        AssetBundleCreateRequest abc = AssetBundle.LoadFromMemoryAsync(buff);
         yield return abc;
         if (abc != null)
         {

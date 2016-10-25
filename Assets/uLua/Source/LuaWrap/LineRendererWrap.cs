@@ -13,6 +13,7 @@ public class LineRendererWrap
 			new LuaMethod("SetColors", SetColors),
 			new LuaMethod("SetVertexCount", SetVertexCount),
 			new LuaMethod("SetPosition", SetPosition),
+			new LuaMethod("SetPositions", SetPositions),
 			new LuaMethod("New", _CreateLineRenderer),
 			new LuaMethod("GetClassType", GetClassType),
 			new LuaMethod("__eq", Lua_Eq),
@@ -142,6 +143,16 @@ public class LineRendererWrap
 		int arg0 = (int)LuaScriptMgr.GetNumber(L, 2);
 		Vector3 arg1 = LuaScriptMgr.GetVector3(L, 3);
 		obj.SetPosition(arg0,arg1);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int SetPositions(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 2);
+		LineRenderer obj = (LineRenderer)LuaScriptMgr.GetUnityObjectSelf(L, 1, "LineRenderer");
+		Vector3[] objs0 = LuaScriptMgr.GetArrayObject<Vector3>(L, 2);
+		obj.SetPositions(objs0);
 		return 0;
 	}
 

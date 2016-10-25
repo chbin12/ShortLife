@@ -545,7 +545,7 @@ public class CLPanelManager :MonoBehaviour
 		if (self.isUnity3dType) {
 			string path = PStr.begin().a(PathCfg.persistentDataPath).a("/")
 				.a(PathCfg.self.panelDataPath).a(PathCfg.self.platform).a("/").a(pName).a(".unity3d").end();
-			AssetBundle ab = AssetBundle.CreateFromFile(path);
+			AssetBundle ab = AssetBundle.LoadFromFile(path);
 #if UNITY_EDITOR
 			if(ab == null) {
 				Debug.LogError(pName + " is null");

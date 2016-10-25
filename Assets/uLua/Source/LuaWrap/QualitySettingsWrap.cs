@@ -42,6 +42,8 @@ public class QualitySettingsWrap
 			new LuaField("desiredColorSpace", get_desiredColorSpace, null),
 			new LuaField("activeColorSpace", get_activeColorSpace, null),
 			new LuaField("blendWeights", get_blendWeights, set_blendWeights),
+			new LuaField("asyncUploadTimeSlice", get_asyncUploadTimeSlice, set_asyncUploadTimeSlice),
+			new LuaField("asyncUploadBufferSize", get_asyncUploadBufferSize, set_asyncUploadBufferSize),
 		};
 
 		LuaScriptMgr.RegisterLib(L, "UnityEngine.QualitySettings", typeof(QualitySettings), regs, fields, typeof(Object));
@@ -230,6 +232,20 @@ public class QualitySettingsWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_asyncUploadTimeSlice(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, QualitySettings.asyncUploadTimeSlice);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_asyncUploadBufferSize(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, QualitySettings.asyncUploadBufferSize);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int set_pixelLightCount(IntPtr L)
 	{
 		QualitySettings.pixelLightCount = (int)LuaScriptMgr.GetNumber(L, 3);
@@ -359,6 +375,20 @@ public class QualitySettingsWrap
 	static int set_blendWeights(IntPtr L)
 	{
 		QualitySettings.blendWeights = (BlendWeights)LuaScriptMgr.GetNetObject(L, 3, typeof(BlendWeights));
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_asyncUploadTimeSlice(IntPtr L)
+	{
+		QualitySettings.asyncUploadTimeSlice = (int)LuaScriptMgr.GetNumber(L, 3);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_asyncUploadBufferSize(IntPtr L)
+	{
+		QualitySettings.asyncUploadBufferSize = (int)LuaScriptMgr.GetNumber(L, 3);
 		return 0;
 	}
 

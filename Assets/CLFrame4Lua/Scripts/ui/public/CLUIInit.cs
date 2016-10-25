@@ -117,7 +117,7 @@ public class CLUIInit : MonoBehaviour
 				tmpPath = tmpPath.Replace("/upgradeRes/", "/upgradeRes4Publish/");
 			}
 			#endif
-			AssetBundle atlasBundel = AssetBundle.CreateFromFile (tmpPath);
+			AssetBundle atlasBundel = AssetBundle.LoadFromFile (tmpPath);
 			if (atlasBundel != null) {
 				GameObject go = atlasBundel.mainAsset as GameObject;
 				atlasBundel.Unload (false);
@@ -170,7 +170,7 @@ public class CLUIInit : MonoBehaviour
 				tmpPath = tmpPath.Replace("/upgradeRes/", "/upgradeRes4Publish/");
 			}
 			#endif
-			AssetBundle atlasBundel = AssetBundle.CreateFromFile (tmpPath);
+			AssetBundle atlasBundel = AssetBundle.LoadFromFile (tmpPath);
 			if (atlasBundel != null) {
 				GameObject go = atlasBundel.mainAsset as GameObject;
 				atlasBundel.Unload (false);

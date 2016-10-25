@@ -9,9 +9,10 @@ public class AssetBundleWrap
 	{
 		LuaMethod[] regs = new LuaMethod[]
 		{
-			new LuaMethod("CreateFromMemory", CreateFromMemory),
-			new LuaMethod("CreateFromMemoryImmediate", CreateFromMemoryImmediate),
-			new LuaMethod("CreateFromFile", CreateFromFile),
+			new LuaMethod("LoadFromFileAsync", LoadFromFileAsync),
+			new LuaMethod("LoadFromFile", LoadFromFile),
+			new LuaMethod("LoadFromMemoryAsync", LoadFromMemoryAsync),
+			new LuaMethod("LoadFromMemory", LoadFromMemory),
 			new LuaMethod("Contains", Contains),
 			new LuaMethod("LoadAsset", LoadAsset),
 			new LuaMethod("LoadAssetAsync", LoadAssetAsync),
@@ -88,33 +89,115 @@ public class AssetBundleWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int CreateFromMemory(IntPtr L)
+	static int LoadFromFileAsync(IntPtr L)
 	{
-		LuaScriptMgr.CheckArgsCount(L, 1);
-		byte[] objs0 = LuaScriptMgr.GetArrayNumber<byte>(L, 1);
-		AssetBundleCreateRequest o = AssetBundle.CreateFromMemory(objs0);
-		LuaScriptMgr.PushObject(L, o);
-		return 1;
+		int count = LuaDLL.lua_gettop(L);
+
+		if (count == 1)
+		{
+			string arg0 = LuaScriptMgr.GetLuaString(L, 1);
+			AssetBundleCreateRequest o = AssetBundle.LoadFromFileAsync(arg0);
+			LuaScriptMgr.PushObject(L, o);
+			return 1;
+		}
+		else if (count == 2)
+		{
+			string arg0 = LuaScriptMgr.GetLuaString(L, 1);
+			uint arg1 = (uint)LuaScriptMgr.GetNumber(L, 2);
+			AssetBundleCreateRequest o = AssetBundle.LoadFromFileAsync(arg0,arg1);
+			LuaScriptMgr.PushObject(L, o);
+			return 1;
+		}
+		else
+		{
+			LuaDLL.luaL_error(L, "invalid arguments to method: AssetBundle.LoadFromFileAsync");
+		}
+
+		return 0;
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int CreateFromMemoryImmediate(IntPtr L)
+	static int LoadFromFile(IntPtr L)
 	{
-		LuaScriptMgr.CheckArgsCount(L, 1);
-		byte[] objs0 = LuaScriptMgr.GetArrayNumber<byte>(L, 1);
-		AssetBundle o = AssetBundle.CreateFromMemoryImmediate(objs0);
-		LuaScriptMgr.Push(L, o);
-		return 1;
+		int count = LuaDLL.lua_gettop(L);
+
+		if (count == 1)
+		{
+			string arg0 = LuaScriptMgr.GetLuaString(L, 1);
+			AssetBundle o = AssetBundle.LoadFromFile(arg0);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 2)
+		{
+			string arg0 = LuaScriptMgr.GetLuaString(L, 1);
+			uint arg1 = (uint)LuaScriptMgr.GetNumber(L, 2);
+			AssetBundle o = AssetBundle.LoadFromFile(arg0,arg1);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else
+		{
+			LuaDLL.luaL_error(L, "invalid arguments to method: AssetBundle.LoadFromFile");
+		}
+
+		return 0;
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int CreateFromFile(IntPtr L)
+	static int LoadFromMemoryAsync(IntPtr L)
 	{
-		LuaScriptMgr.CheckArgsCount(L, 1);
-		string arg0 = LuaScriptMgr.GetLuaString(L, 1);
-		AssetBundle o = AssetBundle.CreateFromFile(arg0);
-		LuaScriptMgr.Push(L, o);
-		return 1;
+		int count = LuaDLL.lua_gettop(L);
+
+		if (count == 1)
+		{
+			byte[] objs0 = LuaScriptMgr.GetArrayNumber<byte>(L, 1);
+			AssetBundleCreateRequest o = AssetBundle.LoadFromMemoryAsync(objs0);
+			LuaScriptMgr.PushObject(L, o);
+			return 1;
+		}
+		else if (count == 2)
+		{
+			byte[] objs0 = LuaScriptMgr.GetArrayNumber<byte>(L, 1);
+			uint arg1 = (uint)LuaScriptMgr.GetNumber(L, 2);
+			AssetBundleCreateRequest o = AssetBundle.LoadFromMemoryAsync(objs0,arg1);
+			LuaScriptMgr.PushObject(L, o);
+			return 1;
+		}
+		else
+		{
+			LuaDLL.luaL_error(L, "invalid arguments to method: AssetBundle.LoadFromMemoryAsync");
+		}
+
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int LoadFromMemory(IntPtr L)
+	{
+		int count = LuaDLL.lua_gettop(L);
+
+		if (count == 1)
+		{
+			byte[] objs0 = LuaScriptMgr.GetArrayNumber<byte>(L, 1);
+			AssetBundle o = AssetBundle.LoadFromMemory(objs0);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 2)
+		{
+			byte[] objs0 = LuaScriptMgr.GetArrayNumber<byte>(L, 1);
+			uint arg1 = (uint)LuaScriptMgr.GetNumber(L, 2);
+			AssetBundle o = AssetBundle.LoadFromMemory(objs0,arg1);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else
+		{
+			LuaDLL.luaL_error(L, "invalid arguments to method: AssetBundle.LoadFromMemory");
+		}
+
+		return 0;
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

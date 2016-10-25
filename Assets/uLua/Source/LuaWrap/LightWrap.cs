@@ -30,6 +30,7 @@ public class LightWrap
 			new LuaField("shadowStrength", get_shadowStrength, set_shadowStrength),
 			new LuaField("shadowBias", get_shadowBias, set_shadowBias),
 			new LuaField("shadowNormalBias", get_shadowNormalBias, set_shadowNormalBias),
+			new LuaField("shadowNearPlane", get_shadowNearPlane, set_shadowNearPlane),
 			new LuaField("range", get_range, set_range),
 			new LuaField("spotAngle", get_spotAngle, set_spotAngle),
 			new LuaField("cookieSize", get_cookieSize, set_cookieSize),
@@ -261,6 +262,30 @@ public class LightWrap
 		}
 
 		LuaScriptMgr.Push(L, obj.shadowNormalBias);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_shadowNearPlane(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		Light obj = (Light)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name shadowNearPlane");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index shadowNearPlane on a nil value");
+			}
+		}
+
+		LuaScriptMgr.Push(L, obj.shadowNearPlane);
 		return 1;
 	}
 
@@ -669,6 +694,30 @@ public class LightWrap
 		}
 
 		obj.shadowNormalBias = (float)LuaScriptMgr.GetNumber(L, 3);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_shadowNearPlane(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		Light obj = (Light)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name shadowNearPlane");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index shadowNearPlane on a nil value");
+			}
+		}
+
+		obj.shadowNearPlane = (float)LuaScriptMgr.GetNumber(L, 3);
 		return 0;
 	}
 
