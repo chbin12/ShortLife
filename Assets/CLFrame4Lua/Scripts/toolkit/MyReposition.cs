@@ -143,13 +143,13 @@ public class MyReposition : MonoBehaviour
 		Vector3 offset, RepsositionType type, bool isWorld = true)
 	{
 		isFollowTarget = false;
-		repositionNow(toPos, 0, null, callback, offset, type, isWorld);
+		repositionNow(toPos, 0.2f, null, callback, offset, type, isWorld);
 	}
 	
 	public void repositionNow(Vector3 toPos, object callback)
 	{
 		isFollowTarget = false;
-		repositionNow(toPos, 0, null, callback, Vector3.zero, RepsositionType.move, true);
+		repositionNow(toPos, 0.2f, null, callback, Vector3.zero, RepsositionType.move, true);
 	}
 
 	public void repositionNow(Vector3 toPos, float arriveDistance, 

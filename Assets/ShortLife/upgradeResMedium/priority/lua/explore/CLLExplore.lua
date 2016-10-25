@@ -1,8 +1,9 @@
 -- 探索处理
 do
     CLLExplore = {}
-
+    local smoothFollow4Camera = SCfg.self.mainCamera:GetComponent("CLSmoothFollow");
     local smoothFollow = SCfg.self.mLookatTarget:GetComponent("CLSmoothFollow");
+    local smoothFollowTween = SCfg.self.mLookatTarget:GetComponent("MyReposition");
 
     local csSelf = nil;
     local transform = nil;
@@ -39,13 +40,9 @@ do
         SCfg.self.player.transform.position = CLLScene.getCenterTile().transform.position;
         SCfg.self.player.transform.localScale = Vector3.one*1.5;
         SCfg.self.player.transform.localEulerAngles = Vector3(0, 90, 0);
---        SCfg.self.mLookatTarget.transform.parent = SCfg.self.player.transform;
-        SCfg.self.mLookatTarget.transform.parent = CLBattle.self.transform;
-        SCfg.self.mLookatTarget.transform.position = SCfg.self.player.transform.position;
-        SCfg.self.mLookatTarget.transform.localEulerAngles = Vector3(0, 70, 0);
---        local smoothFollow = SCfg.self.mLookatTarget:GetComponent("CLSmoothFollow");
-        smoothFollow.target = SCfg.self.player.transform;
 
+        smoothFollowTween:repositionNow(SCfg.self.player.transform, 0.5, CLLExplore.moveLookatTarget, Vector3.zero, true);
+        smoothFollow4Camera:tween(Vector3(8,4,0), Vector3(10, 17,0), 1, nil);
         NGUITools.SetActive(SCfg.self.player.gameObject, true);
         SCfg.self.player:init(bio2Int(playerData.gid), 0, bio2Int(playerData.lev), true, nil);
         SCfg.self.player.luaTable.setFollower(nil);
@@ -56,6 +53,13 @@ do
         ---------------------------------
         -- 地图块掉落
         CLLScene.checkLeftSideTilesTimeout(4);
+    end
+
+    function CLLExplore.moveLookatTarget()
+        SCfg.self.mLookatTarget.transform.parent = CLBattle.self.transform;
+        SCfg.self.mLookatTarget.transform.localEulerAngles = Vector3(0, 70, 0);
+        SCfg.self.mLookatTarget.transform.position = SCfg.self.player.transform.position;
+        smoothFollow.target = SCfg.self.player.transform;
     end
 
     -- 加载跟随者

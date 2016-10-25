@@ -10,6 +10,7 @@ public class CLSmoothFollowWrap
 		LuaMethod[] regs = new LuaMethod[]
 		{
 			new LuaMethod("LateUpdate", LateUpdate),
+			new LuaMethod("tween", tween),
 			new LuaMethod("New", _CreateCLSmoothFollow),
 			new LuaMethod("GetClassType", GetClassType),
 			new LuaMethod("__eq", Lua_Eq),
@@ -387,6 +388,19 @@ public class CLSmoothFollowWrap
 		LuaScriptMgr.CheckArgsCount(L, 1);
 		CLSmoothFollow obj = (CLSmoothFollow)LuaScriptMgr.GetUnityObjectSelf(L, 1, "CLSmoothFollow");
 		obj.LateUpdate();
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int tween(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 5);
+		CLSmoothFollow obj = (CLSmoothFollow)LuaScriptMgr.GetUnityObjectSelf(L, 1, "CLSmoothFollow");
+		Vector2 arg0 = LuaScriptMgr.GetVector2(L, 2);
+		Vector2 arg1 = LuaScriptMgr.GetVector2(L, 3);
+		float arg2 = (float)LuaScriptMgr.GetNumber(L, 4);
+		object arg3 = LuaScriptMgr.GetVarObject(L, 5);
+		obj.tween(arg0,arg1,arg2,arg3);
 		return 0;
 	}
 

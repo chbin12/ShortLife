@@ -68,4 +68,41 @@ public class CLSmoothFollow : MonoBehaviour
 			transform.LookAt (target);
 		}
 	}
+
+	//===============================
+	Vector2 diff4Tween =  Vector2.zero;
+	Vector2 from4Tween = Vector2.zero;
+	Vector2 to4Tween = Vector2.zero;
+	Vector2 tmpTo = Vector2.zero;
+	float speed4Tween = 1;
+	bool isDoTween = false;
+	object finishTweenCallback = null;
+	float totalDeltaVal = 0;
+	void FixedUpdate() {
+		if (!isDoTween)
+			return;
+		totalDeltaVal += Time.deltaTime * speed4Tween*0.33f;
+		if (totalDeltaVal >= 1) {
+			totalDeltaVal = 1;
+		}
+		tmpTo = from4Tween + diff4Tween * totalDeltaVal;
+		distance = tmpTo.x;
+		height = tmpTo.y;
+		if(totalDeltaVal >= 1) {
+			isDoTween = false;
+			Utl.doCallback (finishTweenCallback, this);
+		}
+	}
+
+	public void tween(Vector2 from, Vector2 to, float speed, object callback) {
+		from4Tween = from;
+		to4Tween = to;
+		speed4Tween = speed; 
+		diff4Tween = to - from;
+		finishTweenCallback = callback;
+		distance = from.x;
+		height = from.y;
+		totalDeltaVal = 0;
+		isDoTween = true;
+	}
 }

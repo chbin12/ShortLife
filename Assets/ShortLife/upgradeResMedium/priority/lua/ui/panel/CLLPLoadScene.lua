@@ -35,6 +35,16 @@ do
         spriteBg.color = NewColor(0, 0, 0, 255);
         NGUITools.SetActive(progressBar.gameObject, false);
         LabelTips.text = Localization.Get("Loading");
+
+        if(data.isGuid) then
+            NGUITools.SetActive(LabelTips.gameObject, false);
+            NGUITools.SetActive(spriteBg.gameObject, false);
+        else
+            NGUITools.SetActive(LabelTips.gameObject, true);
+            NGUITools.SetActive(spriteBg.gameObject, true);
+        end
+
+
         if (data.type == "home") then
             csSelf:invoke4Lua("gotoHome", 0.1);
         elseif (data.type == "battle") then
@@ -170,14 +180,14 @@ do
         -- 设置模式
         SCfg.self.mode = GameMode.normal;
         ---------------------------------
-        smoothFollow.distance = 10;
-        smoothFollow.height = 17;
-        SCfg.self.mLookatTarget.localEulerAngles = Vector3(0, 0, 0);
-        SCfg.self.mLookatTarget.position = Vector3(0, 0, -10);
+--        smoothFollow.distance = 10;
+--        smoothFollow.height = 17;
+--        SCfg.self.mLookatTarget.localEulerAngles = Vector3(0, 0, 0);
+--        SCfg.self.mLookatTarget.position = Vector3(0, 0, -10);
 
         SCfg.self.mainCamera.fieldOfView = 60;
         SCfg.self.mainCamera.clearFlags = CameraClearFlags.Skybox;
-        SCfg.self.mainCamera.transform.localEulerAngles = Vector3(38, 0, 0);
+--        SCfg.self.mainCamera.transform.localEulerAngles = Vector3(38, 0, 0);
 
         ---------------------------------
         dragSetting.canRotation = false;
@@ -212,7 +222,7 @@ do
         CLPanelManager.hideTopPanel();
 
         if (data.isGuid) then
-            CLPanelManager.getPanelAsy("PanelLoadScene", onLoadedPanel, { type = "explore", isGuid = true });
+            csSelf:invoke4Lua("showExplore4Guid", 3);
         else
             CLPanelManager.getPanelAsy("PanelMain", onLoadedPanel);
         end
@@ -223,6 +233,9 @@ do
         CLPanelManager.getPanelAsy("PanelBattle", onLoadedPanel);
     end
 
+    function PanelLoadScene.showExplore4Guid()
+        CLPanelManager.getPanelAsy("PanelLoadScene", onLoadedPanel, { type = "explore", isGuid = true });
+    end
     --------------------------------
     return PanelLoadScene;
 end
