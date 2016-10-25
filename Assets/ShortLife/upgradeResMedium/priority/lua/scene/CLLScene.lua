@@ -170,7 +170,7 @@ do
     --
     function CLLScene.getTileList(coefficient)
         -- 至少有一个tile
-        local n = 1;
+        local n = NumEx.NextInt(1, mapSizeY);
         if (coefficient == nil) then
             n = NumEx.NextInt(1, mapSizeY);
         else
@@ -180,6 +180,9 @@ do
             n = n < 1 and 1 or n;
             n = NumEx.getIntPart(n + 0.5);
             n = NumEx.NextInt(s, n);
+            if(n < 2) then
+                n = NumEx.NextInt(1, mapSizeY);
+            end
         end
 
         local index = NumEx.NextInt(0, mapSizeY);

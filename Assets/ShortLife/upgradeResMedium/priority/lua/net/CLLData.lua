@@ -73,7 +73,7 @@ do
 
     function CLLData.setGuidStep(step)
         CLLData.player.guidStep = int2Bio(step);
-        CLLData.needSave = true;
+        CLLDB.savePlayer();
     end
 
     function CLLData.login()

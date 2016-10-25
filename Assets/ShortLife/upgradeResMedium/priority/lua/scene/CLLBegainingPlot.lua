@@ -72,7 +72,7 @@ do
         local _task3 = {
             type = 1, -- 移动lookatTarget
             from = Vector3(0, 3, 0),
-            to = pulse.transform.localPosition,
+            to = pulse.transform.position,
             speed = 0.3,
             next = nil, -- 下一个任务
             nextDelaySec = 2, -- 下一个任务等待时间
@@ -88,7 +88,7 @@ do
     function CLLBegainingPlot.onFinishShowPulse()
         local _task = {
             type = 1, -- 移动lookatTarget
-            from = pulse.transform.localPosition,
+            from = pulse.transform.position,
             to = Vector3(0.11, 0.68, -0.59),
             speed = 0.3,
             next = nil, -- 下一个任务

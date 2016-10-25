@@ -170,6 +170,7 @@ public class MyTween : MonoBehaviour
 				return;
 			}
 			curveTime += Time.fixedDeltaTime * speed;
+			curveTime = curveTime > 1 ? 1 : curveTime;
 			subDiff = v3Diff * curveSpeed.Evaluate(curveTime);//*SCfg.self.fps.fpsRate;
 			
 			curveTime2 = curveTime*flag;
