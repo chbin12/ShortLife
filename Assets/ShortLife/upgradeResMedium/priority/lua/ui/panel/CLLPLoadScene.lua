@@ -114,7 +114,14 @@ do
         SCfg.self.mode = GameMode.normal;
         --        PanelLoadScene.loadCityRes();
         CLLScene.stopSpin();
-        CLLScene.loadInfiniteMap(20, 8, 0.01, 5, -1, PanelLoadScene.onLoadMap);
+        local onLoadRole = function(name, role, ors)
+            NGUITools.SetActive(role.gameObject, false);
+            CLLScene.loadInfiniteMap(20, 8, 0.01, 5, -1, PanelLoadScene.onLoadMap);
+        end
+
+        local playerData = CLLData.player;
+        local attr = CLLDBCfg.getRoleByGIDAndLev(bio2Int(playerData.gid), bio2Int(playerData.lev));
+        CLRolePool.borrowUnitAsyn(attr.base.PrefabName, onLoadRole, { playerData, attr });
     end
 
     function PanelLoadScene.onLoadMap()
@@ -220,7 +227,7 @@ do
 
     function PanelLoadScene.showCityUI(...)
         if (data.isGuid) then
-            csSelf:invoke4Lua("showExplore4Guid", 3);
+            csSelf:invoke4Lua("showExplore4Guid", 1);
         else
             CLPanelManager.hideTopPanel();
             CLPanelManager.getPanelAsy("PanelMain", onLoadedPanel);
