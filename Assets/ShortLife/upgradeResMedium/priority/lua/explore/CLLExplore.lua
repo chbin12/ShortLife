@@ -3,7 +3,7 @@ do
     CLLExplore = {}
     local smoothFollow4Camera = SCfg.self.mainCamera:GetComponent("CLSmoothFollow");
     local smoothFollow = SCfg.self.mLookatTarget:GetComponent("CLSmoothFollow");
-    local smoothFollowTween = SCfg.self.mLookatTarget:GetComponent("MyReposition");
+    local smoothFollowTween = SCfg.self.mLookatTarget:GetComponent("MyTween");
 
     local csSelf = nil;
     local transform = nil;
@@ -41,7 +41,7 @@ do
         SCfg.self.player.transform.localScale = Vector3.one*1.5;
         SCfg.self.player.transform.localEulerAngles = Vector3(0, 90, 0);
 
-        smoothFollowTween:repositionNow(SCfg.self.player.transform, 0.5, CLLExplore.moveLookatTarget, Vector3.zero, true);
+        smoothFollowTween:flyout(SCfg.self.player.transform.position,1, 0, nil, CLLExplore.moveLookatTarget, true);
         smoothFollow4Camera:tween(Vector3(8,4,0), Vector3(10, 17,0), 1, nil);
         NGUITools.SetActive(SCfg.self.player.gameObject, true);
         SCfg.self.player:init(bio2Int(playerData.gid), 0, bio2Int(playerData.lev), true, nil);
