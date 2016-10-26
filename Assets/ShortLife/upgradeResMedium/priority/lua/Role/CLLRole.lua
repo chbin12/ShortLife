@@ -276,6 +276,8 @@ do
     function CLLRole.clean(...)
         follower = nil;
         leader = nil;
+        turnPoints:Clear();
+        
         if (speciLua ~= nil and speciLua.clean ~= nil) then
             speciLua.clean();
         end

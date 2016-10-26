@@ -84,6 +84,7 @@ do
         unit.transform.localScale = Vector3.one*1.5;
         unit.transform.localEulerAngles = Vector3(0, 90, 0);
 
+        NGUITools.SetActive(unit.gameObject, true);
         unit:init(bio2Int(playerData.gid), 0, bio2Int(playerData.lev), true, nil);
         leader.luaTable.setFollower(unit);
         unit.luaTable.setLeader(leader);
