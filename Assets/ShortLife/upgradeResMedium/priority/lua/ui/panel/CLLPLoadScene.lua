@@ -219,11 +219,10 @@ do
     end
 
     function PanelLoadScene.showCityUI(...)
-        CLPanelManager.hideTopPanel();
-
         if (data.isGuid) then
             csSelf:invoke4Lua("showExplore4Guid", 3);
         else
+            CLPanelManager.hideTopPanel();
             CLPanelManager.getPanelAsy("PanelMain", onLoadedPanel);
         end
     end
@@ -234,6 +233,7 @@ do
     end
 
     function PanelLoadScene.showExplore4Guid()
+        CLPanelManager.hideTopPanel();
         CLPanelManager.getPanelAsy("PanelLoadScene", onLoadedPanel, { type = "explore", isGuid = true });
     end
     --------------------------------
