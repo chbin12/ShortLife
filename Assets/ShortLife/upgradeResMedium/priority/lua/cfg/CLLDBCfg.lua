@@ -19,6 +19,8 @@ do
     local cfgRoleLevPath = PStr.b():a(cfgBasePath):a("DBCFRoleLevData.cfg"):e();
     -- 道具
     local cfgPropPath = PStr.b():a(cfgBasePath):a("DBCFPropData.cfg"):e();
+    -- 关卡
+    local cfgLevelPath = PStr.b():a(cfgBasePath):a("DBCFLevelData.cfg"):e();
 
 
     CLLDBCfg = {};
@@ -31,9 +33,10 @@ do
                 dbMap = CLLDBCfgTool.getRoleData(cfgRolePath, cfgRoleLevPath);
             elseif (path == cfgSkillPath) then
                 dbMap = CLLDBCfgTool.pubGetBaseAndLevData(cfgSkillPath, cfgSkillLevPath);
-            else -- 其它没有特殊处理的都以ID为key（因些在配置数据时，ID列必须是以1开始且连续）
-            local tmp = nil;
-            tmp, dbMap = CLLDBCfgTool.getDatas(path, true);
+            else
+                -- 其它没有特殊处理的都以ID为key（因些在配置数据时，ID列必须是以1开始且连续）
+                local tmp = nil;
+                tmp, dbMap = CLLDBCfgTool.getDatas(path, true);
             end;
             db[path] = dbMap;
         end;
@@ -83,6 +86,7 @@ do
         if (datas == nil) then return nil end;
         return datas[id];
     end
+
     --------------------------------------------------
     return CLLDBCfg;
 end;
