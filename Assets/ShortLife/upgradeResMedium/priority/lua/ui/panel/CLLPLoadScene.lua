@@ -240,6 +240,7 @@ do
     end
 
     function PanelLoadScene.showExplore4Guid()
+        NAlertTxt.add("进入后，角色一开始还是全部绑了纱布，一个特效变身成背着书包的学生娃娃，接着才开始移动", Color.red, 2);
         CLPanelManager.hideTopPanel();
         CLPanelManager.getPanelAsy("PanelLoadScene", onLoadedPanel, { type = "explore", isGuid = true });
     end

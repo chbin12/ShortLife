@@ -120,7 +120,7 @@ public class HUDText : MonoBehaviour
 		// Make it small so that it's invisible to start with
 		ne.label.cachedTransform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
 		ne.label.overflowMethod = UILabel.Overflow.ResizeHeight;
-		ne.label.width = 750;
+		ne.label.width = (int)(Screen.width*0.7f);
 		ne.scaleTime = 0f;
 		mList.Add(ne);
 		++counter;
