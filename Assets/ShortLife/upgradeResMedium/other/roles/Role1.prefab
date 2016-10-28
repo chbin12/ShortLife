@@ -1215,7 +1215,7 @@ MonoBehaviour:
   closestOnPathCheck: 0
   obstrucLayer:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 2048
   canRotation: 1
 --- !u!114 &11411502
 MonoBehaviour:
@@ -1400,7 +1400,7 @@ MonoBehaviour:
   high: 0
   obstrucLayer:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 2048
   obsDistance: 1
   shadow: {fileID: 449732}
   shadowHeight: 0.05

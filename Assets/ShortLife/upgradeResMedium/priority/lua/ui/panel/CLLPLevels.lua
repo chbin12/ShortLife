@@ -7,6 +7,7 @@ do
     local RootSpin;
     local plotObj = nil;
     local blur = nil;
+    local cellList = {};
 
 
     -- 初始化，只会调用一次
@@ -16,6 +17,11 @@ do
         RootSpin = getChild(transform, "CameraBlur", "Plot", "RootSpin");
         blur = getChild(transform, "CameraBlur"):GetComponent("Blur");
         blur.blurShader = Shader.Find("Hidden/FastBlur");
+
+        local tableObj = getChild(transform, "Table");
+        for i = 1, 6 do
+            table.insert(cellList, getChild(tableObj, i):GetComponent("CLCellLua"));
+        end
     end
 
     -- 设置数据
@@ -46,6 +52,13 @@ do
 
     -- 刷新
     function CLLPLevels.refresh()
+        for i, v in ipairs(cellList) do
+            v:init(i, CLLPLevels.onClickCell);
+        end
+    end
+
+    function CLLPLevels.onClickCell(cell)
+        CLPanelManager.getPanelAsy("PanelLoadScene", onLoadedPanel, { type = "home"});
     end
 
     -- 关闭页面
@@ -81,7 +94,7 @@ do
 
     -- 当按了返回键时，关闭自己（返值为true时关闭）
     function CLLPLevels.hideSelfOnKeyBack()
-        return true;
+        return false;
     end
 
     --------------------------------------------

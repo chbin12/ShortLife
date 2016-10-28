@@ -274,7 +274,11 @@ do
 
     -- 清除数据，最好不要直接调用lua的clean，而是调用cs对象的clean。因为cs那边还有做其它的清理工作
     function CLLRole.clean(...)
+        if(follower ~= nil) then
+            follower.luaTable.setFollower(nil);
+        end
         follower = nil;
+
         leader = nil;
         turnPoints:Clear();
 
@@ -444,7 +448,7 @@ do
     end
 
     function CLLRole.checkFall()
-        if (not Physics.Raycast(transform.position + transform.up, transform.up * -1, 2, LayerMask.GetMask("Ground"))) then
+        if (not Physics.Raycast(transform.position + transform.up, transform.up * -1, 2, LayerMask.GetMask("Tile"))) then
             isFalling = true;
             rigidbody.isKinematic = false;
             CLLRole.onDead();

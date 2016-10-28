@@ -16,7 +16,7 @@ GameObject:
   - 114: {fileID: 11454914}
   - 114: {fileID: 11490908}
   - 114: {fileID: 11411846}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: stone_08
   m_TagString: Untagged
   m_Icon: {fileID: 0}

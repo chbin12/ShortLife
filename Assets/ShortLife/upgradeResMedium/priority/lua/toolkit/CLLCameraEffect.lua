@@ -18,7 +18,7 @@ do
     --]]
 
     bloomLens = transform:GetComponent("BloomAndLensFlares");
-    colorCorrection = transform:GetComponent("ColorCorrectionCurves");
+--    colorCorrection = transform:GetComponent("ColorCorrectionCurves");
     depthField = transform:GetComponent("DepthOfField34");
   end
 
@@ -40,7 +40,7 @@ do
 
   function CLLCameraEffect.enabled( val )
     bloomLens.enabled = val;
-    colorCorrection.enabled = val;
+--    colorCorrection.enabled = val;
     depthField.enabled = val;
   end
 
@@ -52,7 +52,7 @@ do
 
   function CLLCameraEffect.setVal(val1, val2, val3)
     bloomLens.bloomIntensity = val1;
-    colorCorrection.saturation = val2;
+--    colorCorrection.saturation = val2;
     depthField.focalPoint = val3;
   end
   

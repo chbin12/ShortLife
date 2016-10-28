@@ -107,6 +107,7 @@ GameObject:
   - 65: {fileID: 6505622}
   - 114: {fileID: 11476756}
   - 114: {fileID: 11452826}
+  - 114: {fileID: 11437178}
   m_Layer: 5
   m_Name: 6
   m_TagString: Untagged
@@ -141,6 +142,7 @@ GameObject:
   - 65: {fileID: 6515136}
   - 114: {fileID: 11449414}
   - 114: {fileID: 11444306}
+  - 114: {fileID: 11417766}
   m_Layer: 5
   m_Name: 1
   m_TagString: Untagged
@@ -159,6 +161,7 @@ GameObject:
   - 65: {fileID: 6564200}
   - 114: {fileID: 11450298}
   - 114: {fileID: 11415400}
+  - 114: {fileID: 11423342}
   m_Layer: 5
   m_Name: 2
   m_TagString: Untagged
@@ -193,6 +196,7 @@ GameObject:
   - 65: {fileID: 6599214}
   - 114: {fileID: 11404852}
   - 114: {fileID: 11408598}
+  - 114: {fileID: 11487112}
   m_Layer: 5
   m_Name: 3
   m_TagString: Untagged
@@ -227,6 +231,7 @@ GameObject:
   - 65: {fileID: 6590354}
   - 114: {fileID: 11466112}
   - 114: {fileID: 11467084}
+  - 114: {fileID: 11485876}
   m_Layer: 5
   m_Name: 5
   m_TagString: Untagged
@@ -277,6 +282,7 @@ GameObject:
   - 65: {fileID: 6526188}
   - 114: {fileID: 11403010}
   - 114: {fileID: 11431482}
+  - 114: {fileID: 11422820}
   m_Layer: 5
   m_Name: 4
   m_TagString: Untagged
@@ -1132,6 +1138,51 @@ MonoBehaviour:
   mDepth: 20001
   mSortingOrder: 0
   mClipOffset: {x: 0, y: 0}
+--- !u!114 &11417766
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 134664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 575f113ee96624a30ab2ca1af1303112, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPause: 0
+  luaPath: ShortLife/upgradeRes/priority/lua/ui/cell/CLLUICellLevel.lua
+  frameCounter: 0
+  isNeedResetAtlase: 1
+--- !u!114 &11422820
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 165232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 575f113ee96624a30ab2ca1af1303112, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPause: 0
+  luaPath: ShortLife/upgradeRes/priority/lua/ui/cell/CLLUICellLevel.lua
+  frameCounter: 0
+  isNeedResetAtlase: 1
+--- !u!114 &11423342
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 144452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 575f113ee96624a30ab2ca1af1303112, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPause: 0
+  luaPath: ShortLife/upgradeRes/priority/lua/ui/cell/CLLUICellLevel.lua
+  frameCounter: 0
+  isNeedResetAtlase: 1
 --- !u!114 &11428240
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1225,6 +1276,21 @@ MonoBehaviour:
   effectType: 1
   EffectList: []
   isFinishInit: 0
+--- !u!114 &11437178
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 121998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 575f113ee96624a30ab2ca1af1303112, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPause: 0
+  luaPath: ShortLife/upgradeRes/priority/lua/ui/cell/CLLUICellLevel.lua
+  frameCounter: 0
+  isNeedResetAtlase: 1
 --- !u!114 &11438532
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1822,9 +1888,39 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   downsample: 0
   blurSize: 1
-  blurIterations: 1
+  blurIterations: 2
   blurType: 0
   blurShader: {fileID: 4800000, guid: 12b1b0be88a4544d4a5b5e7f83dcec3e, type: 3}
+--- !u!114 &11485876
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 158902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 575f113ee96624a30ab2ca1af1303112, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPause: 0
+  luaPath: ShortLife/upgradeRes/priority/lua/ui/cell/CLLUICellLevel.lua
+  frameCounter: 0
+  isNeedResetAtlase: 1
+--- !u!114 &11487112
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 157638}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 575f113ee96624a30ab2ca1af1303112, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPause: 0
+  luaPath: ShortLife/upgradeRes/priority/lua/ui/cell/CLLUICellLevel.lua
+  frameCounter: 0
+  isNeedResetAtlase: 1
 --- !u!114 &11487228
 MonoBehaviour:
   m_ObjectHideFlags: 1
