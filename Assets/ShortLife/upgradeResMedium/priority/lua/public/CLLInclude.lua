@@ -20,6 +20,7 @@ do
   FogMode = luanet.import_type('UnityEngine.FogMode')
   LayerMask= luanet.import_type('UnityEngine.LayerMask')
   Directory = luanet.import_type('System.IO.Directory');
+  Shader = luanet.import_type('UnityEngine.Shader');
   
   -------------------------------------------------------
   -- 重新命名

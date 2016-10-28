@@ -459,13 +459,13 @@ do
             CLThingsPool.borrowObjAsyn("BegainingPlot", onLoadPlot );
         else
             -- CLPanelManager.getPanelAsy ("PanelMain", PanelStart.onLoadedPanel);
-            CLPanelManager.getPanelAsy("PanelLoadScene", PanelStart.onLoadedPanel);
+            CLPanelManager.getPanelAsy("PanelLevels", PanelStart.onLoadedPanel);
         end
     end
 
     function PanelStart.onLoadedPanel(p)
         CLPanelManager.hideTopPanel();
-        p:setData({ type = "home" });
+--        p:setData({ type = "home" });
         CLPanelManager.showTopPanel(p);
     end
 
