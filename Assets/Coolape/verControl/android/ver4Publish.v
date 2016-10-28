@@ -29,7 +29,7 @@ ShortLife/upgradeRes4Publish/other/texture/shadow/Android/shadow.unity3d,0
 ShortLife/upgradeRes4Publish/other/texture/tileMap/Android/hexagon_new_01.unity3d,0
 ShortLife/upgradeRes4Publish/other/texture/tileMap/Android/hexagon_new_02.unity3d,0
 ShortLife/upgradeRes4Publish/other/texture/tileMap/Android/liubiankuang.unity3d,0
-ShortLife/upgradeRes4Publish/other/things/Android/BegainingPlot.unity3d,2
+ShortLife/upgradeRes4Publish/other/things/Android/BegainingPlot.unity3d,3
 ShortLife/upgradeRes4Publish/other/things/Android/line.unity3d,1
 ShortLife/upgradeRes4Publish/other/things/props/Android/1.unity3d,1
 ShortLife/upgradeRes4Publish/other/things/props/Android/4.unity3d,1

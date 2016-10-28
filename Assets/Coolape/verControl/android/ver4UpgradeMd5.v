@@ -49,7 +49,7 @@ ShortLife/upgradeRes4Publish/priority/cfg/DBCFRoleLevData.cfg,f775982eda72bc432d
 ShortLife/upgradeRes4Publish/priority/lua/ui/panel/CLLPOpeningPlot.lua,3209b71f1f567c78f4dc6d174516fa8d
 ShortLife/upgradeRes4Publish/priority/lua/ui/cell/CLLUICellStuff.lua,1dfb03743f026557b944d6c40f65bbc5
 ShortLife/upgradeRes4Publish/priority/ui/panel/Android/PanelExplore.unity3d,d6064cebb78ea116c30a016120f582b2
-ShortLife/upgradeRes4Publish/other/things/Android/BegainingPlot.unity3d,3e6eb3e7b279a369984dc1ab8caec5d0
+ShortLife/upgradeRes4Publish/other/things/Android/BegainingPlot.unity3d,609c93471d8a74a257f6009bb5768dd1
 ShortLife/upgradeRes4Publish/priority/lua/uLua/Lua/System/Layer.lua,bb27b40038b2dcd83c134ccd7f639973
 ShortLife/upgradeRes4Publish/priority/lua/uLua/Lua/System/Touch.lua,5c2604cf6788b88f77809cd68898379f
 ShortLife/upgradeRes4Publish/other/things/tiles/Android/tree_12.unity3d,08bca4737e66823d4dc61a23af11d407
