@@ -169,6 +169,14 @@ do
 
     --
     function CLLScene.getTileList(coefficient)
+        local ret = {};
+        if(sideRight == mapSizeX) then
+            for i = 0, mapSizeY-1 do
+
+            end
+            return ret;
+        end
+
         -- 至少有一个tile
         local n = NumEx.NextInt(1, mapSizeY);
         if (coefficient == nil) then
@@ -194,7 +202,6 @@ do
         local key5 = "";
         local key6 = "";
         local count = 0;
-        local ret = {};
         local i = 0;
 
         -- 先取得一个可以通行的格子
@@ -305,7 +312,7 @@ do
         -- tiles/s_00 是一个空六边形
         if (tile.name == "tiles/s_00") then return end;
 
-        if ((tile.mapY == 0 or tile.mapY == 1) and SCfg.self.mode ~= GameMode.explore) then
+        if ( SCfg.self.mode ~= GameMode.explore and (tile.mapY == 0 or tile.mapY == 1)) then
             -- 说明是最边上的两排，添加装饰物品
             local index = NumEx.NextInt(0, currTerrain.ornTypes.Count);
             local ornName = "tiles/" .. currTerrain.ornTypes[index]:ToString();

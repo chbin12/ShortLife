@@ -33,7 +33,7 @@ ShortLife/upgradeRes4Publish/priority/lua/ui/cell/CLLUICellServer.lua,5bd55f9e95
 ShortLife/upgradeRes4Publish/other/model/Android/hexagon_new.unity3d,d28eee1e353551cd57c3b2a4cfbc585f
 ShortLife/upgradeRes4Publish/other/things/tiles/Android/tree_06.unity3d,ca3c9700ff650479d91a31867de28d56
 ShortLife/upgradeRes4Publish/other/effect/Android/effect_hit.unity3d,514eb54048aec38fb1624110b5e2991f
-ShortLife/upgradeRes4Publish/priority/localization/Chinese.txt,13cdcf00ad0db9e148d7ae2b34053cd4
+ShortLife/upgradeRes4Publish/priority/localization/Chinese.txt,9bd1f5aa678377ca55fb3b762cf22623
 ShortLife/upgradeRes4Publish/other/things/tiles/Android/stone_03.unity3d,ba1b0241dfaf9aea14643a1269ad9f9a
 ShortLife/upgradeRes4Publish/other/model/Android/dongzuo1.unity3d,9ce0dae404fc5af19b062bbec370d9ec
 ShortLife/upgradeRes4Publish/priority/.idea/copyright/profiles_settings.xml,b1e0b181e080c28b1d116582290e6e97
@@ -61,7 +61,7 @@ ShortLife/upgradeRes4Publish/priority/lua/public/CLLInclude.lua,b71f187a4d1ed6fd
 ShortLife/upgradeRes4Publish/other/texture/effect/guangxian/Android/guangxian01.unity3d,88a76ad82721412d2117a23dc23c65ab
 ShortLife/upgradeRes4Publish/other/sound/Android/fx_save.unity3d,3149e915e750e0392cfbb2aba7bc96db
 ShortLife/upgradeRes4Publish/other/things/tiles/Android/s_24.unity3d,1557df98aaa10639341e7bfdae10854e
-ShortLife/upgradeRes4Publish/priority/lua/ui/cell/CLLUICellLevel.lua,58118e1bac35388fb591b5d6d3c4daff
+ShortLife/upgradeRes4Publish/priority/lua/ui/cell/CLLUICellLevel.lua,9b1a86449be0ff229d4afb73b3593f6d
 ShortLife/upgradeRes4Publish/other/texture/tileMap/Android/hexagon_new_02.unity3d,65eecc272d883110c0f045f09bd7059f
 ShortLife/upgradeRes4Publish/priority/lua/ui/panel/CLLPGuid.lua,5a84b94767fc961169d2b1f3f447fcb0
 ShortLife/upgradeRes4Publish/other/things/tiles/Android/s_14.unity3d,7a2dc39a5d93d2f568ea9d7efc4273dc
@@ -73,7 +73,7 @@ ShortLife/upgradeRes4Publish/other/roles/Android/Role1.unity3d,11df58d31e7023ee9
 ShortLife/upgradeRes4Publish/priority/lua/public/CLLPrefs.lua,e2852bf33d7a716e1ff73fde3bdcde3e
 ShortLife/upgradeRes4Publish/other/uiPic/public/Android/_empty.unity3d,7611e1fb943768f6f8ac3a92b3b46036
 ShortLife/upgradeRes4Publish/priority/priority.iml,7d1f876edffcc5abfe91d06de71d4671
-ShortLife/upgradeRes4Publish/priority/lua/CLMainLua.lua,08746f9292ca5f51c4a7b373c499fda7
+ShortLife/upgradeRes4Publish/priority/lua/CLMainLua.lua,89d27730195b22f675d9a9b115da8e11
 ShortLife/upgradeRes4Publish/priority/lua/uLua/Lua/encoder.lua,a05d332d2016386470af74e1790dc1b6
 ShortLife/upgradeRes4Publish/priority/lua/ui/panel/CLLPLevels.lua,e81d04b42b1c3735e12c56ee1dd2cd65
 ShortLife/upgradeRes4Publish/other/things/tiles/Android/s_23.unity3d,9d19bed2ce240188c10453afff06aa79
@@ -133,12 +133,12 @@ ShortLife/upgradeRes4Publish/priority/lua/toolkit/LuaUtl.lua,de9621c6f629485c95b
 ShortLife/upgradeRes4Publish/other/things/tiles/Android/tree_10.unity3d,1b7e9badc208fa8319fe3b7e29d2afbb
 ShortLife/upgradeRes4Publish/other/things/tiles/Android/s_15.unity3d,233a71743ee9e8cdc5d0475437529265
 ShortLife/upgradeRes4Publish/other/sound/Android/fx_pickUp.unity3d,eb592d514651dd643029417d8bfc1edc
-ShortLife/upgradeRes4Publish/priority/.idea/workspace.xml,4292a847cfbdbac34f8e5d10edf04aaa
+ShortLife/upgradeRes4Publish/priority/.idea/workspace.xml,17ec2f16d018cf0fcfb0da21bda5d6b3
 ShortLife/upgradeRes4Publish/priority/lua/chn/CLLChn.lua,1b15295238499bf85ac8795f0f2abc84
 ShortLife/upgradeRes4Publish/other/texture/effect/Android/GlowDot.unity3d,fcbb02d9edac7fe6d0dd4c74b3ef6ce0
 ShortLife/upgradeRes4Publish/priority/lua/explore/CLLExplore.lua,b2c6f580c7d5ec738a3d55e1f920f48b
 ShortLife/upgradeRes4Publish/priority/lua/net/CLLNetDispatch.lua,e5c9f1fb7c39d64836bdc64713d67c6b
-ShortLife/upgradeRes4Publish/priority/lua/cfg/CLLDBCfg.lua,895f129c1747ba8cfd95a841623e7da4
+ShortLife/upgradeRes4Publish/priority/lua/cfg/CLLDBCfg.lua,be5238a22b72652a40347d1faa8ae4e4
 ShortLife/upgradeRes4Publish/other/effect/Android/PickupEffect.unity3d,ea5834824ff6716138d9ebebddd286c4
 ShortLife/upgradeRes4Publish/priority/lua/toolkit/NumEx.lua,b719dc17238a572ebc4e338055b48b41
 ShortLife/upgradeRes4Publish/priority/ui/other/Android/BuildingTitle.unity3d,472c3b03fd876ca999952a137a9fe0e1
@@ -188,7 +188,7 @@ ShortLife/upgradeRes4Publish/other/things/tiles/Android/tree_05.unity3d,678e7af1
 ShortLife/upgradeRes4Publish/priority/lua/cfg/CLLDBCfgTool.lua,8b911933d5b5f910bdcb65768cf6e798
 ShortLife/upgradeRes4Publish/priority/lua/uLua/Lua/type_checkers.lua,a2e9334bcb34d90a45ac4845d573088e
 ShortLife/upgradeRes4Publish/priority/lua/uLua/Lua/System/Set.lua,586669143c15ff44f90632bfc9515715
-ShortLife/upgradeRes4Publish/priority/ui/panel/Android/PanelLevels.unity3d,425df5a3659055ad4e4715a97e358a5c
+ShortLife/upgradeRes4Publish/priority/ui/panel/Android/PanelLevels.unity3d,1af85246fff8af43569bf629e2c3e7f2
 ShortLife/upgradeRes4Publish/priority/lua/ui/panel/CLLPWWWProgress.lua,f90cf36a009ded621c751888f2835e81
 ShortLife/upgradeRes4Publish/priority/.idea/vcs.xml,241f194483e072034a73b09046c5b480
 ShortLife/upgradeRes4Publish/other/things/tiles/Android/stone_02.unity3d,2eec713e2083a5aa937b26b0cc998b17

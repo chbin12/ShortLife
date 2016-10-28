@@ -87,6 +87,12 @@ do
         return datas[id];
     end
 
+    -- 取得关卡
+    function CLLDBCfg.getLevByID(id)
+        local datas = CLLDBCfg.getData(cfgLevelPath);
+        if (datas == nil) then return nil end;
+        return datas[id];
+    end
     --------------------------------------------------
     return CLLDBCfg;
 end;

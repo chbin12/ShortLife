@@ -31,7 +31,7 @@ ShortLife/upgradeRes/priority/lua/ui/cell/CLLUICellServer.lua,0
 ShortLife/upgradeRes/other/model/Android/hexagon_new.unity3d,0
 ShortLife/upgradeRes/other/things/tiles/Android/tree_06.unity3d,3
 ShortLife/upgradeRes/other/effect/Android/effect_hit.unity3d,1
-ShortLife/upgradeRes/priority/localization/Chinese.txt,0
+ShortLife/upgradeRes/priority/localization/Chinese.txt,1
 ShortLife/upgradeRes/other/things/tiles/Android/stone_03.unity3d,3
 ShortLife/upgradeRes/priority/lua/uLua/Lua/listener.lua,0
 ShortLife/upgradeRes/other/model/Android/dongzuo1.unity3d,0
@@ -43,7 +43,8 @@ ShortLife/upgradeRes/priority/lua/uLua/Lua/System/class.lua,0
 ShortLife/upgradeRes/priority/lua/uLua/Lua/encoder.lua,0
 ShortLife/upgradeRes/other/sound/Android/Tap.unity3d,0
 ShortLife/upgradeRes/other/things/tiles/Android/s_05.unity3d,3
-ShortLife/upgradeRes/other/texture/effect/baodian/Android/baodian02.unity3d,0
+ShortLife/upgradeRes/priority/lua/Role/CLLRoleSpeci_02.lua,0
+ShortLife/upgradeRes/priority/lua/uLua/Lua/System/Vector4.lua,0
 ShortLife/upgradeRes/priority/lua/uLua/Lua/containers.lua,0
 ShortLife/upgradeRes/priority/cfg/DBCFRoleLevData.cfg,0
 ShortLife/upgradeRes/priority/lua/ui/cell/CLLUICellStuff.lua,0
@@ -59,6 +60,7 @@ ShortLife/upgradeRes/priority/lua/public/CLLInclude.lua,1
 ShortLife/upgradeRes/other/texture/effect/guangxian/Android/guangxian01.unity3d,0
 ShortLife/upgradeRes/other/sound/Android/fx_save.unity3d,0
 ShortLife/upgradeRes/other/things/tiles/Android/s_24.unity3d,3
+ShortLife/upgradeRes/other/texture/effect/baodian/Android/baodian02.unity3d,0
 ShortLife/upgradeRes/other/texture/tileMap/Android/hexagon_new_02.unity3d,0
 ShortLife/upgradeRes/other/things/tiles/Android/s_14.unity3d,3
 ShortLife/upgradeRes/priority/lua/net/Demo4BuildLua.lua,0
@@ -69,7 +71,7 @@ ShortLife/upgradeRes/other/roles/Android/Role1.unity3d,3
 ShortLife/upgradeRes/priority/lua/public/CLLPrefs.lua,0
 ShortLife/upgradeRes/other/uiPic/public/Android/_empty.unity3d,0
 ShortLife/upgradeRes/priority/priority.iml,0
-ShortLife/upgradeRes/priority/lua/CLMainLua.lua,0
+ShortLife/upgradeRes/priority/lua/CLMainLua.lua,1
 ShortLife/upgradeRes/priority/lua/ui/panel/CLLPBattle.lua,0
 ShortLife/upgradeRes/priority/lua/ui/panel/CLLPLevels.lua,2
 ShortLife/upgradeRes/priority/lua/toolkit/CLLUINode.lua,0
@@ -79,7 +81,6 @@ ShortLife/upgradeRes/other/things/props/Android/1.unity3d,1
 ShortLife/upgradeRes/other/things/tiles/Android/tree_07.unity3d,3
 ShortLife/upgradeRes/other/things/tiles/Android/s_13.unity3d,3
 ShortLife/upgradeRes/priority/lua/uLua/Lua/decoder.lua,0
-ShortLife/upgradeRes/other/texture/effect/niuquwenli/Android/baokaiwenli01.unity3d,0
 ShortLife/upgradeRes/other/things/tiles/Android/tree_10.unity3d,3
 ShortLife/upgradeRes/other/things/tiles/Android/stone_08.unity3d,3
 ShortLife/upgradeRes/priority/lua/uLua/Lua/System/Global.lua,0
@@ -92,7 +93,7 @@ ShortLife/upgradeRes/priority/cfg/DBCFBulletData.cfg,0
 ShortLife/upgradeRes/priority/lua/uLua/Lua/wire_format.lua,0
 ShortLife/upgradeRes/priority/lua/uLua/Lua/protobuf.lua,0
 ShortLife/upgradeRes/priority/lua/net/CLLData.lua,0
-ShortLife/upgradeRes/priority/lua/ui/cell/CLLUICellLevel.lua,1
+ShortLife/upgradeRes/priority/lua/ui/cell/CLLUICellLevel.lua,2
 ShortLife/upgradeRes/priority/lua/uLua/Lua/3rd/cjson/util.lua,0
 ShortLife/upgradeRes/priority/ui/panel/Android/PanelWWWProgress.unity3d,1
 ShortLife/upgradeRes/priority/lua/uLua/Lua/type_checkers.lua,0
@@ -101,7 +102,7 @@ ShortLife/upgradeRes/priority/lua/uLua/Lua/3rd/pbc/parser.lua,0
 ShortLife/upgradeRes/priority/ui/panel/Android/PanelBattle.unity3d,1
 ShortLife/upgradeRes/other/things/tiles/Android/stone_04.unity3d,3
 ShortLife/upgradeRes/priority/lua/net/optdb/CLDBGuid.lua,0
-ShortLife/upgradeRes/priority/lua/public/CLPubTypes.lua,0
+ShortLife/upgradeRes/other/texture/effect/niuquwenli/Android/baokaiwenli01.unity3d,0
 ShortLife/upgradeRes/other/things/tiles/Android/s_09.unity3d,3
 ShortLife/upgradeRes/other/things/tiles/Android/s_17.unity3d,3
 ShortLife/upgradeRes/priority/lua/ui/panel/CLLPExplore.lua,0
@@ -132,12 +133,12 @@ ShortLife/upgradeRes/priority/lua/toolkit/LuaUtl.lua,0
 ShortLife/upgradeRes/priority/lua/uLua/Lua/System/Bounds.lua,0
 ShortLife/upgradeRes/other/things/tiles/Android/s_15.unity3d,3
 ShortLife/upgradeRes/other/sound/Android/fx_pickUp.unity3d,0
-ShortLife/upgradeRes/priority/.idea/workspace.xml,5
+ShortLife/upgradeRes/priority/.idea/workspace.xml,7
 ShortLife/upgradeRes/priority/lua/chn/CLLChn.lua,0
 ShortLife/upgradeRes/other/texture/effect/Android/GlowDot.unity3d,0
 ShortLife/upgradeRes/priority/lua/explore/CLLExplore.lua,2
 ShortLife/upgradeRes/priority/lua/net/CLLNetDispatch.lua,0
-ShortLife/upgradeRes/priority/lua/cfg/CLLDBCfg.lua,1
+ShortLife/upgradeRes/priority/lua/cfg/CLLDBCfg.lua,2
 ShortLife/upgradeRes/other/effect/Android/PickupEffect.unity3d,1
 ShortLife/upgradeRes/priority/lua/toolkit/NumEx.lua,0
 ShortLife/upgradeRes/priority/lua/uLua/Lua/System/Raycast.lua,0
@@ -157,7 +158,7 @@ ShortLife/upgradeRes/priority/cfg/DBCFPropData.cfg,0
 ShortLife/upgradeRes/other/things/tiles/Android/s_21.unity3d,3
 ShortLife/upgradeRes/priority/ui/panel/Android/PanelPackage.unity3d,1
 ShortLife/upgradeRes/priority/lua/uLua/Lua/System/Plane.lua,0
-ShortLife/upgradeRes/priority/lua/uLua/Lua/System/Vector4.lua,0
+ShortLife/upgradeRes/priority/lua/public/CLPubTypes.lua,0
 ShortLife/upgradeRes/other/things/tiles/Android/s_01.unity3d,3
 ShortLife/upgradeRes/priority/lua/uLua/Lua/3rd/sproto/sproto.lua,0
 ShortLife/upgradeRes/priority/lua/net/CLLDB.lua,0
@@ -186,7 +187,7 @@ ShortLife/upgradeRes/other/things/tiles/Android/tree_05.unity3d,3
 ShortLife/upgradeRes/priority/lua/cfg/CLLDBCfgTool.lua,0
 ShortLife/upgradeRes/priority/lua/ui/panel/CLLPGuid.lua,0
 ShortLife/upgradeRes/priority/lua/uLua/Lua/System/Set.lua,0
-ShortLife/upgradeRes/priority/ui/panel/Android/PanelLevels.unity3d,2
+ShortLife/upgradeRes/priority/ui/panel/Android/PanelLevels.unity3d,3
 ShortLife/upgradeRes/priority/lua/ui/panel/CLLPWWWProgress.lua,0
 ShortLife/upgradeRes/priority/.idea/vcs.xml,0
 ShortLife/upgradeRes/priority/ui/panel/Android/PanelMain.unity3d,1
@@ -199,7 +200,6 @@ ShortLife/upgradeRes/other/texture/effect/baodian/Android/baodian03.unity3d,0
 ShortLife/upgradeRes/other/model/Android/Plane001.unity3d,0
 ShortLife/upgradeRes/other/things/tiles/Android/tree_14.unity3d,3
 ShortLife/upgradeRes/other/things/tiles/Android/s_19.unity3d,3
-ShortLife/upgradeRes/priority/lua/Role/CLLRoleSpeci_02.lua,0
 ShortLife/upgradeRes/other/things/tiles/Android/stone_02.unity3d,3
 ShortLife/upgradeRes/priority/lua/ui/panel/CLLPBackplate.lua,0
 ShortLife/upgradeRes/other/things/tiles/Android/tree_04.unity3d,3

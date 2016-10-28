@@ -4,23 +4,23 @@ do
   local csSelf = nil;
   local transform = nil;
   local mData = nil;
+  local label = nil;
+  local attr = nil;
+
 
   -- 初始化，只调用一次
   function _cell.init (csObj)
     csSelf = csObj;
     transform = csSelf.transform;
-    --[[
-    上的组件：getChild(transform, "offset", "Progress BarHong"):GetComponent("UISlider");
-    --]]
+    label = getChild(transform, "Label"):GetComponent("UILabel");
   end
 
   -- 显示，
   -- 注意，c#侧不会在调用show时，调用refresh
   function _cell.show ( go, data )
     mData = data;
-    --[[
-    TODO:
-    --]]
+    attr = CLLDBCfg.getLevByID(mData);
+    label.text = Localization.Get(attr.NameKey);
   end
 
   -- 注意，c#侧不会在调用show时，调用refresh
