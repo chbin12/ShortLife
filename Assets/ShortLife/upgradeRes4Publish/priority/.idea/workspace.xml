@@ -23,16 +23,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="CLLRole.lua" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lua/Role/CLLRole.lua">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="277" column="41" selection-start-line="277" selection-start-column="41" selection-end-line="277" selection-end-column="41" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="Chinese.txt" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/localization/Chinese.txt">
           <provider selected="true" editor-type-id="text-editor">
@@ -57,7 +47,27 @@
         <entry file="file://$PROJECT_DIR$/lua/scene/CLLScene.lua">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="179" column="20" selection-start-line="179" selection-start-column="20" selection-end-line="179" selection-end-column="20" />
+              <caret line="560" column="32" selection-start-line="560" selection-start-column="13" selection-end-line="560" selection-end-column="32" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CLLExplore.lua" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/lua/explore/CLLExplore.lua">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.6300852">
+              <caret line="82" column="11" selection-start-line="82" selection-start-column="11" selection-end-line="82" selection-end-column="11" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CLLPExplore.lua" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lua/ui/panel/CLLPExplore.lua">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="61" column="16" selection-start-line="61" selection-start-column="16" selection-end-line="61" selection-end-column="37" />
               <folding />
             </state>
           </provider>
@@ -87,26 +97,16 @@
         <entry file="file://$PROJECT_DIR$/lua/net/CLLData.lua">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="84" column="44" selection-start-line="84" selection-start-column="44" selection-end-line="84" selection-end-column="44" />
+              <caret line="78" column="32" selection-start-line="78" selection-start-column="13" selection-end-line="78" selection-end-column="32" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CLLCameraEffect.lua" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lua/toolkit/CLLCameraEffect.lua">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="20" column="46" selection-start-line="20" selection-start-column="34" selection-end-line="20" selection-end-column="46" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CLLPLevels.lua" pinned="false" current-in-tab="true">
+      <file leaf-file-name="CLLPLevels.lua" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lua/ui/panel/CLLPLevels.lua">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5146642">
+            <state vertical-scroll-proportion="0.0">
               <caret line="32" column="7" selection-start-line="32" selection-start-column="7" selection-end-line="32" selection-end-column="7" />
               <folding />
             </state>
@@ -117,7 +117,7 @@
         <entry file="file://$PROJECT_DIR$/lua/cfg/CLLDBCfg.lua">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="90" column="36" selection-start-line="90" selection-start-column="13" selection-end-line="90" selection-end-column="36" />
+              <caret line="90" column="32" selection-start-line="90" selection-start-column="13" selection-end-line="90" selection-end-column="32" />
               <folding />
             </state>
           </provider>
@@ -140,7 +140,6 @@
         <option value="$PROJECT_DIR$/lua/scene/CLLBegainingPlot.lua" />
         <option value="$PROJECT_DIR$/lua/ui/panel/CLLPMain.lua" />
         <option value="$PROJECT_DIR$/lua/ui/panel/CLLPOpeningPlot.lua" />
-        <option value="$PROJECT_DIR$/lua/explore/CLLExplore.lua" />
         <option value="$PROJECT_DIR$/lua/ui/panel/CLLPLoadScene.lua" />
         <option value="$PROJECT_DIR$/lua/ui/panel/CLLPStart.lua" />
         <option value="$PROJECT_DIR$/lua/public/CLLInclude.lua" />
@@ -150,9 +149,10 @@
         <option value="$PROJECT_DIR$/lua/CLMainLua.lua" />
         <option value="$PROJECT_DIR$/lua/ui/cell/CLLUICellLevel.lua" />
         <option value="$PROJECT_DIR$/localization/Chinese.txt" />
-        <option value="$PROJECT_DIR$/lua/net/CLLData.lua" />
         <option value="$PROJECT_DIR$/lua/scene/CLLScene.lua" />
         <option value="$PROJECT_DIR$/lua/ui/panel/CLLPLevels.lua" />
+        <option value="$PROJECT_DIR$/lua/net/CLLData.lua" />
+        <option value="$PROJECT_DIR$/lua/explore/CLLExplore.lua" />
       </list>
     </option>
   </component>
@@ -628,12 +628,12 @@
       <workItem from="1477618310453" duration="7973000" />
       <workItem from="1477877629366" duration="1410000" />
       <workItem from="1477965884245" duration="3711000" />
-      <workItem from="1478047831626" duration="5495000" />
+      <workItem from="1478047831626" duration="9785000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="84414000" />
+    <option name="totallyTimeSpent" value="88704000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1846" y="23" width="1846" height="1177" extended-state="6" />
@@ -912,24 +912,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lua/ui/panel/CLLPExplore.lua">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="54" column="47" selection-start-line="54" selection-start-column="47" selection-end-line="56" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lua/ui/panel/CLLPGuid.lua">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="39" column="51" selection-start-line="39" selection-start-column="51" selection-end-line="39" selection-end-column="51" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lua/explore/CLLExplore.lua">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="84" column="60" selection-start-line="84" selection-start-column="23" selection-end-line="84" selection-end-column="60" />
         </state>
       </provider>
     </entry>
@@ -993,14 +979,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lua/cfg/CLLDBCfg.lua">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="90" column="36" selection-start-line="90" selection-start-column="13" selection-end-line="90" selection-end-column="36" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lua/CLMainLua.lua">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1025,22 +1003,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lua/net/CLLData.lua">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="84" column="44" selection-start-line="84" selection-start-column="44" selection-end-line="84" selection-end-column="44" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lua/scene/CLLScene.lua">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="179" column="20" selection-start-line="179" selection-start-column="20" selection-end-line="179" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lua/ui/panel/CLLPMain.lua">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1051,8 +1013,48 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/lua/ui/panel/CLLPLevels.lua">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5146642">
+        <state vertical-scroll-proportion="0.0">
           <caret line="32" column="7" selection-start-line="32" selection-start-column="7" selection-end-line="32" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lua/scene/CLLScene.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="560" column="32" selection-start-line="560" selection-start-column="13" selection-end-line="560" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lua/cfg/CLLDBCfg.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="90" column="32" selection-start-line="90" selection-start-column="13" selection-end-line="90" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lua/net/CLLData.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="78" column="32" selection-start-line="78" selection-start-column="13" selection-end-line="78" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lua/ui/panel/CLLPExplore.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="61" column="16" selection-start-line="61" selection-start-column="16" selection-end-line="61" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lua/explore/CLLExplore.lua">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6300852">
+          <caret line="82" column="11" selection-start-line="82" selection-start-column="11" selection-end-line="82" selection-end-column="11" />
           <folding />
         </state>
       </provider>

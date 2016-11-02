@@ -76,6 +76,11 @@ do
         CLLDB.savePlayer();
     end
 
+    function CLLData.setLev(val)
+        CLLData.player.lev = int2Bio(val);
+        CLLDB.savePlayer();
+    end
+
     function CLLData.login()
         CLLData.player = CLLDB.getPlayer();
         if(CLLData.player == nil or CLLData.player.gid == nil) then

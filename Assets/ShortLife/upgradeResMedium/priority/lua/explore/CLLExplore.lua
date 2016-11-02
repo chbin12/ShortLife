@@ -66,8 +66,27 @@ do
     -- 加载跟随者
     function CLLExplore.loadFollowers()
         local playerData = CLLData.player;
+        local curLev = bio2Int(playerData.lev);
+        local count = 0;
+        if(curLev == 1) then
+            count = 0;
+        elseif(curLev == 2) then
+            count = 0;
+        elseif(curLev == 3) then
+            count = 1;
+        elseif(curLev == 4) then
+            count = 3;
+        elseif(curLev == 5) then
+            count = 3;
+        elseif(curLev == 6) then
+            count = 1;
+        end
+        if(count == 0) then
+            return;
+        end
+
         local attr = CLLDBCfg.getRoleByGIDAndLev(bio2Int(playerData.gid), bio2Int(playerData.lev));
-        CLRolePool.borrowUnitAsyn(attr.base.PrefabName, CLLExplore.onLoadedFollower, { playerData, attr, 1, SCfg.self.player });
+        CLRolePool.borrowUnitAsyn(attr.base.PrefabName, CLLExplore.onLoadedFollower, { playerData, attr, 1, SCfg.self.player, count});
     end
 
     function CLLExplore.onLoadedFollower(name, unit, orgs)
@@ -75,6 +94,7 @@ do
         local attr = orgs[2];
         local index = orgs[3];
         local leader = orgs[4];
+        local count = orgs[5];
 
         local tile = CLLScene.getCenterTile();
         local x = tile.mapX - index;
@@ -91,8 +111,8 @@ do
         unit.luaTable.setLeader(leader);
         offense:Add(unit);
 
-        if (index < 4) then
-            CLRolePool.borrowUnitAsyn(attr.base.PrefabName, CLLExplore.onLoadedFollower, { playerData, attr, index + 1, unit });
+        if (index < count) then
+            CLRolePool.borrowUnitAsyn(attr.base.PrefabName, CLLExplore.onLoadedFollower, { playerData, attr, index + 1, unit, count});
         end
     end
 
@@ -134,12 +154,14 @@ do
     -- 计算是否能过关
     function CLLExplore.checkCanPassLev(val)
         local playerData = CLLData.player;
-        local levAttr = CLLDBCfg.getLevByID(bio2Int(playerData.lev));
+        local curLev = bio2Int(playerData.lev);
+        local levAttr = CLLDBCfg.getLevByID(curLev);
         local passStep = bio2Int(levAttr.Steps);
         if (val >= passStep) then
             -- 说明过关了
             -- TODO:
             Time:SetTimeScale(0);
+            CLLData.setLev(curLev + 1);
         end
     end
 
