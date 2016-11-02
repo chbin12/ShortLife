@@ -4,6 +4,8 @@ do
 
     local csSelf = nil;
     local transform = nil;
+    local GridMenu = nil;
+    local isHideMenu = false;
     local RootSpin;
     local plotObj = nil;
     local blur = nil;
@@ -14,6 +16,12 @@ do
     function CLLPLevels.init(csObj)
         csSelf = csObj;
         transform = csObj.transform;
+
+        GridMenu = getChild(transform, "AnchorTopRight/GridMenu"):GetComponent("TweenPosition");
+        isHideMenu = (not isHideMenu);
+        GridMenu:Play(isHideMenu);
+
+
         RootSpin = getChild(transform, "CameraBlur", "Plot", "RootSpin");
         blur = getChild(transform, "CameraBlur"):GetComponent("Blur");
         blur.blurShader = Shader.Find("Hidden/FastBlur");
@@ -58,6 +66,13 @@ do
     end
 
     function CLLPLevels.onClickCell(cell)
+        local d = cell.luaTable.getData();
+
+        local lev = bio2Int(CLLData.player.lev);
+        if (lev < d) then
+            NAlertTxt.add(Localization.Get("NotOpen"), Color.red, 1);
+            return;
+        end
         CLPanelManager.getPanelAsy("PanelLoadScene", onLoadedPanel, { type = "home"});
     end
 
@@ -85,12 +100,25 @@ do
     -- 处理ui上的事件，例如点击等
     function CLLPLevels.uiEventDelegate(go)
         local goName = go.name;
-        --[[
-        if(goName == "xxx") then
-          --TODO:
+        if (goName == "ButtonMenu") then
+            isHideMenu = (not isHideMenu);
+            GridMenu:Play(isHideMenu);
+        elseif (goName == "ButtonCell1") then
+            -- help
+        elseif (goName == "ButtonCell2") then
+            -- share
+        elseif (goName == "ButtonCell3") then
+            -- setting
+            CLPanelManager.getPanelAsy("PanelSet", onLoadedPanelTT);
         end
-        --]]
     end
+
+--    function CLLPLevels.hideMenu()
+--        if(not isHideMenu) then
+--            isHideMenu = (not isHideMenu);
+--            GridMenu:Play(isHideMenu);
+--        end
+--    end
 
     -- 当按了返回键时，关闭自己（返值为true时关闭）
     function CLLPLevels.hideSelfOnKeyBack()

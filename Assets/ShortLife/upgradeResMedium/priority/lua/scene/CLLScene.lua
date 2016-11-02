@@ -172,7 +172,7 @@ do
         local ret = {};
         if(sideRight == mapSizeX) then
             for i = 0, mapSizeY-1 do
-
+                ret[PStr.b():a(sideRight):a("_"):a(i):e()] = true;
             end
             return ret;
         end
@@ -212,13 +212,13 @@ do
                 i = i - mapSizeY;
             end
 
-            key = sideRight .. "_" .. i;
-            key2 = sideRight .. "_" .. (i + 1);
-            key3 = sideRight .. "_" .. (i - 1);
+            key = PStr.b():a(sideRight):a("_"):a(i):e();
+            key2 = PStr.b():a(sideRight):a("_"):a(i + 1):e();
+            key3 = PStr.b():a(sideRight):a("_"):a(i - 1):e();
 
-            key4 = (sideRight - 1) .. "_" .. i;
-            key5 = (sideRight - 1) .. "_" .. (i + 1);
-            key6 = (sideRight - 1) .. "_" .. (i - 1);
+            key4 = PStr.b():a((sideRight - 1)):a("_"):a(i):e();
+            key5 = PStr.b():a((sideRight - 1)):a("_"):a(i + 1):e();
+            key6 = PStr.b():a((sideRight - 1)):a("_"):a(i - 1):e();
             if (i % 2 == 1 or i % 2 == -1) then
                 if (lastRightSideState[key4]) then
                     count = count + 1;

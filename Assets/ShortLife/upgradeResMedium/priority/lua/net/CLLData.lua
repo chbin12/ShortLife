@@ -81,6 +81,7 @@ do
         if(CLLData.player == nil or CLLData.player.gid == nil) then
             CLLData.player = {};
             CLLData.player.gid = int2Bio(1);
+            -- 可以理解为关卡进度
             CLLData.player.lev = int2Bio(1);
             CLLData.player.guidStep = int2Bio(0);
             CLLData.needSave = true;

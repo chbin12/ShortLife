@@ -9,6 +9,8 @@ do
     local transform = nil;
     local MaxStep = 300;
     local offense = ArrayList();
+    -- 方块掉落距离
+    local FallTileDistance = 8;
 
     -- 初始化，只会调用一次
     function CLLExplore.init(csObj)
@@ -21,7 +23,6 @@ do
 
     -- 设置数据
     function CLLExplore.setData(paras)
-
     end
 
     function CLLExplore.begain()
@@ -38,11 +39,11 @@ do
         ---------------------------------
         SCfg.self.player.transform.parent = CLBattle.self.transform;
         SCfg.self.player.transform.position = CLLScene.getCenterTile().transform.position;
-        SCfg.self.player.transform.localScale = Vector3.one*1.5;
+        SCfg.self.player.transform.localScale = Vector3.one * 1.5;
         SCfg.self.player.transform.localEulerAngles = Vector3(0, 90, 0);
 
-        smoothFollowTween:flyout(SCfg.self.player.transform.position,1, 0, nil, CLLExplore.moveLookatTarget, true);
-        smoothFollow4Camera:tween(Vector3(8,4,0), Vector3(10, 17,0), 1, nil);
+        smoothFollowTween:flyout(SCfg.self.player.transform.position, 1, 0, nil, CLLExplore.moveLookatTarget, true);
+        smoothFollow4Camera:tween(Vector3(8, 4, 0), Vector3(10, 17, 0), 1, nil);
         NGUITools.SetActive(SCfg.self.player.gameObject, true);
         SCfg.self.player:init(bio2Int(playerData.gid), 0, bio2Int(playerData.lev), true, nil);
         SCfg.self.player.luaTable.setFollower(nil);
@@ -66,7 +67,7 @@ do
     function CLLExplore.loadFollowers()
         local playerData = CLLData.player;
         local attr = CLLDBCfg.getRoleByGIDAndLev(bio2Int(playerData.gid), bio2Int(playerData.lev));
-        CLRolePool.borrowUnitAsyn(attr.base.PrefabName, CLLExplore.onLoadedFollower, { playerData, attr, 1, SCfg.self.player});
+        CLRolePool.borrowUnitAsyn(attr.base.PrefabName, CLLExplore.onLoadedFollower, { playerData, attr, 1, SCfg.self.player });
     end
 
     function CLLExplore.onLoadedFollower(name, unit, orgs)
@@ -75,13 +76,13 @@ do
         local index = orgs[3];
         local leader = orgs[4];
 
-        local tile =  CLLScene.getCenterTile();
+        local tile = CLLScene.getCenterTile();
         local x = tile.mapX - index;
         local y = tile.mapY;
         tile = CLLScene.GetTileAt(x, y, 0);
         unit.transform.parent = CLBattle.self.transform;
         unit.transform.position = tile.transform.position;
-        unit.transform.localScale = Vector3.one*1.5;
+        unit.transform.localScale = Vector3.one * 1.5;
         unit.transform.localEulerAngles = Vector3(0, 90, 0);
 
         NGUITools.SetActive(unit.gameObject, true);
@@ -90,31 +91,55 @@ do
         unit.luaTable.setLeader(leader);
         offense:Add(unit);
 
-        if(index < 4) then
-            CLRolePool.borrowUnitAsyn(attr.base.PrefabName, CLLExplore.onLoadedFollower, { playerData, attr, index+1, unit});
+        if (index < 4) then
+            CLRolePool.borrowUnitAsyn(attr.base.PrefabName, CLLExplore.onLoadedFollower, { playerData, attr, index + 1, unit });
         end
     end
 
     function CLLExplore.onMoving(role)
         -- 处理加载地图
         local tile = CLLScene.getTileByLocalPos(role.transform.localPosition);
-        if(tile == nil) then return end;
+        if (tile == nil) then return end;
         local x = tile.mapX;
         local right = CLLScene.getRightSide();
-        if(right - x < 8) then
+        if (right - x < FallTileDistance) then
             local curStep = CLLScene.getSteps();
-            local offset = curStep/MaxStep;
+            local offset = curStep / MaxStep;
             -- 增加一列地块
             CLLScene.addRightSideTiles(0.0, nil, offset);
-            CLLPExplore.refreshStep(curStep);
-            -- 重新设置角色移动速度
 
+            -- 重新设置角色移动速度
             local count = offense.Count;
             local unit;
             for i = 0, count - 1 do
                 unit = offense:get_Item(i);
                 unit.luaTable.setMoveSpeed(bio2Int(unit.luaTable.attr.base.MoveSpeed) * (1 + offset));
             end
+
+            -- 重新计算步数
+            local step = CLLExplore.getSteps();
+            CLLPExplore.refreshStep(step);
+
+            -- 计算是否能过关
+            CLLExplore.checkCanPassLev(step);
+        end
+    end
+
+    function CLLExplore.getSteps()
+        local step = CLLScene.getSteps() - FallTileDistance;
+        step = step < 0 and 0 or step;
+        return step;
+    end
+
+    -- 计算是否能过关
+    function CLLExplore.checkCanPassLev(val)
+        local playerData = CLLData.player;
+        local levAttr = CLLDBCfg.getLevByID(bio2Int(playerData.lev));
+        local passStep = bio2Int(levAttr.Steps);
+        if (val >= passStep) then
+            -- 说明过关了
+            -- TODO:
+            Time:SetTimeScale(0);
         end
     end
 
