@@ -31,7 +31,7 @@ ShortLife/upgradeRes/priority/lua/ui/cell/CLLUICellServer.lua,0
 ShortLife/upgradeRes/other/model/Android/hexagon_new.unity3d,0
 ShortLife/upgradeRes/other/things/tiles/Android/tree_06.unity3d,3
 ShortLife/upgradeRes/other/effect/Android/effect_hit.unity3d,1
-ShortLife/upgradeRes/priority/localization/Chinese.txt,1
+ShortLife/upgradeRes/priority/localization/Chinese.txt,2
 ShortLife/upgradeRes/other/things/tiles/Android/stone_03.unity3d,3
 ShortLife/upgradeRes/priority/lua/uLua/Lua/listener.lua,0
 ShortLife/upgradeRes/other/model/Android/dongzuo1.unity3d,0
@@ -73,7 +73,7 @@ ShortLife/upgradeRes/other/uiPic/public/Android/_empty.unity3d,0
 ShortLife/upgradeRes/priority/priority.iml,0
 ShortLife/upgradeRes/priority/lua/CLMainLua.lua,1
 ShortLife/upgradeRes/priority/lua/ui/panel/CLLPBattle.lua,0
-ShortLife/upgradeRes/priority/lua/ui/panel/CLLPLevels.lua,2
+ShortLife/upgradeRes/priority/lua/ui/panel/CLLPLevels.lua,3
 ShortLife/upgradeRes/priority/lua/toolkit/CLLUINode.lua,0
 ShortLife/upgradeRes/other/things/tiles/Android/s_23.unity3d,3
 ShortLife/upgradeRes/priority/lua/uLua/Lua/System/Coroutine.lua,0
@@ -92,8 +92,8 @@ ShortLife/upgradeRes/other/things/tiles/Android/s_00.unity3d,3
 ShortLife/upgradeRes/priority/cfg/DBCFBulletData.cfg,0
 ShortLife/upgradeRes/priority/lua/uLua/Lua/wire_format.lua,0
 ShortLife/upgradeRes/priority/lua/uLua/Lua/protobuf.lua,0
-ShortLife/upgradeRes/priority/lua/net/CLLData.lua,0
-ShortLife/upgradeRes/priority/lua/ui/cell/CLLUICellLevel.lua,2
+ShortLife/upgradeRes/priority/lua/net/CLLData.lua,1
+ShortLife/upgradeRes/priority/lua/ui/cell/CLLUICellLevel.lua,3
 ShortLife/upgradeRes/priority/lua/uLua/Lua/3rd/cjson/util.lua,0
 ShortLife/upgradeRes/priority/ui/panel/Android/PanelWWWProgress.unity3d,1
 ShortLife/upgradeRes/priority/lua/uLua/Lua/type_checkers.lua,0
@@ -133,10 +133,10 @@ ShortLife/upgradeRes/priority/lua/toolkit/LuaUtl.lua,0
 ShortLife/upgradeRes/priority/lua/uLua/Lua/System/Bounds.lua,0
 ShortLife/upgradeRes/other/things/tiles/Android/s_15.unity3d,3
 ShortLife/upgradeRes/other/sound/Android/fx_pickUp.unity3d,0
-ShortLife/upgradeRes/priority/.idea/workspace.xml,7
+ShortLife/upgradeRes/priority/.idea/workspace.xml,13
 ShortLife/upgradeRes/priority/lua/chn/CLLChn.lua,0
 ShortLife/upgradeRes/other/texture/effect/Android/GlowDot.unity3d,0
-ShortLife/upgradeRes/priority/lua/explore/CLLExplore.lua,2
+ShortLife/upgradeRes/priority/lua/explore/CLLExplore.lua,8
 ShortLife/upgradeRes/priority/lua/net/CLLNetDispatch.lua,0
 ShortLife/upgradeRes/priority/lua/cfg/CLLDBCfg.lua,2
 ShortLife/upgradeRes/other/effect/Android/PickupEffect.unity3d,1
@@ -187,7 +187,7 @@ ShortLife/upgradeRes/other/things/tiles/Android/tree_05.unity3d,3
 ShortLife/upgradeRes/priority/lua/cfg/CLLDBCfgTool.lua,0
 ShortLife/upgradeRes/priority/lua/ui/panel/CLLPGuid.lua,0
 ShortLife/upgradeRes/priority/lua/uLua/Lua/System/Set.lua,0
-ShortLife/upgradeRes/priority/ui/panel/Android/PanelLevels.unity3d,3
+ShortLife/upgradeRes/priority/ui/panel/Android/PanelLevels.unity3d,4
 ShortLife/upgradeRes/priority/lua/ui/panel/CLLPWWWProgress.lua,0
 ShortLife/upgradeRes/priority/.idea/vcs.xml,0
 ShortLife/upgradeRes/priority/ui/panel/Android/PanelMain.unity3d,1
@@ -214,7 +214,7 @@ ShortLife/upgradeRes/other/texture/Android/empty.unity3d,0
 ShortLife/upgradeRes/priority/ui/panel/Android/PanelSet.unity3d,1
 ShortLife/upgradeRes/other/things/tiles/Android/tree_01.unity3d,3
 ShortLife/upgradeRes/priority/lua/uLua/Lua/3rd/pblua/login_pb.lua,0
-ShortLife/upgradeRes/priority/lua/scene/CLLScene.lua,0
+ShortLife/upgradeRes/priority/lua/scene/CLLScene.lua,2
 ShortLife/upgradeRes/priority/lua/chn/ChnNetHandle.lua,0
 ShortLife/upgradeRes/priority/lua/uLua/Lua/System/Layer.lua,0
 ShortLife/upgradeRes/other/texture/tileMap/Android/hexagon_new_01.unity3d,0
@@ -223,7 +223,7 @@ ShortLife/upgradeRes/priority/ui/panel/Android/PanelMask4Panel.unity3d,1
 ShortLife/upgradeRes/priority/lua/ui/panel/CLLPHotWheel.lua,0
 ShortLife/upgradeRes/other/things/tiles/Android/s_03.unity3d,3
 ShortLife/upgradeRes/priority/lua/battle/CLLBattle.lua,0
-ShortLife/upgradeRes/priority/lua/ui/panel/CLLPLoadScene.lua,2
+ShortLife/upgradeRes/priority/lua/ui/panel/CLLPLoadScene.lua,3
 ShortLife/upgradeRes/priority/lua/uLua/Lua/System/Timer.lua,0
 ShortLife/upgradeRes/priority/lua/uLua/Lua/3rd/sproto/testrpc.lua,0
 ShortLife/upgradeRes/priority/lua/ui/panel/CLLPOpeningPlot.lua,1

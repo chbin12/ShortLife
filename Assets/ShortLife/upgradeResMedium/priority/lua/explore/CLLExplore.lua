@@ -28,7 +28,13 @@ do
     function CLLExplore.begain()
         -- load player
         local playerData = CLLData.player;
-        local attr = CLLDBCfg.getRoleByGIDAndLev(bio2Int(playerData.gid), bio2Int(playerData.lev));
+
+        local curLev = bio2Int(playerData.lev);
+        local levAttr = CLLDBCfg.getLevByID(curLev);
+        local passStep = bio2Int(levAttr.Steps);
+        CLLScene.setMaxLevLength(passStep);
+
+        local attr = CLLDBCfg.getRoleByGIDAndLev(bio2Int(playerData.gid), 1);
         CLRolePool.borrowUnitAsyn(attr.base.PrefabName, CLLExplore.onLoadedPlayer, { playerData, attr });
     end
 
@@ -45,7 +51,7 @@ do
         smoothFollowTween:flyout(SCfg.self.player.transform.position, 1, 0, nil, CLLExplore.moveLookatTarget, true);
         smoothFollow4Camera:tween(Vector3(8, 4, 0), Vector3(10, 17, 0), 1, nil);
         NGUITools.SetActive(SCfg.self.player.gameObject, true);
-        SCfg.self.player:init(bio2Int(playerData.gid), 0, bio2Int(playerData.lev), true, nil);
+        SCfg.self.player:init(bio2Int(playerData.gid), 0, 1, true, nil);
         SCfg.self.player.luaTable.setFollower(nil);
         SCfg.self.player.luaTable.setLeader(nil);
         offense:Add(SCfg.self.player);
@@ -85,7 +91,7 @@ do
             return;
         end
 
-        local attr = CLLDBCfg.getRoleByGIDAndLev(bio2Int(playerData.gid), bio2Int(playerData.lev));
+        local attr = CLLDBCfg.getRoleByGIDAndLev(bio2Int(playerData.gid), 1);
         CLRolePool.borrowUnitAsyn(attr.base.PrefabName, CLLExplore.onLoadedFollower, { playerData, attr, 1, SCfg.self.player, count});
     end
 
@@ -106,7 +112,7 @@ do
         unit.transform.localEulerAngles = Vector3(0, 90, 0);
 
         NGUITools.SetActive(unit.gameObject, true);
-        unit:init(bio2Int(playerData.gid), 0, bio2Int(playerData.lev), true, nil);
+        unit:init(bio2Int(playerData.gid), 0, 1, true, nil);
         leader.luaTable.setFollower(unit);
         unit.luaTable.setLeader(leader);
         offense:Add(unit);
@@ -159,9 +165,15 @@ do
         local passStep = bio2Int(levAttr.Steps);
         if (val >= passStep) then
             -- 说明过关了
-            -- TODO:
-            Time:SetTimeScale(0);
+            Time:SetTimeScale(0.5);
             CLLData.setLev(curLev + 1);
+            local onFinishFollowCamera = function()
+                CLLExplore.clean();
+                CLLScene.clean();
+                Time:SetTimeScale(1);
+                CLPanelManager.getPanelAsy("PanelLevels", onLoadedPanel);
+            end
+            smoothFollow4Camera:tween(Vector3(10, 17, 0), Vector3(8, 4, 0),  1, onFinishFollowCamera);
         end
     end
 

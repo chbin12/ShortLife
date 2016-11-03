@@ -120,7 +120,7 @@ do
         end
 
         local playerData = CLLData.player;
-        local attr = CLLDBCfg.getRoleByGIDAndLev(bio2Int(playerData.gid), bio2Int(playerData.lev));
+        local attr = CLLDBCfg.getRoleByGIDAndLev(bio2Int(playerData.gid), 1);
         CLRolePool.borrowUnitAsyn(attr.base.PrefabName, onLoadRole, { playerData, attr });
     end
 

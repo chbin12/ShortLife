@@ -19,6 +19,7 @@ do
     local tiles = {};
     -- 最右边的一列的状态
     local lastRightSideState = {};
+    local mLevLength = 0;
 
 
     -- 初始化，只会调用一次
@@ -170,7 +171,7 @@ do
     --
     function CLLScene.getTileList(coefficient)
         local ret = {};
-        if(sideRight == mapSizeX) then
+        if(sideRight == mapSizeX or (mLevLength > 0 and CLLScene.getSteps() >= mLevLength)) then
             for i = 0, mapSizeY-1 do
                 ret[PStr.b():a(sideRight):a("_"):a(i):e()] = true;
             end
@@ -565,6 +566,11 @@ do
     -- 取得边界
     function CLLScene.getRightSide()
         return sideRight;
+    end
+
+    -- 设置过关长度
+    function CLLScene.setMaxLevLength(val)
+        mLevLength = val;
     end
 
     --------------------------------------------
