@@ -130,11 +130,11 @@ Material:
       data:
         first:
           name: _GradientYStartPos
-        second: 5.86
+        second: -2.82
       data:
         first:
           name: _GradientHeight
-        second: 10
+        second: 5
       data:
         first:
           name: _AmbientPower

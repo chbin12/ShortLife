@@ -294,24 +294,8 @@ Material:
         second: 1
       data:
         first:
-          name: _GradientYStartPos
-        second: 0
-      data:
-        first:
-          name: _GradientHeight
-        second: 10
-      data:
-        first:
-          name: _AmbientPower
-        second: 0
-      data:
-        first:
-          name: _LightmapPower
-        second: 0.5
-      data:
-        first:
-          name: _ShadowPower
-        second: 0.25
+          name: _Emission
+        second: 1
       data:
         first:
           name: _Intensity
@@ -330,8 +314,24 @@ Material:
         second: 0
       data:
         first:
-          name: _Emission
-        second: 1
+          name: _GradientYStartPos
+        second: 0
+      data:
+        first:
+          name: _GradientHeight
+        second: 10
+      data:
+        first:
+          name: _AmbientPower
+        second: 0
+      data:
+        first:
+          name: _LightmapPower
+        second: 0.5
+      data:
+        first:
+          name: _ShadowPower
+        second: 0.25
       data:
         first:
           name: _Stencil
@@ -407,6 +407,22 @@ Material:
         second: {r: 0.369, g: 0.349, b: 0.341, a: 1}
       data:
         first:
+          name: _Emission
+        second: {r: 0, g: 0, b: 0, a: 0}
+      data:
+        first:
+          name: _Color2
+        second: {r: 0.97, g: 0.67, b: 0.51, a: 0}
+      data:
+        first:
+          name: _Color1
+        second: {r: 0, g: 0.7, b: 0.74, a: 0}
+      data:
+        first:
+          name: _Direction
+        second: {r: 0, g: 1, b: 0, a: 0}
+      data:
+        first:
           name: _TopColor
         second: {r: 0.12262111, g: 0.61764705, b: 0.61764705, a: 0}
       data:
@@ -456,22 +472,6 @@ Material:
       data:
         first:
           name: _LightmapColor
-        second: {r: 0, g: 0, b: 0, a: 0}
-      data:
-        first:
-          name: _Color2
-        second: {r: 0.97, g: 0.67, b: 0.51, a: 0}
-      data:
-        first:
-          name: _Color1
-        second: {r: 0, g: 0.7, b: 0.74, a: 0}
-      data:
-        first:
-          name: _Direction
-        second: {r: 0, g: 1, b: 0, a: 0}
-      data:
-        first:
-          name: _Emission
         second: {r: 0, g: 0, b: 0, a: 0}
       data:
         first:
