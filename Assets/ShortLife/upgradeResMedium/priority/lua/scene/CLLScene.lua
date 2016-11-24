@@ -126,10 +126,12 @@ do
     function CLLScene.addRightSideTiles(speed, onFinishAddSideTiles, coefficient)
         sideRight = sideRight + 1;
         --切换地图风格
-        local switchStep = NumEx.getIntPart(CLLScene.getSteps() / 10);
-        if (switchStep ~= oldSwitchMapeStep) then
-            oldSwitchMapeStep = switchStep;
-            currTerrain = csSelf.terrainInfor[NumEx.NextInt(0, csSelf.terrainInfor.Count)];
+        if (SCfg.self.mode ~= GameMode.explore) then
+            local switchStep = NumEx.getIntPart(CLLScene.getSteps() / 10);
+            if (switchStep ~= oldSwitchMapeStep) then
+                oldSwitchMapeStep = switchStep;
+                currTerrain = csSelf.terrainInfor[NumEx.NextInt(0, csSelf.terrainInfor.Count)];
+            end
         end
 
         local isEmptyTile = false;
@@ -315,9 +317,9 @@ do
 
         if ( SCfg.self.mode ~= GameMode.explore and (tile.mapY == 0 or tile.mapY == 1)) then
             -- 说明是最边上的两排，添加装饰物品
-            local index = NumEx.NextInt(0, currTerrain.ornTypes.Count);
-            local ornName = "tiles/" .. currTerrain.ornTypes[index]:ToString();
-            CLThingsPool.borrowObjAsyn(ornName, CLLScene.addOrnament, tile);
+--            local index = NumEx.NextInt(0, currTerrain.ornTypes.Count);
+--            local ornName = "tiles/" .. currTerrain.ornTypes[index]:ToString();
+--            CLThingsPool.borrowObjAsyn(ornName, CLLScene.addOrnament, tile);
         else
             local createOrn = false;
             if (SCfg.self.mode == GameMode.explore) then

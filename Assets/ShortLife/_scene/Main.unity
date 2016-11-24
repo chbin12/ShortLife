@@ -1294,6 +1294,15 @@ MonoBehaviour:
     fogColor: {r: 1, g: 1, b: 1, a: 1}
     fogStartDis: 0
     fogEndDis: 0
+  - name: mid
+    tileTypes: 2f000000
+    ornTypes: 2f000000
+    effect: 
+    fog: 0
+    fogDensity: 0
+    fogColor: {r: 1, g: 1, b: 1, a: 1}
+    fogStartDis: 0
+    fogEndDis: 0
   currTerrain:
     name: 
     tileTypes: 

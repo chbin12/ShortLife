@@ -121,4 +121,5 @@ public enum MapTileType
 	tree_13,
 	tree_14,
 	tree_15,
+	tile_00,
 }
