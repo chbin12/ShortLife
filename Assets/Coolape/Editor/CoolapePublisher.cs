@@ -5,6 +5,7 @@ using System.IO;
 using System.Collections;
 using System.IO.Compression;
 using Toolkit;
+using System.Collections.Generic;
 
 /// <summary>
 /// Coolape Publisher .
@@ -12,12 +13,11 @@ using Toolkit;
 /// 2013-11-16
 /// create by chenbin
 /// </summary>
-using System.Collections.Generic;
 
 
 public class CoolapePublisher : EditorWindow
 {
-	public delegate void OnClickCallback ();
+	public delegate void OnClickCallback();
 
 	string[] AndroidIconsName = {
 		"192x192",
@@ -39,18 +39,18 @@ public class CoolapePublisher : EditorWindow
 	};
 	string configFile = "Coolape/Editor/CoolapeChannel.cfg";
 	//渠道列表
-	Hashtable channelMap = new Hashtable ();
-	ArrayList channelEnum = new ArrayList ();
-	ArrayList channelKey = new ArrayList ();
-	ArrayList channelAliasEnum = new ArrayList ();
-	Hashtable channelData = new Hashtable ();
+	Hashtable channelMap = new Hashtable();
+	ArrayList channelEnum = new ArrayList();
+	ArrayList channelKey = new ArrayList();
+	ArrayList channelAliasEnum = new ArrayList();
+	Hashtable channelData = new Hashtable();
 	string cfgFilePath = "";
 	UnityEngine.Object _CfgFile;
 
 	UnityEngine.Object mCfgFile {
 		get {
-			if (_CfgFile == null && !string.IsNullOrEmpty (cfgFilePath)) {
-				_CfgFile = AssetDatabase.LoadAssetAtPath (
+			if (_CfgFile == null && !string.IsNullOrEmpty(cfgFilePath)) {
+				_CfgFile = AssetDatabase.LoadAssetAtPath(
 					cfgFilePath, 
 					typeof(UnityEngine.Object));
 			}
@@ -59,7 +59,7 @@ public class CoolapePublisher : EditorWindow
 		set {
 			_CfgFile = value;
 			if (_CfgFile != null) {
-				cfgFilePath = AssetDatabase.GetAssetPath (_CfgFile.GetInstanceID ());
+				cfgFilePath = AssetDatabase.GetAssetPath(_CfgFile.GetInstanceID());
 			} else {
 				cfgFilePath = "";
 			}
@@ -68,8 +68,10 @@ public class CoolapePublisher : EditorWindow
 		}
 	}
 
-	bool isNewChannel = true;		//新增渠道
-	bool isCfgChannel = false;		//配置渠道
+	bool isNewChannel = true;
+	//新增渠道
+	bool isCfgChannel = false;
+	//配置渠道
 	int channelCount = 0;
 	int enumCount = 0;
 	bool isFinishInit = false;
@@ -85,30 +87,30 @@ public class CoolapePublisher : EditorWindow
 	string currChlKey = "";
 	string currChlID = "";
 	string currChlAlias = "";
-	ChlData currChlData = new ChlData ();
+	ChlData currChlData = new ChlData();
 	Vector2 scrollPos = Vector2.zero;
 	Vector2 scrollPos2 = Vector2.zero;
 	bool isShowIcons = false;
 
-	void OnGUI ()
+	void OnGUI()
 	{
 		if (!isFinishInit) {
 			isFinishInit = true;
-			initData ();
+			initData();
 		}
 		//==========title============
 		GUI.color = Color.yellow;
-		GUILayout.Label ("coolape酷猿平台发布工具, 点击【Refresh】刷新加载数据\n如有问题请联系QQ:181752725");
+		GUILayout.Label("coolape酷猿平台发布工具, 点击【Refresh】刷新加载数据\n如有问题请联系QQ:181752725");
 		GUI.color = Color.white;
-		GUILayout.BeginHorizontal ();
+		GUILayout.BeginHorizontal();
 		{
 			if (isNewChannel) {
 				GUI.color = Color.yellow;
 			} else {
 				GUI.color = Color.white;
 			}
-			if (GUILayout.Button ("Channels(渠道)")) {
-				refreshData ();
+			if (GUILayout.Button("Channels(渠道)")) {
+				refreshData();
 				isNewChannel = true;
 				isCfgChannel = false;
 			}
@@ -117,39 +119,39 @@ public class CoolapePublisher : EditorWindow
 			} else {
 				GUI.color = Color.white;
 			}
-			if (GUILayout.Button ("Config Channel(配置)")) {
-				refreshData ();
+			if (GUILayout.Button("Config Channel(配置)")) {
+				refreshData();
 				isCfgChannel = true;
 				isNewChannel = false;
 			}
 			GUI.color = Color.white;
-			if (GUILayout.Button ("Refresh")) {
-				refreshData ();
+			if (GUILayout.Button("Refresh")) {
+				refreshData();
 			}
 		}
-		GUILayout.EndHorizontal ();
+		GUILayout.EndHorizontal();
 		
-		GUILayout.Space (5);
+		GUILayout.Space(5);
 
 		
 		//配置渠道
 		if (isCfgChannel) {
-			scrollPos = EditorGUILayout.BeginScrollView (scrollPos);
+			scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
 			{
-				showCfgChannel ();
+				showCfgChannel();
 			}
-			EditorGUILayout.EndScrollView ();
+			EditorGUILayout.EndScrollView();
 			return;
 		}
 
 		GUI.color = Color.white;
-		GUILayout.BeginHorizontal ();
+		GUILayout.BeginHorizontal();
 		{
 			//--------------------left------------------------------------
-			scrollPos = EditorGUILayout.BeginScrollView (scrollPos, GUILayout.Width (245));
+			scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Width(245));
 			{
 				
-				CLEditorTools.BeginContents ();
+				CLEditorTools.BeginContents();
 				{
 					//channel list
 					GUI.color = Color.white;
@@ -161,310 +163,322 @@ public class CoolapePublisher : EditorWindow
 							} else {
 								GUI.color = Color.white;
 							}
-							if (GUILayout.Button (channelEnum [i].ToString () + " (" + channelAliasEnum [i] + ")")) {
-								currChlKey = channelKey [i].ToString ();
-								currChlID = channelEnum [i].ToString ();
-								currChlAlias = channelAliasEnum [i].ToString ();
+							if (GUILayout.Button(channelEnum [i].ToString() + " (" + channelAliasEnum [i] + ")")) {
+								currChlKey = channelKey [i].ToString();
+								currChlID = channelEnum [i].ToString();
+								currChlAlias = channelAliasEnum [i].ToString();
 								isComfireDelete = false;
 								isShowHelpBox = false;
 								isShowIcons = false;
 								currChlIndex = i;
-								getChlData (currChlKey, currChlID);
+								getChlData(currChlKey, currChlID);
 							}
 						}
 					}
 				}
-				CLEditorTools.EndContents ();
+				CLEditorTools.EndContents();
 			}
-			EditorGUILayout.EndScrollView ();
+			EditorGUILayout.EndScrollView();
 
 			//========right========
+
 			GUI.color = Color.white;
-			GUILayout.BeginVertical ();
+			GUILayout.BeginVertical();
 			{
 				if (currChlIndex >= 0 && currChlIndex < channelEnum.Count) {
-					GUILayout.Space (5);
-					GUILayout.BeginHorizontal ();
-					{
-						if (!isComfireDelete && !isShowHelpBox) {
-							GUI.color = Color.green;
-							if (GUILayout.Button ("Save")) {
-								saveChlBuildSetting ();
-							}
-							GUI.color = Color.green;
-							if (GUILayout.Button ("Chg4Edit")) {
-								chgChl4Edit ();
-							}
-							GUI.color = Color.green;
-							if (GUILayout.Button ("Apply")) {
-								applySetting ();
-							}
-							GUI.color = Color.green;
-							if (GUILayout.Button ("Apply&Build")) {
-								showMsgBox (currChlKey + ":确认各参数是否正确!", MessageType.Warning, applyAndBuild);
-							}
-							GUI.color = Color.red;
-							if (GUILayout.Button ("Clean")) {
-								isComfireDelete = true;
-							}
-						} else if (isComfireDelete) {
-							GUI.color = Color.white;
-							EditorGUILayout.HelpBox ("确定要清除所选的渠道的配置信息？", MessageType.Warning);
-							GUI.color = Color.green;
-							if (GUILayout.Button ("Cancel")) {
-								isComfireDelete = false;
-							}
-							GUI.color = Color.red;
-							if (GUILayout.Button ("Clean Now")) {
-								isComfireDelete = false;
-								cleanChlSetting (currChlKey, currChlID);
-							}
-						} else if (isShowHelpBox) {
-							GUI.color = Color.white;
-							EditorGUILayout.HelpBox (msgBoxMsg, msgBoxType);
-							GUI.color = Color.green;
-							if (GUILayout.Button ("Okey")) {
-								isShowHelpBox = false;
-								if (onClickCallbak != null) {
-									onClickCallbak ();
+					GUILayout.Space(-5);
+					using (new UnityEditorHelper.HighlightBox()) {
+						GUILayout.BeginHorizontal();
+						{
+							if (!isComfireDelete && !isShowHelpBox) {
+								GUI.color = Color.green;
+								if (GUILayout.Button("Save")) {
+									saveChlBuildSetting();
 								}
+								GUI.color = Color.green;
+								if (GUILayout.Button("Chg4Edit")) {
+									chgChl4Edit();
+								}
+								GUI.color = Color.green;
+								if (GUILayout.Button("Apply")) {
+									applySetting();
+								}
+								GUI.color = Color.green;
+								if (GUILayout.Button("Apply&Build")) {
+									showMsgBox(currChlKey + ":确认各参数是否正确!", MessageType.Warning, applyAndBuild);
+								}
+								GUI.color = Color.red;
+								if (GUILayout.Button("Clean")) {
+									isComfireDelete = true;
+								}
+							} else if (isComfireDelete) {
+								GUI.color = Color.white;
+								EditorGUILayout.HelpBox("确定要清除所选的渠道的配置信息？", MessageType.Warning);
+								GUI.color = Color.green;
+								if (GUILayout.Button("Cancel")) {
+									isComfireDelete = false;
+								}
+								GUI.color = Color.red;
+								if (GUILayout.Button("Clean Now")) {
+									isComfireDelete = false;
+									cleanChlSetting(currChlKey, currChlID);
+								}
+							} else if (isShowHelpBox) {
+								GUI.color = Color.white;
+								EditorGUILayout.HelpBox(msgBoxMsg, msgBoxType);
+								GUI.color = Color.green;
+								if (GUILayout.Button("Okey")) {
+									isShowHelpBox = false;
+									if (onClickCallbak != null) {
+										onClickCallbak();
+									}
+								}
+								GUI.color = Color.red;
+								if (GUILayout.Button("Cancel")) {
+									isShowHelpBox = false;
+									onClickCallbak = null;
+								}
+								GUI.color = Color.white;
 							}
-							GUI.color = Color.red;
-							if (GUILayout.Button ("Cancel")) {
-								isShowHelpBox = false;
-								onClickCallbak = null;
-							}
-							GUI.color = Color.white;
 						}
+						GUILayout.EndHorizontal();
+						GUI.color = Color.white;
 					}
-					GUILayout.EndHorizontal ();
-					GUI.color = Color.white;
 				}
-				GUILayout.Space (5);
-
-				scrollPos2 = EditorGUILayout.BeginScrollView (scrollPos2);
+				GUILayout.Space(-11);
+				scrollPos2 = EditorGUILayout.BeginScrollView(scrollPos2);
 				{
 					if (currChlIndex >= 0) {
-						CLEditorTools.BeginContents ();
-						{
-							channelCell (currChlKey, false);
+						using (new UnityEditorHelper.HighlightBox()) {
+
+							GUILayout.Space(10);
+							channelCell(currChlKey, false);
 							GUI.backgroundColor = Color.white;
 						}
-						CLEditorTools.EndContents ();
 					}
 				}
-				EditorGUILayout.EndScrollView ();
+				EditorGUILayout.EndScrollView();
 			}
-			GUILayout.EndVertical ();
+			GUILayout.EndVertical();
 		}
-		GUILayout.EndHorizontal ();
+		GUILayout.EndHorizontal();
 	}
 
-	void showCfgChannel ()
+	void showCfgChannel()
 	{
-		GUILayout.BeginHorizontal ();
+		CLEditorTools.BeginContents();
 		{
-			GUILayout.Label ("Version Config File", GUILayout.Width (125));
-			mCfgFile = EditorGUILayout.ObjectField (mCfgFile, typeof(UnityEngine.Object), GUILayout.Width (125));
-			GUI.color = Color.yellow;
-			if (GUILayout.Button ("Infor", GUILayout.Width (60f))) {
-				isShowCfgFileDesc = !isShowCfgFileDesc;
+			GUILayout.BeginHorizontal();
+			{
+				GUILayout.Label("Version Config File", GUILayout.Width(125));
+				mCfgFile = EditorGUILayout.ObjectField(mCfgFile, typeof(UnityEngine.Object), GUILayout.Width(125));
+				GUI.color = Color.yellow;
+				if (GUILayout.Button("Infor", GUILayout.Width(60f))) {
+					isShowCfgFileDesc = !isShowCfgFileDesc;
+				}
+				GUI.color = Color.white;
 			}
-			GUI.color = Color.white;
-		}
-		GUILayout.EndHorizontal ();
-		if (isShowCfgFileDesc) {
-			GUI.color = Color.white;
-			EditorGUILayout.HelpBox (
-				"在些配置工程的版本信息代码，目前只支持c#代码，" +
-				"且代码中只能以如下方式定义版本信息：\n" +
-				"public static string version = \"0.91\"; \n" +
-				"public static int versionCode = 2;"
+			GUILayout.EndHorizontal();
+
+			if (isShowCfgFileDesc) {
+				GUI.color = Color.white;
+				EditorGUILayout.HelpBox(
+					"在些配置工程的版本信息代码，目前只支持c#代码，" +
+					"且代码中只能以如下方式定义版本信息：\n" +
+					"public static string version = \"0.91\"; \n" +
+					"public static int versionCode = 2;"
 				, MessageType.Info);
-		}
-		GUILayout.BeginHorizontal ();
-		{
-			GUI.color = Color.white;
-			GUILayout.Label ("Key", GUILayout.Width (125));
-			GUILayout.Label ("ID", GUILayout.Width (125));
-			GUILayout.Label ("Symbols", GUILayout.Width (125));
-			GUILayout.Label ("Alias", GUILayout.Width (125));
-			GUI.color = Color.yellow;
-			if (GUILayout.Button ("Infor", GUILayout.Width (60f))) {
-				isShowCfgChlDesc = !isShowCfgChlDesc;
 			}
-		}
-		GUILayout.EndHorizontal ();
-		
-		if (isShowCfgChlDesc) {
-			GUI.color = Color.white;
-			EditorGUILayout.HelpBox (
-				"以下为渠道定义。注意当定义好渠道后，" +
-				"需要在对应的渠道代码中加上宏的预编译判断，" +
-				"例如小米渠道=“mi”，宏为：“CHL_MI”", 
-				MessageType.Info);
-		}
-		
-		GUI.color = Color.white;
-		if (channelEnum != null) {
-			enumCount = channelEnum.Count;
-			for (int i = 0; i < enumCount; i++) {
-				GUILayout.BeginHorizontal ();
+
+			using (new UnityEditorHelper.HighlightBox()) {
+				GUILayout.BeginHorizontal();
 				{
-					channelKey [i] = GUILayout.TextField (channelKey [i].ToString (), GUILayout.Width (125));
-					channelEnum [i] = GUILayout.TextField (channelEnum [i].ToString (), GUILayout.Width (125));
-					string symbols = "CHL_" + channelEnum [i].ToString ().ToUpper ();
-					GUILayout.TextField (symbols, GUILayout.Width (125));
-					if (i >= channelAliasEnum.Count) {
-						channelAliasEnum.Add ("");
+					GUI.color = Color.white;
+					GUILayout.Label("Key", GUILayout.Width(125));
+					GUILayout.Label("ID", GUILayout.Width(125));
+					GUILayout.Label("Symbols", GUILayout.Width(125));
+					GUILayout.Label("Alias", GUILayout.Width(125));
+					GUI.color = Color.yellow;
+					if (GUILayout.Button("Infor", GUILayout.Width(60f))) {
+						isShowCfgChlDesc = !isShowCfgChlDesc;
 					}
-					channelAliasEnum [i] = GUILayout.TextField (channelAliasEnum [i] == null ? "" : channelAliasEnum [i].ToString (), GUILayout.Width (125));
+				}
+				GUILayout.EndHorizontal();
+		
+				if (isShowCfgChlDesc) {
+					GUI.color = Color.white;
+					EditorGUILayout.HelpBox(
+						"以下为渠道定义。注意当定义好渠道后，" +
+						"需要在对应的渠道代码中加上宏的预编译判断，" +
+						"例如小米渠道=“mi”，宏为：“CHL_MI”", 
+						MessageType.Info);
+				}
+		
+				GUI.color = Color.white;
+				if (channelEnum != null) {
+					enumCount = channelEnum.Count;
+					for (int i = 0; i < enumCount; i++) {
+						GUILayout.BeginHorizontal();
+						{
+							channelKey [i] = GUILayout.TextField(channelKey [i].ToString(), GUILayout.Width(125));
+							channelEnum [i] = GUILayout.TextField(channelEnum [i].ToString(), GUILayout.Width(125));
+							string symbols = "CHL_" + channelEnum [i].ToString().ToUpper();
+							GUILayout.TextField(symbols, GUILayout.Width(125));
+							if (i >= channelAliasEnum.Count) {
+								channelAliasEnum.Add("");
+							}
+							channelAliasEnum [i] = GUILayout.TextField(channelAliasEnum [i] == null ? "" : channelAliasEnum [i].ToString(), GUILayout.Width(125));
 					
-					if (GUILayout.Button ("Modify", GUILayout.Width (60f))) {
-						channelData ["channelKey"] = channelKey;
-						channelData ["channelEnum"] = channelEnum;
-						channelData ["channelAliasEnum"] = channelAliasEnum;
-						return;
+							if (GUILayout.Button("Modify", GUILayout.Width(60f))) {
+								channelData ["channelKey"] = channelKey;
+								channelData ["channelEnum"] = channelEnum;
+								channelData ["channelAliasEnum"] = channelAliasEnum;
+								return;
+							}
+							GUI.color = Color.red;
+							if (GUILayout.Button("Delete", GUILayout.Width(60f))) {
+								channelKey.RemoveAt(i);
+								channelEnum.RemoveAt(i);
+								channelAliasEnum.RemoveAt(i);
+								channelData ["channelKey"] = channelKey;
+								channelData ["channelEnum"] = channelEnum;
+								channelData ["channelAliasEnum"] = channelAliasEnum;
+								return;
+							}
+							GUI.color = Color.white;
+					
+							if (GUILayout.Button("Copy", GUILayout.Width(60f))) {
+								copyChlFromKey = channelKey [i].ToString();
+								newChlKey = "Copy " + channelKey [i];
+								newChlName = "Copy " + channelEnum [i];
+								newChlAlias = "Copy " + channelAliasEnum [i];
+
+							}
+						}
+						GUILayout.EndHorizontal();
 					}
-					GUI.color = Color.red;
-					if (GUILayout.Button ("Delete", GUILayout.Width (60f))) {
-						channelKey.RemoveAt (i);
-						channelEnum.RemoveAt (i);
-						channelAliasEnum.RemoveAt (i);
-						channelData ["channelKey"] = channelKey;
-						channelData ["channelEnum"] = channelEnum;
-						channelData ["channelAliasEnum"] = channelAliasEnum;
-						return;
+				}
+				GUILayout.BeginHorizontal();
+				{
+					newChlKey = GUILayout.TextField(newChlKey, GUILayout.Width(125));
+					newChlName = GUILayout.TextField(newChlName, GUILayout.Width(125));
+					string symbols = "";
+					if (!string.IsNullOrEmpty(newChlName)) {
+						symbols = "CHL_" + newChlName.ToUpper();
+					}
+					GUILayout.TextField(symbols, GUILayout.Width(125));
+					newChlAlias = GUILayout.TextField(newChlAlias, GUILayout.Width(125));
+			
+					GUI.color = Color.yellow;
+					if (GUILayout.Button("Add", GUILayout.Width(60f))) {
+						if (!string.IsNullOrEmpty(newChlKey) &&
+						  !string.IsNullOrEmpty(newChlName)) {
+							if (channelMap [newChlKey] != null) {
+								Debug.LogWarning("Key is same with other!");
+								EditorUtility.DisplayDialog("Alert", "Key is same with other!", "Okey");
+//						EditorGUILayout.HelpBox ("Key is same with other!", MessageType.Warning);
+								return;
+							}
+							channelKey.Add(newChlKey);
+							channelEnum.Add(newChlName);
+							channelAliasEnum.Add(newChlAlias);
+							channelData ["channelKey"] = channelKey;
+							channelData ["channelEnum"] = channelEnum;
+							channelData ["channelAliasEnum"] = channelAliasEnum;
+
+							if (!string.IsNullOrEmpty(copyChlFromKey)) {
+								object tmpData = channelMap [copyChlFromKey];
+								ChlData ChlData = tmpData == null ? new ChlData() : ChlData.parse((Hashtable)tmpData);
+								ChlData.mChlName = newChlName;
+								channelMap [newChlKey] = ChlData.toMap();
+							}
+
+							newChlName = "";
+							newChlKey = "";
+						} else {
+							Debug.LogWarning("Please input the channel name!");
+						}
+					}
+			
+					GUI.color = Color.green;
+					if (GUILayout.Button("Save", GUILayout.Width(60f))) {
+						saveData();
+						copyChlFromKey = "";
 					}
 					GUI.color = Color.white;
-					
-					if (GUILayout.Button ("Copy", GUILayout.Width (60f))) {
-						copyChlFromKey = channelKey [i].ToString();
-						newChlKey = "Copy " + channelKey [i];
-						newChlName = "Copy " + channelEnum [i];
-						newChlAlias = "Copy " + channelAliasEnum [i];
-
-					}
 				}
-				GUILayout.EndHorizontal ();
+				GUILayout.EndHorizontal();
 			}
-		}
-		GUILayout.BeginHorizontal ();
-		{
-			newChlKey = GUILayout.TextField (newChlKey, GUILayout.Width (125));
-			newChlName = GUILayout.TextField (newChlName, GUILayout.Width (125));
-			string symbols = "";
-			if (!string.IsNullOrEmpty (newChlName)) {
-				symbols = "CHL_" + newChlName.ToUpper ();
-			}
-			GUILayout.TextField (symbols, GUILayout.Width (125));
-			newChlAlias = GUILayout.TextField (newChlAlias, GUILayout.Width (125));
-			
-			GUI.color = Color.yellow;
-			if (GUILayout.Button ("Add", GUILayout.Width (60f))) {
-				if (!string.IsNullOrEmpty (newChlKey) &&
-				    !string.IsNullOrEmpty (newChlName)) {
-					if(channelMap[newChlKey] != null) {
-						Debug.LogWarning("Key is same with other!");
-						EditorUtility.DisplayDialog ("Alert", "Key is same with other!", "Okey");
-//						EditorGUILayout.HelpBox ("Key is same with other!", MessageType.Warning);
-						return;
-					}
-					channelKey.Add (newChlKey);
-					channelEnum.Add (newChlName);
-					channelAliasEnum.Add (newChlAlias);
-					channelData ["channelKey"] = channelKey;
-					channelData ["channelEnum"] = channelEnum;
-					channelData ["channelAliasEnum"] = channelAliasEnum;
 
-					if(!string.IsNullOrEmpty(copyChlFromKey)) {
-						object tmpData = channelMap [copyChlFromKey];
-						ChlData ChlData = tmpData == null ? new ChlData () : ChlData.parse ((Hashtable)tmpData);
-						ChlData.mChlName = newChlName;
-						channelMap[newChlKey] = ChlData.toMap();
-					}
-
-					newChlName = "";
-					newChlKey = "";
-				} else {
-					Debug.LogWarning ("Please input the channel name!");
-				}
-			}
-			
-			GUI.color = Color.green;
-			if (GUILayout.Button ("Save", GUILayout.Width (60f))) {
-				saveData ();
-				copyChlFromKey = "";
-			}
-			GUI.color = Color.white;
-		}
-		GUILayout.EndHorizontal ();
+		} 
+		CLEditorTools.EndContents();
 	}
 
 	string msgBoxMsg = "";
 	MessageType msgBoxType = MessageType.None;
 	OnClickCallback onClickCallbak;
 
-	void showMsgBox (string msg, MessageType type, OnClickCallback callbak = null)
+	void showMsgBox(string msg, MessageType type, OnClickCallback callbak = null)
 	{
 		msgBoxMsg = msg;
 		msgBoxType = type;
 		onClickCallbak = callbak;
 		isShowHelpBox = true;
 	}
+
 	/// <summary>
 	/// Inits the data.
 	/// 初始化数据
 	/// </summary>
-	void initData ()
+	void initData()
 	{
-		if (FileEx.FileExists (configFile)) {
-			byte[] buffer = FileEx.ReadAllBytes (configFile);
+		if (FileEx.FileExists(configFile)) {
+			byte[] buffer = FileEx.ReadAllBytes(configFile);
 			if (buffer.Length <= 0) {
 				return;
 			}
-			MemoryStream ms = new MemoryStream ();
-			ms.Write (buffer, 0, buffer.Length);
+			MemoryStream ms = new MemoryStream();
+			ms.Write(buffer, 0, buffer.Length);
 			ms.Position = 0;
-			object obj = B2InputStream.readObject (ms);
+			object obj = B2InputStream.readObject(ms);
 			if (obj != null) {
 				channelData = (Hashtable)obj;
 				channelEnum = (ArrayList)(channelData ["channelEnum"]);
-				channelEnum = channelEnum == null ? new ArrayList () : channelEnum;
+				channelEnum = channelEnum == null ? new ArrayList() : channelEnum;
 				
 				channelKey = (ArrayList)(channelData ["channelKey"]);
-				channelKey = channelKey == null ? new ArrayList () : channelKey;
+				channelKey = channelKey == null ? new ArrayList() : channelKey;
 				if (channelEnum.Count > channelKey.Count) {
-					for (int i=0; i < channelEnum.Count; i++) {
-						channelKey.Add ("");
+					for (int i = 0; i < channelEnum.Count; i++) {
+						channelKey.Add("");
 					}
 				}
 
 				channelAliasEnum = (ArrayList)(channelData ["channelAliasEnum"]);
-				channelAliasEnum = channelAliasEnum == null ? new ArrayList () : channelAliasEnum;
+				channelAliasEnum = channelAliasEnum == null ? new ArrayList() : channelAliasEnum;
 				channelMap = (Hashtable)(channelData ["channelMap"]);
-				channelMap = channelMap == null ? new Hashtable () : channelMap;
-				cfgFilePath = MapEx.getString (channelData, "cfgFile");
+				channelMap = channelMap == null ? new Hashtable() : channelMap;
+				cfgFilePath = MapEx.getString(channelData, "cfgFile");
 
 				ArrayList delKeys = new ArrayList();
-				foreach(DictionaryEntry item in channelMap) {
-					if(!channelKey.Contains(item.Key.ToString())) {
+				foreach (DictionaryEntry item in channelMap) {
+					if (!channelKey.Contains(item.Key.ToString())) {
 						delKeys.Add(item.Key.ToString());
 					}
 				}
 
-				for(int i=0; i < delKeys.Count; i++) {
-					channelMap.Remove(delKeys[i].ToString());
+				for (int i = 0; i < delKeys.Count; i++) {
+					channelMap.Remove(delKeys [i].ToString());
 				}
 			}
 		} else {
-			channelMap = new Hashtable ();
-			channelEnum = new ArrayList ();
+			channelMap = new Hashtable();
+			channelEnum = new ArrayList();
 			cfgFilePath = "";
 		}
 	}
 
-	void refreshData ()
+	void refreshData()
 	{
 		copyChlFromKey = "";
 		newChlKey = "";
@@ -482,18 +496,18 @@ public class CoolapePublisher : EditorWindow
 		initData();
 	}
 
-	void saveData ()
+	void saveData()
 	{
-		MemoryStream ms = new MemoryStream ();
-		B2OutputStream.writeObject (ms, channelData);
-		FileEx.WriteAllBytes (configFile, ms.ToArray ());
+		MemoryStream ms = new MemoryStream();
+		B2OutputStream.writeObject(ms, channelData);
+		FileEx.WriteAllBytes(configFile, ms.ToArray());
 	}
 
 	/// <summary>
 	/// Channels the cell.
 	/// 渠道单元
 	/// </summary>
-	void channelCell (string chlName, bool canEdit)
+	void channelCell(string chlName, bool canEdit)
 	{
 		if (currChlData == null) {
 			return;
@@ -501,247 +515,247 @@ public class CoolapePublisher : EditorWindow
 		int width = 150;
 		GUI.color = Color.white;
 		//Product Name
-		GUILayout.BeginHorizontal ();
+		GUILayout.BeginHorizontal();
 		{
-			GUILayout.Label ("Product Name", GUILayout.Width (width));
-			currChlData.mProductName = GUILayout.TextField (currChlData.mProductName);
+			GUILayout.Label("Product Name", GUILayout.Width(width));
+			currChlData.mProductName = GUILayout.TextField(currChlData.mProductName);
 		}
-		GUILayout.EndHorizontal ();
+		GUILayout.EndHorizontal();
 		//Platform ios or android
-		GUILayout.BeginHorizontal ();
+		GUILayout.BeginHorizontal();
 		{
-			currChlData.mPlatform = (ChlPlatform)EditorGUILayout.EnumPopup ("Select Platform", currChlData.mPlatform);
+			currChlData.mPlatform = (ChlPlatform)EditorGUILayout.EnumPopup("Select Platform", currChlData.mPlatform);
 			if (currChlData.mPlatform == ChlPlatform.ios) {
 				currChlData.mCreateEclipseProject = false;
 			}
 		}
-		GUILayout.EndHorizontal ();
+		GUILayout.EndHorizontal();
 		//Default Icon
 
-		GUILayout.BeginHorizontal ();
+		GUILayout.BeginHorizontal();
 		{
-			if (GUILayout.Button ("Icons")) {
+			if (GUILayout.Button("Icons")) {
 				isShowIcons = !isShowIcons;
 			}
 		}
-		GUILayout.EndHorizontal ();
+		GUILayout.EndHorizontal();
 
 		if (isShowIcons) {
 			if (currChlData.mPlatform == ChlPlatform.android) {
-				for (int i =0; i < AndroidIconsName.Length; i++) {
+				for (int i = 0; i < AndroidIconsName.Length; i++) {
 					currChlData.mDefaultIcon [AndroidIconsName [i]] = 
-						EditorGUILayout.ObjectField (AndroidIconsName [i], 
+						EditorGUILayout.ObjectField(AndroidIconsName [i], 
 						(Texture2D)(currChlData.mDefaultIcon [AndroidIconsName [i]]),
 						typeof(Texture2D), false) as Texture2D;
 				}
 			} else if (currChlData.mPlatform == ChlPlatform.ios) {
-				for (int i =0; i < IosIconsName.Length; i++) {
+				for (int i = 0; i < IosIconsName.Length; i++) {
 					currChlData.mDefaultIcon [IosIconsName [i]] = 
-							EditorGUILayout.ObjectField (IosIconsName [i], 
-							(Texture2D)(currChlData.mDefaultIcon [IosIconsName [i]]),
-							typeof(Texture2D), false) as Texture2D;
+							EditorGUILayout.ObjectField(IosIconsName [i], 
+						(Texture2D)(currChlData.mDefaultIcon [IosIconsName [i]]),
+						typeof(Texture2D), false) as Texture2D;
 				}
 			}
 		}
 		//Splash Image
-		GUILayout.BeginHorizontal ();
+		GUILayout.BeginHorizontal();
 		{
-			currChlData.mSplashImage = EditorGUILayout.ObjectField ("Splash Image", 
-								currChlData.mSplashImage,
-								typeof(Texture2D), false) as Texture2D;
+			currChlData.mSplashImage = EditorGUILayout.ObjectField("Splash Image", 
+				currChlData.mSplashImage,
+				typeof(Texture2D), false) as Texture2D;
 		}
-		GUILayout.EndHorizontal ();
+		GUILayout.EndHorizontal();
 		//Bundle Indentifier
-		GUILayout.BeginHorizontal ();
+		GUILayout.BeginHorizontal();
 		{
-			GUILayout.Label ("Bundle Indentifier", GUILayout.Width (width));
-			currChlData.mBundleIndentifier = GUILayout.TextField (currChlData.mBundleIndentifier);
+			GUILayout.Label("Bundle Indentifier", GUILayout.Width(width));
+			currChlData.mBundleIndentifier = GUILayout.TextField(currChlData.mBundleIndentifier);
 		}
-		GUILayout.EndHorizontal ();
+		GUILayout.EndHorizontal();
 		//Bundle Version
-		GUILayout.BeginHorizontal ();
+		GUILayout.BeginHorizontal();
 		{
-			GUILayout.Label ("Bundle Version", GUILayout.Width (width));
-			currChlData.mBundleVersion = GUILayout.TextField (currChlData.mBundleVersion);
+			GUILayout.Label("Bundle Version", GUILayout.Width(width));
+			currChlData.mBundleVersion = GUILayout.TextField(currChlData.mBundleVersion);
 		}
-		GUILayout.EndHorizontal ();
+		GUILayout.EndHorizontal();
 		//Bundle Version Code
-		GUILayout.BeginHorizontal ();
+		GUILayout.BeginHorizontal();
 		{
-			GUILayout.Label ("Bundle Version Code", GUILayout.Width (width));
-			currChlData.mBundleVersionCode = EditorGUILayout.IntField (currChlData.mBundleVersionCode);
+			GUILayout.Label("Bundle Version Code", GUILayout.Width(width));
+			currChlData.mBundleVersionCode = EditorGUILayout.IntField(currChlData.mBundleVersionCode);
 		}
-		GUILayout.EndHorizontal ();
+		GUILayout.EndHorizontal();
 		//Scripting Define Symbols
-		GUILayout.BeginHorizontal ();
+		GUILayout.BeginHorizontal();
 		{
-			GUILayout.Label ("Scripting Define Symbols", GUILayout.Width (width));
-			GUILayout.Label (currChlData.mScriptingDefineSymbols);
+			GUILayout.Label("Scripting Define Symbols", GUILayout.Width(width));
+			GUILayout.Label(currChlData.mScriptingDefineSymbols);
 		}
-		GUILayout.EndHorizontal ();
+		GUILayout.EndHorizontal();
 
 		// SubChannel
-		GUILayout.BeginHorizontal ();
+		GUILayout.BeginHorizontal();
 		{
-			GUILayout.Label ("SubChannel", GUILayout.Width (width));
-			currChlData.mSubChannel = EditorGUILayout.TextField (currChlData.mSubChannel);
+			GUILayout.Label("SubChannel", GUILayout.Width(width));
+			currChlData.mSubChannel = EditorGUILayout.TextField(currChlData.mSubChannel);
 		}
-		GUILayout.EndHorizontal ();
+		GUILayout.EndHorizontal();
 		
-		GUILayout.BeginHorizontal ();
+		GUILayout.BeginHorizontal();
 		{
-			GUILayout.Label ("CTCC Channel", GUILayout.Width (width));
-			currChlData.mCtccChannel = EditorGUILayout.TextField (currChlData.mCtccChannel);
+			GUILayout.Label("CTCC Channel", GUILayout.Width(width));
+			currChlData.mCtccChannel = EditorGUILayout.TextField(currChlData.mCtccChannel);
 		}
-		GUILayout.EndHorizontal ();
+		GUILayout.EndHorizontal();
 		
-		GUILayout.BeginHorizontal ();
+		GUILayout.BeginHorizontal();
 		{
-			GUILayout.Label ("isThirdExit", GUILayout.Width (width));
-			currChlData.isThirdExit = GUILayout.Toggle (currChlData.isThirdExit, "");
+			GUILayout.Label("isThirdExit", GUILayout.Width(width));
+			currChlData.isThirdExit = GUILayout.Toggle(currChlData.isThirdExit, "");
 		}
-		GUILayout.EndHorizontal ();
+		GUILayout.EndHorizontal();
 		
-		GUILayout.BeginHorizontal ();
+		GUILayout.BeginHorizontal();
 		{
-			GUILayout.Label ("isMoreGame", GUILayout.Width (width));
-			currChlData.isMoreGame = GUILayout.Toggle (currChlData.isMoreGame, "");
+			GUILayout.Label("isMoreGame", GUILayout.Width(width));
+			currChlData.isMoreGame = GUILayout.Toggle(currChlData.isMoreGame, "");
 		}
-		GUILayout.EndHorizontal ();
+		GUILayout.EndHorizontal();
 		
-		GUILayout.BeginHorizontal ();
+		GUILayout.BeginHorizontal();
 		{
-			GUILayout.Label ("isSwitchAccount", GUILayout.Width (width));
-			currChlData.isSwitchAccount = GUILayout.Toggle (currChlData.isSwitchAccount, "");
+			GUILayout.Label("isSwitchAccount", GUILayout.Width(width));
+			currChlData.isSwitchAccount = GUILayout.Toggle(currChlData.isSwitchAccount, "");
 		}
-		GUILayout.EndHorizontal ();
+		GUILayout.EndHorizontal();
 
 		// Create Eclipse Project
 		if (currChlData.mPlatform == ChlPlatform.android) {
-			GUILayout.BeginHorizontal ();
+			GUILayout.BeginHorizontal();
 			{
-				GUILayout.Label ("Create Eclipse Project", GUILayout.Width (width));
-				currChlData.mCreateEclipseProject = GUILayout.Toggle (currChlData.mCreateEclipseProject, "");
+				GUILayout.Label("Create Eclipse Project", GUILayout.Width(width));
+				currChlData.mCreateEclipseProject = GUILayout.Toggle(currChlData.mCreateEclipseProject, "");
 			}
-			GUILayout.EndHorizontal ();
+			GUILayout.EndHorizontal();
 		}
 		
 		//Build Location
 		if (currChlData.mPlatform == ChlPlatform.ios ||
-			currChlData.mCreateEclipseProject) {
-			GUILayout.BeginHorizontal ();
+		    currChlData.mCreateEclipseProject) {
+			GUILayout.BeginHorizontal();
 			{
-				GUILayout.Label ("Build Location", GUILayout.Width (width));
-				currChlData.mBuildLocation = GUILayout.TextField (currChlData.mBuildLocation);
+				GUILayout.Label("Build Location", GUILayout.Width(width));
+				currChlData.mBuildLocation = GUILayout.TextField(currChlData.mBuildLocation);
 			}
-			GUILayout.EndHorizontal ();
+			GUILayout.EndHorizontal();
 			GUI.color = Color.yellow;
-			GUILayout.Label ("***Build Location是相对于工程目录的路径，但是不包括“Assets/”目录!");
+			GUILayout.Label("***Build Location是相对于工程目录的路径，但是不包括“Assets/”目录!");
 			GUI.color = Color.white;
 		}
 		GUI.color = Color.white;
 		//copy files
-		GUILayout.BeginHorizontal ();
+		GUILayout.BeginHorizontal();
 		{
-			GUILayout.Label ("Folder Copy to Plugin", GUILayout.Width (width));
-			currChlData.mCopyDir = EditorGUILayout.ObjectField (currChlData.mCopyDir, typeof(UnityEngine.Object));
-			currChlData.mUnZip = GUILayout.Toggle (currChlData.mUnZip, "And UnZip the Zip files");
+			GUILayout.Label("Folder Copy to Plugin", GUILayout.Width(width));
+			currChlData.mCopyDir = EditorGUILayout.ObjectField(currChlData.mCopyDir, typeof(UnityEngine.Object));
+			currChlData.mUnZip = GUILayout.Toggle(currChlData.mUnZip, "And UnZip the Zip files");
 		}
-		GUILayout.EndHorizontal ();
+		GUILayout.EndHorizontal();
 
 		
-		GUILayout.BeginHorizontal ();
+		GUILayout.BeginHorizontal();
 		{
-			GUILayout.Label ("Special Folder Copy to Plugin", GUILayout.Width (width));
-			currChlData.mSpecialCopyDir = EditorGUILayout.ObjectField (currChlData.mSpecialCopyDir, typeof(UnityEngine.Object));
+			GUILayout.Label("Special Folder Copy to Plugin", GUILayout.Width(width));
+			currChlData.mSpecialCopyDir = EditorGUILayout.ObjectField(currChlData.mSpecialCopyDir, typeof(UnityEngine.Object));
 		}
-		GUILayout.EndHorizontal ();
+		GUILayout.EndHorizontal();
 
 		GUI.color = Color.white;
 		//publishing settings
 		if (currChlData.mPlatform == ChlPlatform.android) {
-			GUILayout.Label ("Publishing settings", GUILayout.Width (width));
-			GUILayout.BeginHorizontal ();
+			GUILayout.Label("Publishing settings", GUILayout.Width(width));
+			GUILayout.BeginHorizontal();
 			{
-				GUILayout.Label ("Use Keystore", GUILayout.Width (width));
-				currChlData.mLicenseVerification = GUILayout.Toggle (currChlData.mLicenseVerification, "");
+				GUILayout.Label("Use Keystore", GUILayout.Width(width));
+				currChlData.mLicenseVerification = GUILayout.Toggle(currChlData.mLicenseVerification, "");
 			}
-			GUILayout.EndHorizontal ();
+			GUILayout.EndHorizontal();
 			
 			if (currChlData.mLicenseVerification) {
-				GUILayout.BeginHorizontal ();
+				GUILayout.BeginHorizontal();
 				{
-					GUILayout.Label ("Keystore", GUILayout.Width (width));
-					currChlData.mKeystoreName = EditorGUILayout.ObjectField (currChlData.mKeystoreName, typeof(UnityEngine.Object));
+					GUILayout.Label("Keystore", GUILayout.Width(width));
+					currChlData.mKeystoreName = EditorGUILayout.ObjectField(currChlData.mKeystoreName, typeof(UnityEngine.Object));
 				}
-				GUILayout.EndHorizontal ();
+				GUILayout.EndHorizontal();
 				
-				GUILayout.BeginHorizontal ();
+				GUILayout.BeginHorizontal();
 				{
-					GUILayout.Label ("Keystore Pass", GUILayout.Width (width));
-					currChlData.mKeystorePass = EditorGUILayout.TextField (currChlData.mKeystorePass);
+					GUILayout.Label("Keystore Pass", GUILayout.Width(width));
+					currChlData.mKeystorePass = EditorGUILayout.TextField(currChlData.mKeystorePass);
 				}
-				GUILayout.EndHorizontal ();
+				GUILayout.EndHorizontal();
 				
-				GUILayout.BeginHorizontal ();
+				GUILayout.BeginHorizontal();
 				{
-					GUILayout.Label ("Keyalias Name", GUILayout.Width (width));
-					currChlData.mKeyaliasName = EditorGUILayout.TextField (currChlData.mKeyaliasName);
+					GUILayout.Label("Keyalias Name", GUILayout.Width(width));
+					currChlData.mKeyaliasName = EditorGUILayout.TextField(currChlData.mKeyaliasName);
 				}
-				GUILayout.EndHorizontal ();
+				GUILayout.EndHorizontal();
 				
-				GUILayout.BeginHorizontal ();
+				GUILayout.BeginHorizontal();
 				{
-					GUILayout.Label ("Keyalias Pass", GUILayout.Width (width));
-					currChlData.mKeyaliasPass = EditorGUILayout.TextField (currChlData.mKeyaliasPass);
+					GUILayout.Label("Keyalias Pass", GUILayout.Width(width));
+					currChlData.mKeyaliasPass = EditorGUILayout.TextField(currChlData.mKeyaliasPass);
 				}
-				GUILayout.EndHorizontal ();
+				GUILayout.EndHorizontal();
 			}
 		}
 		//Be careful
-		GUILayout.BeginHorizontal ();
+		GUILayout.BeginHorizontal();
 		{
 			GUI.color = Color.red;
-			GUILayout.Label ("Special Instructions", GUILayout.Width (width));
+			GUILayout.Label("Special Instructions", GUILayout.Width(width));
 			GUI.color = Color.white;
 			GUI.contentColor = Color.yellow;
-			currChlData.mAlertDesc = GUILayout.TextArea (currChlData.mAlertDesc, GUILayout.Height (50f));
+			currChlData.mAlertDesc = GUILayout.TextArea(currChlData.mAlertDesc, GUILayout.Height(50f));
 			GUI.contentColor = Color.white;
 		}
-		GUILayout.EndHorizontal ();
+		GUILayout.EndHorizontal();
 	}
-	
-	void getChlData (string chlKey, string chlID)
+
+	void getChlData(string chlKey, string chlID)
 	{
-		currChlData = new ChlData ();
+		currChlData = new ChlData();
 		if (channelMap == null) {
 			return;
 		}
 		object tmpData = channelMap [chlKey];
-		currChlData = tmpData == null ? new ChlData () : ChlData.parse ((Hashtable)tmpData);
+		currChlData = tmpData == null ? new ChlData() : ChlData.parse((Hashtable)tmpData);
 		currChlData.mChlName = chlID;
 	}
-	
+
 	/// <summary>
 	/// Saves the chl build setting.
 	/// 保存渠道打包设置
 	/// </summary>
-	void saveChlBuildSetting ()
+	void saveChlBuildSetting()
 	{
 		if (currChlData == null) {
 			return;
 		}
-		currChlData.refreshData ();
+		currChlData.refreshData();
 		if (channelMap == null) {
-			channelMap = new Hashtable ();
+			channelMap = new Hashtable();
 		}
-		channelMap [currChlKey] = currChlData.toMap ();
+		channelMap [currChlKey] = currChlData.toMap();
 		channelData ["channelKey"] = channelKey;
 		channelData ["channelMap"] = channelMap;
 		channelData ["channelAliasEnum"] = channelAliasEnum;
-		saveData ();
+		saveData();
 	}
-	
+
 	/// <summary>
 	/// Cleans the chl setting.
 	/// 清空渠道打包设置
@@ -749,32 +763,33 @@ public class CoolapePublisher : EditorWindow
 	/// <param name='chlName'>
 	/// Chl name.
 	/// </param>
-	void cleanChlSetting (string chlName, string chlID)
+	void cleanChlSetting(string chlName, string chlID)
 	{
 		channelMap [chlName] = null;
 		channelData ["channelKey"] = channelKey;
 		channelData ["channelMap"] = channelMap;
 		channelData ["channelAliasEnum"] = channelAliasEnum;
-		saveData ();
-		getChlData (chlName, chlID);
+		saveData();
+		getChlData(chlName, chlID);
 	}
 
-	void chgChl4Edit ()
+	void chgChl4Edit()
 	{
-		PlayerSettings.SetScriptingDefineSymbolsForGroup (BuildTargetGroup.Android, currChlData.mScriptingDefineSymbols);
+		PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.Android, currChlData.mScriptingDefineSymbols);
 #if UNITY_5
-        PlayerSettings.SetScriptingDefineSymbolsForGroup (BuildTargetGroup.iOS, currChlData.mScriptingDefineSymbols);
+		PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.iOS, currChlData.mScriptingDefineSymbols);
 #else
 		PlayerSettings.SetScriptingDefineSymbolsForGroup (BuildTargetGroup.iPhone, currChlData.mScriptingDefineSymbols);
 #endif
 		
-		PlayerSettings.SetScriptingDefineSymbolsForGroup (BuildTargetGroup.Standalone, currChlData.mScriptingDefineSymbols);
+		PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.Standalone, currChlData.mScriptingDefineSymbols);
 	}
+
 	/// <summary>
 	/// Applies the setting.
 	/// 应用渠道设置
 	/// </summary>
-	void applySetting ()
+	void applySetting()
 	{
 		if (currChlData == null) {
 			return;
@@ -786,7 +801,7 @@ public class CoolapePublisher : EditorWindow
 		 * be assigned if it has the same length as the list of icon sizes returned
 		 * by GetIconSizesForTargetGroup and if the specified platform is supported in this editor.
 		 */
-		List<Texture2D> icons = new List<Texture2D> ();
+		List<Texture2D> icons = new List<Texture2D>();
 //		int[] iconSize = PlayerSettings.GetIconSizesForTargetGroup(currChlData.buildTargetGroup);
 //		Debug.Log("iconSize==" + iconSize.Length);
 //		for (int i = 0; i< iconSize.Length; i++) {
@@ -796,63 +811,63 @@ public class CoolapePublisher : EditorWindow
 		if (currChlData.buildTarget == BuildTarget.Android) {
 			iconNames = AndroidIconsName;
 #if UNITY_5
-        } else if (currChlData.buildTarget == BuildTarget.iOS) {
+		} else if (currChlData.buildTarget == BuildTarget.iOS) {
 #else
 		} else if (currChlData.buildTarget == BuildTarget.iPhone) {
 #endif
 		
 			iconNames = IosIconsName;
 		}
-		for (int i =0; i < iconNames.Length; i++) {
-			icons.Add ((Texture2D)(currChlData.mDefaultIcon [iconNames [i]]));
+		for (int i = 0; i < iconNames.Length; i++) {
+			icons.Add((Texture2D)(currChlData.mDefaultIcon [iconNames [i]]));
 		}
-		PlayerSettings.SetIconsForTargetGroup (currChlData.buildTargetGroup, icons.ToArray ());
+		PlayerSettings.SetIconsForTargetGroup(currChlData.buildTargetGroup, icons.ToArray());
 		//Splash imgae
 		PlayerSettings.resolutionDialogBanner = currChlData.mSplashImage;
 		//indentifier & version
 		PlayerSettings.bundleIdentifier = currChlData.mBundleIndentifier;
 		PlayerSettings.bundleVersion = currChlData.mBundleVersion;
-		modifyCfgFile ();
+		modifyCfgFile();
 		if (currChlData.buildTargetGroup == BuildTargetGroup.Android) {
 			PlayerSettings.Android.bundleVersionCode = currChlData.mBundleVersionCode;
 		}
-		string symbols = PlayerSettings.GetScriptingDefineSymbolsForGroup (currChlData.buildTargetGroup);
-		if (!string.IsNullOrEmpty (symbols)) {
-			string[] symbolsList = symbols.Split (';');
-			for (int i =0; i < symbolsList.Length; i++) {
-				if (symbolsList [i].StartsWith ("CHL_")) {
+		string symbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(currChlData.buildTargetGroup);
+		if (!string.IsNullOrEmpty(symbols)) {
+			string[] symbolsList = symbols.Split(';');
+			for (int i = 0; i < symbolsList.Length; i++) {
+				if (symbolsList [i].StartsWith("CHL_")) {
 					symbolsList [i] = "";
 				}
 			}
 			symbols = "";
-			for (int i =0; i < symbolsList.Length; i++) {
-				if (!string.IsNullOrEmpty (symbolsList [i])) {
+			for (int i = 0; i < symbolsList.Length; i++) {
+				if (!string.IsNullOrEmpty(symbolsList [i])) {
 					symbols += symbolsList [i] + ";";
 				}
 			}
 		}
 		symbols += (";" + currChlData.mScriptingDefineSymbols);
-		PlayerSettings.SetScriptingDefineSymbolsForGroup (currChlData.buildTargetGroup, symbols);
+		PlayerSettings.SetScriptingDefineSymbolsForGroup(currChlData.buildTargetGroup, symbols);
 		
 		// subchannel
 		string chlCfgPath = Application.streamingAssetsPath + "/chnCfg.json";
-		if(File.Exists(chlCfgPath)) {
-			Hashtable chlMap = JSON.DecodeMap (File.ReadAllText (chlCfgPath));
+		if (File.Exists(chlCfgPath)) {
+			Hashtable chlMap = JSON.DecodeMap(File.ReadAllText(chlCfgPath));
 			chlMap ["SubChannel"] = currChlData.mSubChannel;
 			chlMap ["chn"] = currChlData.mChlName;
 			chlMap ["isThirdExit"] = currChlData.isThirdExit;
 			chlMap ["isMoreGame"] = currChlData.isMoreGame;
 			chlMap ["IsSwitchAccount"] = currChlData.isSwitchAccount;
-			File.WriteAllText (chlCfgPath, JSON.JsonEncode (chlMap));
+			File.WriteAllText(chlCfgPath, JSON.JsonEncode(chlMap));
 		}
 
 		// copy files
 		if (currChlData.mCopyDir != null) {
-			copyFilesToPlugin (currChlData.mCopyDirPath);
+			copyFilesToPlugin(currChlData.mCopyDirPath);
 		}
 		// special copy
 		if (currChlData.mSpecialCopyDir != null) {
-			copyFilesToPlugin (currChlData.mSpecialCopyDirPath);
+			copyFilesToPlugin(currChlData.mSpecialCopyDirPath);
 		}
 
 		//
@@ -872,28 +887,28 @@ public class CoolapePublisher : EditorWindow
 			}
 		}
 	}
-	
+
 	/// <summary>
 	/// Applies the and build.
 	/// 设置并编译
 	/// </summary>
-	void applyAndBuild ()
+	void applyAndBuild()
 	{
 		if (currChlData == null) {
 			return;
 		}
-		applySetting ();
+		applySetting();
 		
 		//如果平台不一样，先切到
 		if (EditorUserBuildSettings.activeBuildTarget != currChlData.buildTarget) {
 //			EditorUserBuildSettings.SwitchActiveBuildTarget (currChlData.buildTarget);
-			EditorUtility.DisplayDialog ("Alert", "The active build target is not the same with current build target!", null);
+			EditorUtility.DisplayDialog("Alert", "The active build target is not the same with current build target!", null);
 			return;
 		}
 		
 		if (currChlData.mCreateEclipseProject) {
-			Debug.LogWarning ("The channel need Create Eclipse Project!!");
-			showMsgBox ("The channel need Create Eclipse Project!!", MessageType.Warning);
+			Debug.LogWarning("The channel need Create Eclipse Project!!");
+			showMsgBox("The channel need Create Eclipse Project!!", MessageType.Warning);
 			return;
 		}
 		
@@ -908,56 +923,56 @@ public class CoolapePublisher : EditorWindow
 			levels [0] = EditorApplication.currentScene;
 		}
 		
-		string locationName = currChlData.mPlatform.ToString () + "_" + currChlData.mChlName + "_" + currChlAlias + "_" + currChlData.mBundleIndentifier + "_v" + currChlData.mBundleVersion + "_" + DateEx.format (DateEx.fmt_yyyy_MM_dd) + "_" + DateEx.nowMS;
+		string locationName = currChlData.mPlatform.ToString() + "_" + currChlData.mChlName + "_" + currChlAlias + "_" + currChlData.mBundleIndentifier + "_v" + currChlData.mBundleVersion + "_" + DateEx.format(DateEx.fmt_yyyy_MM_dd) + "_" + DateEx.nowMS;
 		if (currChlData.mPlatform == ChlPlatform.android) {
 			if (!currChlData.mCreateEclipseProject) {
 				locationName += ".apk";
 			} else {
-				locationName = dataPath () + currChlData.mBuildLocation;
+				locationName = dataPath() + currChlData.mBuildLocation;
 			}
 #if UNITY_5
-        } else if (currChlData.buildTarget == BuildTarget.iOS) {
+		} else if (currChlData.buildTarget == BuildTarget.iOS) {
 #else
 		} else if (currChlData.buildTarget == BuildTarget.iPhone) {
 #endif
 //			EditorUserBuildSettings.appendProject = true;
-			locationName = dataPath () + currChlData.mBuildLocation;
+			locationName = dataPath() + currChlData.mBuildLocation;
 		}
 		bool needApend = true;
-		if (!string.IsNullOrEmpty (currChlData.mBuildLocation)) {
-			if (!Directory.Exists (locationName)) {
+		if (!string.IsNullOrEmpty(currChlData.mBuildLocation)) {
+			if (!Directory.Exists(locationName)) {
 				needApend = false;
-				Directory.CreateDirectory (locationName);
+				Directory.CreateDirectory(locationName);
 			}
 		}
 		
-		Debug.Log ("Publish path:" + locationName);
+		Debug.Log("Publish path:" + locationName);
 #if UNITY_5
-                if (currChlData.buildTarget == BuildTarget.iOS && needApend) {
+		if (currChlData.buildTarget == BuildTarget.iOS && needApend) {
 #else
 		if (currChlData.buildTarget == BuildTarget.iPhone && needApend) {
 #endif
-			BuildPipeline.BuildPlayer (levels, locationName, currChlData.buildTarget, BuildOptions.AcceptExternalModificationsToPlayer);
+			BuildPipeline.BuildPlayer(levels, locationName, currChlData.buildTarget, BuildOptions.AcceptExternalModificationsToPlayer);
 		} else {
-			BuildPipeline.BuildPlayer (levels, locationName, currChlData.buildTarget, BuildOptions.None);
+			BuildPipeline.BuildPlayer(levels, locationName, currChlData.buildTarget, BuildOptions.None);
 		}
 	}
 
-	void modifyCfgFile ()
+	void modifyCfgFile()
 	{
-		if (string.IsNullOrEmpty (cfgFilePath)) {
+		if (string.IsNullOrEmpty(cfgFilePath)) {
 			return;
 		}
-		string[] buffer = File.ReadAllLines (dataPath () + cfgFilePath);
+		string[] buffer = File.ReadAllLines(dataPath() + cfgFilePath);
 		string line = "";
 		bool finishModifyVer = false;
 		bool finishModifyVerCoder = false;
 		for (int i = 0; i < buffer.Length; i++) {
 			line = buffer [i];
-			if (line.IndexOf ("public static string version") >= 0) {
+			if (line.IndexOf("public static string version") >= 0) {
 				buffer [i] = "    public static string version = \"" + currChlData.mBundleVersion + "\";";
 				finishModifyVer = true;
-			} else if (line.IndexOf ("public static int versionCode") >= 0) {
+			} else if (line.IndexOf("public static int versionCode") >= 0) {
 				buffer [i] = "    public static int versionCode = " + currChlData.mBundleVersionCode + ";";
 				finishModifyVerCoder = true;
 			}
@@ -965,14 +980,14 @@ public class CoolapePublisher : EditorWindow
 				break;
 			}
 		}
-		File.WriteAllLines (dataPath () + cfgFilePath, buffer);
+		File.WriteAllLines(dataPath() + cfgFilePath, buffer);
 	}
-	
+
 	/// <summary>
 	/// Copies the files to plugin.
 	/// 把文件拷贝到Plugin目录
 	/// </summary>
-	void copyFilesToPlugin (string fromPath)
+	void copyFilesToPlugin(string fromPath)
 	{
 		string toPath = "";
 		if (currChlData.mPlatform == ChlPlatform.android) {
@@ -980,8 +995,8 @@ public class CoolapePublisher : EditorWindow
 		} else if (currChlData.mPlatform == ChlPlatform.ios) {
 			toPath = "Assets/Plugins/IOS/";
 		}
-		Debug.Log (dataPath ());
-		doCopyFiles (dataPath () + fromPath, dataPath () + toPath);
+		Debug.Log(dataPath());
+		doCopyFiles(dataPath() + fromPath, dataPath() + toPath);
 	}
 
 	/// <summary>
@@ -991,42 +1006,42 @@ public class CoolapePublisher : EditorWindow
 	/// <returns>
 	/// The path.
 	/// </returns>
-	string dataPath ()
+	string dataPath()
 	{
 		string tmpPath = Application.dataPath + "/";
-		return tmpPath.Replace ("/Assets/", "/");
+		return tmpPath.Replace("/Assets/", "/");
 	}
 
-	void doCopyFiles (string fromPath, string toPath)
+	void doCopyFiles(string fromPath, string toPath)
 	{
-		string[] fileEntries = Directory.GetFiles (fromPath);
+		string[] fileEntries = Directory.GetFiles(fromPath);
 		string extension = "";
 		string fileName = "";
 		foreach (string filePath in fileEntries) {
-			extension = Path.GetExtension (filePath);
-			if (extension.ToLower () == ".meta" || extension.ToLower () == ".ds_store") {
+			extension = Path.GetExtension(filePath);
+			if (extension.ToLower() == ".meta" || extension.ToLower() == ".ds_store") {
 				continue;
 			}
-			fileName = Path.GetFileName (filePath);
-			if (currChlData.mUnZip && extension.ToLower () == ".zip") {
-				ZipEx.UnZip (filePath, toPath, 4096);
+			fileName = Path.GetFileName(filePath);
+			if (currChlData.mUnZip && extension.ToLower() == ".zip") {
+				ZipEx.UnZip(filePath, toPath, 4096);
 			} else {
-				if (File.Exists (toPath + fileName)) {
-					File.Delete (toPath + fileName);
+				if (File.Exists(toPath + fileName)) {
+					File.Delete(toPath + fileName);
 				}
-				File.Copy (filePath, toPath + fileName);
+				File.Copy(filePath, toPath + fileName);
 			}
 		}
-		string[] dirEntries = Directory.GetDirectories (fromPath);
+		string[] dirEntries = Directory.GetDirectories(fromPath);
 		string dirName = "";
 		string newToPath = "";
 		foreach (string dir in dirEntries) {
-			dirName = Path.GetFileName (dir);
+			dirName = Path.GetFileName(dir);
 			newToPath = toPath + dirName + "/";
-			if (!Directory.Exists (newToPath)) {
-				Directory.CreateDirectory (newToPath);
+			if (!Directory.Exists(newToPath)) {
+				Directory.CreateDirectory(newToPath);
 			}
-			doCopyFiles (dir, newToPath);
+			doCopyFiles(dir, newToPath);
 		}
 	}
 }
@@ -1049,16 +1064,16 @@ public class ChlData
 {
 	public string mChlName = "";
 	public string mProductName = "";
-	public ChlPlatform  mPlatform = ChlPlatform.android;
+	public ChlPlatform mPlatform = ChlPlatform.android;
 
 	public BuildTargetGroup buildTargetGroup {
 		get {
 			switch (mPlatform) {
-			case ChlPlatform.android:
-				return BuildTargetGroup.Android;
-			case ChlPlatform.ios:
+				case ChlPlatform.android:
+					return BuildTargetGroup.Android;
+				case ChlPlatform.ios:
 #if UNITY_5
-                return BuildTargetGroup.iOS;
+					return BuildTargetGroup.iOS;
 #else
 				return BuildTargetGroup.iPhone;
 #endif
@@ -1066,15 +1081,15 @@ public class ChlData
 			return BuildTargetGroup.Android;
 		}
 	}
-	
+
 	public BuildTarget buildTarget {
 		get {
 			switch (mPlatform) {
-			case ChlPlatform.android:
-				return BuildTarget.Android;
-			case ChlPlatform.ios:
+				case ChlPlatform.android:
+					return BuildTarget.Android;
+				case ChlPlatform.ios:
 #if UNITY_5
-                return BuildTarget.iOS;
+					return BuildTarget.iOS;
 #else
 				return BuildTarget.iPhone;
 #endif
@@ -1083,31 +1098,32 @@ public class ChlData
 		}
 	}
 	
-//	public BuildTarget  
+	//	public BuildTarget
 
-	Hashtable _DefaultIcon; //Texture2D
+	Hashtable _DefaultIcon;
+	//Texture2D
 	Texture2D _SplashImage;
 
 	public Hashtable mDefaultIcon {
 		get {
 			if (_DefaultIcon == null && mDefaultIconPath != null) {
-				_DefaultIcon = new Hashtable ();
+				_DefaultIcon = new Hashtable();
 				foreach (DictionaryEntry cell in mDefaultIconPath) {
-					string iconPath = cell.Value.ToString ();
-					_DefaultIcon [cell.Key] = (Texture2D)(AssetDatabase.LoadAssetAtPath ("Assets/" + iconPath, typeof(Texture2D)));
+					string iconPath = cell.Value.ToString();
+					_DefaultIcon [cell.Key] = (Texture2D)(AssetDatabase.LoadAssetAtPath("Assets/" + iconPath, typeof(Texture2D)));
 				}
 			}
 			if (_DefaultIcon == null) {
-				_DefaultIcon = new Hashtable ();
+				_DefaultIcon = new Hashtable();
 			}
 			return _DefaultIcon;
 		}
 	}
-		
+
 	public Texture2D mSplashImage {
 		get {
-			if (_SplashImage == null && !string.IsNullOrEmpty (mSplashImagePath)) {
-				_SplashImage = (Texture2D)(AssetDatabase.LoadAssetAtPath ("Assets/" + mSplashImagePath, typeof(Texture2D)));
+			if (_SplashImage == null && !string.IsNullOrEmpty(mSplashImagePath)) {
+				_SplashImage = (Texture2D)(AssetDatabase.LoadAssetAtPath("Assets/" + mSplashImagePath, typeof(Texture2D)));
 					
 			}
 			return _SplashImage;
@@ -1120,7 +1136,7 @@ public class ChlData
 		}
 	}
 
-	public Hashtable mDefaultIconPath = new Hashtable ();
+	public Hashtable mDefaultIconPath = new Hashtable();
 	public string mSplashImagePath;
 	public string mBundleIndentifier = "";
 	public string mBundleVersion = "";
@@ -1130,10 +1146,10 @@ public class ChlData
 
 	public string mScriptingDefineSymbols {
 		get {
-			return "CHL_" + mChlName.ToUpper ();
+			return "CHL_" + mChlName.ToUpper();
 		}
 	}
-		
+
 	public string mSubChannel = "";
 	public string mCtccChannel = "";
 	public bool isThirdExit = false;
@@ -1146,8 +1162,8 @@ public class ChlData
 	public UnityEngine.Object mCopyDir {
 		get {
 			if (_CopyDir == null) {
-				if (!string.IsNullOrEmpty (mCopyDirPath)) {
-					_CopyDir = AssetDatabase.LoadAssetAtPath (
+				if (!string.IsNullOrEmpty(mCopyDirPath)) {
+					_CopyDir = AssetDatabase.LoadAssetAtPath(
 						mCopyDirPath, 
 						typeof(UnityEngine.Object));
 				}
@@ -1159,11 +1175,11 @@ public class ChlData
 			if (value == null) {
 				mCopyDirPath = ""; 
 			} else {
-				mCopyDirPath = AssetDatabase.GetAssetPath (_CopyDir.GetInstanceID ());
+				mCopyDirPath = AssetDatabase.GetAssetPath(_CopyDir.GetInstanceID());
 			}
 		}
 	}
-	
+
 	public bool mUnZip;
 	public string mSpecialCopyDirPath = "";
 	UnityEngine.Object _SpecialCopyDir;
@@ -1171,10 +1187,10 @@ public class ChlData
 	public UnityEngine.Object mSpecialCopyDir {
 		get {
 			if (_SpecialCopyDir == null) {
-				if (!string.IsNullOrEmpty (mSpecialCopyDirPath)) {
-					_SpecialCopyDir = AssetDatabase.LoadAssetAtPath (
-							mSpecialCopyDirPath, 
-							typeof(UnityEngine.Object));
+				if (!string.IsNullOrEmpty(mSpecialCopyDirPath)) {
+					_SpecialCopyDir = AssetDatabase.LoadAssetAtPath(
+						mSpecialCopyDirPath, 
+						typeof(UnityEngine.Object));
 				}
 			}
 			return _SpecialCopyDir;
@@ -1184,7 +1200,7 @@ public class ChlData
 			if (value == null) {
 				mSpecialCopyDirPath = ""; 
 			} else {
-				mSpecialCopyDirPath = AssetDatabase.GetAssetPath (_SpecialCopyDir.GetInstanceID ());
+				mSpecialCopyDirPath = AssetDatabase.GetAssetPath(_SpecialCopyDir.GetInstanceID());
 			}
 		}
 	}
@@ -1196,8 +1212,8 @@ public class ChlData
 	public UnityEngine.Object mKeystoreName {
 		get {
 			if (_KeystoreName == null) {
-				if (!string.IsNullOrEmpty (mKeystoreNamePath)) {
-					_KeystoreName = AssetDatabase.LoadAssetAtPath (
+				if (!string.IsNullOrEmpty(mKeystoreNamePath)) {
+					_KeystoreName = AssetDatabase.LoadAssetAtPath(
 						mKeystoreNamePath, 
 						typeof(UnityEngine.Object));
 				}
@@ -1209,7 +1225,7 @@ public class ChlData
 			if (value == null) {
 				mKeystoreNamePath = ""; 
 			} else {
-				mKeystoreNamePath = AssetDatabase.GetAssetPath (_KeystoreName.GetInstanceID ());
+				mKeystoreNamePath = AssetDatabase.GetAssetPath(_KeystoreName.GetInstanceID());
 			}
 		}
 	}
@@ -1217,13 +1233,13 @@ public class ChlData
 	public string mKeystorePass;
 	public string mKeyaliasName;
 	public string mKeyaliasPass;
-	
-	public Hashtable toMap ()
+
+	public Hashtable toMap()
 	{
-		Hashtable r = new Hashtable ();
+		Hashtable r = new Hashtable();
 		r ["mChlNmae"] = mChlName;
 		r ["mProductName"] = mProductName;
-		r ["mPlatform"] = mPlatform.ToString ();
+		r ["mPlatform"] = mPlatform.ToString();
 		r ["mDefaultIconPath"] = mDefaultIconPath;
 		r ["mSplashImagePath"] = mSplashImagePath;
 		r ["mBundleIndentifier"] = mBundleIndentifier;
@@ -1250,74 +1266,74 @@ public class ChlData
 		r ["isSwitchAccount"] = isSwitchAccount;
 		return r;
 	}
-		
-	public void refreshData ()
+
+	public void refreshData()
 	{
 		if (_DefaultIcon != null) {
 			foreach (DictionaryEntry cell in _DefaultIcon) {
 				Texture2D icon = cell.Value == null ? null : (Texture2D)(cell.Value);
 				if (icon == null)
 					continue;
-				string tmpPath = AssetDatabase.GetAssetPath (icon.GetInstanceID ());
+				string tmpPath = AssetDatabase.GetAssetPath(icon.GetInstanceID());
 				int startPos = 0;
-				startPos = tmpPath.IndexOf ("Assets/");
+				startPos = tmpPath.IndexOf("Assets/");
 				startPos += 7;
-				tmpPath = tmpPath.Substring (startPos, tmpPath.Length - startPos);
+				tmpPath = tmpPath.Substring(startPos, tmpPath.Length - startPos);
 				if (mDefaultIconPath == null) {
-					mDefaultIconPath = new Hashtable ();
+					mDefaultIconPath = new Hashtable();
 				}
 				mDefaultIconPath [cell.Key] = tmpPath;
 			}
 		}
 		if (_SplashImage != null) {
-			string tmpPath = AssetDatabase.GetAssetPath (_SplashImage.GetInstanceID ());
+			string tmpPath = AssetDatabase.GetAssetPath(_SplashImage.GetInstanceID());
 			int startPos = 0;
-			startPos = tmpPath.IndexOf ("Assets/");
+			startPos = tmpPath.IndexOf("Assets/");
 			startPos += 7;
-			tmpPath = tmpPath.Substring (startPos, tmpPath.Length - startPos);
+			tmpPath = tmpPath.Substring(startPos, tmpPath.Length - startPos);
 			mSplashImagePath = tmpPath;
 		}
 	}
-		
-	public static ChlData parse (Hashtable map)
+
+	public static ChlData parse(Hashtable map)
 	{
 		if (map == null) {
 			return null;
 		}
-		ChlData r = new ChlData ();
-		r.mChlName = MapEx.getString (map, "mChlNmae");
-		r.mProductName = MapEx.getString (map, "mProductName");
-		r.mDefaultIconPath = MapEx.getMap (map, "mDefaultIconPath");
-		r.mSplashImagePath = MapEx.getString (map, "mSplashImagePath");
-		r.mBundleIndentifier = MapEx.getString (map, "mBundleIndentifier");
-		r.mBundleVersion = MapEx.getString (map, "mBundleVersion");
-		r.mBundleVersionCode = MapEx.getInt (map, "mBundleVersionCode");
-		string platform = MapEx.getString (map, "mPlatform");
+		ChlData r = new ChlData();
+		r.mChlName = MapEx.getString(map, "mChlNmae");
+		r.mProductName = MapEx.getString(map, "mProductName");
+		r.mDefaultIconPath = MapEx.getMap(map, "mDefaultIconPath");
+		r.mSplashImagePath = MapEx.getString(map, "mSplashImagePath");
+		r.mBundleIndentifier = MapEx.getString(map, "mBundleIndentifier");
+		r.mBundleVersion = MapEx.getString(map, "mBundleVersion");
+		r.mBundleVersionCode = MapEx.getInt(map, "mBundleVersionCode");
+		string platform = MapEx.getString(map, "mPlatform");
 		switch (platform) {
-		case "android":
-			r.mPlatform = ChlPlatform.android;
-			break;
-		case "ios":
-			r.mPlatform = ChlPlatform.ios;
-			break;
+			case "android":
+				r.mPlatform = ChlPlatform.android;
+				break;
+			case "ios":
+				r.mPlatform = ChlPlatform.ios;
+				break;
 		}
-		r.mCreateEclipseProject = MapEx.getBool (map, "mCreateEclipseProject");
-		r.mBuildLocation = MapEx.getString (map, "mBuildLocation");
-		r.mAlertDesc = MapEx.getString (map, "mAlertDesc");
+		r.mCreateEclipseProject = MapEx.getBool(map, "mCreateEclipseProject");
+		r.mBuildLocation = MapEx.getString(map, "mBuildLocation");
+		r.mAlertDesc = MapEx.getString(map, "mAlertDesc");
 		r.mAlertDesc = r.mAlertDesc == null ? "" : r.mAlertDesc;
-		r.mCopyDirPath = MapEx.getString (map, "mCopyDir");
-		r.mSpecialCopyDirPath = MapEx.getString (map, "mSpecialCopyDir");
-		r.mUnZip = MapEx.getBool (map, "mUnZip");
-		r.mLicenseVerification = MapEx.getBool (map, "mLicenseVerification");
-		r.mKeystoreNamePath = MapEx.getString (map, "mKeystoreNamePath");
-		r.mKeystorePass = MapEx.getString (map, "mKeystorePass");
-		r.mKeyaliasName = MapEx.getString (map, "mKeyaliasName");
-		r.mKeyaliasPass = MapEx.getString (map, "mKeyaliasPass");
-		r.mSubChannel = MapEx.getString (map, "mSubChannel");
-		r.mCtccChannel = MapEx.getString (map, "mCtccChannel");
-		r.isThirdExit = MapEx.getBool (map, "isThirdExit");
-		r.isMoreGame = MapEx.getBool (map, "isMoreGame");
-		r.isSwitchAccount = MapEx.getBool (map, "isSwitchAccount");
+		r.mCopyDirPath = MapEx.getString(map, "mCopyDir");
+		r.mSpecialCopyDirPath = MapEx.getString(map, "mSpecialCopyDir");
+		r.mUnZip = MapEx.getBool(map, "mUnZip");
+		r.mLicenseVerification = MapEx.getBool(map, "mLicenseVerification");
+		r.mKeystoreNamePath = MapEx.getString(map, "mKeystoreNamePath");
+		r.mKeystorePass = MapEx.getString(map, "mKeystorePass");
+		r.mKeyaliasName = MapEx.getString(map, "mKeyaliasName");
+		r.mKeyaliasPass = MapEx.getString(map, "mKeyaliasPass");
+		r.mSubChannel = MapEx.getString(map, "mSubChannel");
+		r.mCtccChannel = MapEx.getString(map, "mCtccChannel");
+		r.isThirdExit = MapEx.getBool(map, "isThirdExit");
+		r.isMoreGame = MapEx.getBool(map, "isMoreGame");
+		r.isSwitchAccount = MapEx.getBool(map, "isSwitchAccount");
 		return r;
 	}
 }
