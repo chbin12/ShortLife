@@ -13,7 +13,7 @@ GameObject:
   - 65: {fileID: 6537670}
   - 54: {fileID: 5437820}
   - 114: {fileID: 11499472}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: tile_00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30,7 +30,7 @@ GameObject:
   - 4: {fileID: 406418}
   - 33: {fileID: 3349548}
   - 23: {fileID: 2380944}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: tile_00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -120,8 +120,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 0.85, z: 1}
-  m_Center: {x: 0, y: 0, z: -1.04}
+  m_Size: {x: 1, y: 0.9, z: 1}
+  m_Center: {x: 0, y: 0, z: -0.51}
 --- !u!114 &11414672
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -187,7 +187,17 @@ MonoBehaviour:
   duration: 1
   steeperCurves: 0
   tweenGroup: 0
-  onFinished: []
+  onFinished:
+  - mTarget: {fileID: 11428224}
+    mMethodName: onNotifyLua
+    mParameters:
+    - obj: {fileID: 0}
+      field: 
+    - obj: {fileID: 0}
+      field: 
+    - obj: {fileID: 0}
+      field: 
+    oneShot: 0
   eventReceiver: {fileID: 0}
   callWhenFinished: 
   from: {x: -0.2, y: 0, z: 0}

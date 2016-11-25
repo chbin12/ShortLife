@@ -1225,6 +1225,9 @@ MonoBehaviour:
   - name: "\u8349\u5730"
     tileTypes: 000000000100000002000000
     ornTypes: 18000000200000002100000022000000230000002400000025000000260000002700000028000000290000002a000000
+    ground: 
+    groundHigh: 0
+    ornament4Ground: []
     effect: 
     fog: 0
     fogDensity: 0
@@ -1234,6 +1237,9 @@ MonoBehaviour:
   - name: "\u96EA\u5730"
     tileTypes: 0c0000000e000000070000000d000000
     ornTypes: 190000001c0000002b0000002c000000
+    ground: 
+    groundHigh: 0
+    ornament4Ground: []
     effect: 
     fog: 0
     fogDensity: 0
@@ -1243,6 +1249,9 @@ MonoBehaviour:
   - name: "\u571F\u5730"
     tileTypes: 03000000040000000500000008000000090000000a0000000b000000
     ornTypes: 200000002100000022000000230000001a0000001b000000
+    ground: 
+    groundHigh: 0
+    ornament4Ground: []
     effect: 
     fog: 0
     fogDensity: 0
@@ -1252,6 +1261,9 @@ MonoBehaviour:
   - name: "\u706B\u7130\u5C71"
     tileTypes: 140000001500000016000000
     ornTypes: 1a0000001b0000001e0000001f000000
+    ground: 
+    groundHigh: 0
+    ornament4Ground: []
     effect: 
     fog: 0
     fogDensity: 0
@@ -1261,6 +1273,9 @@ MonoBehaviour:
   - name: "\u77F3\u5934"
     tileTypes: 17000000
     ornTypes: 2a00000018000000
+    ground: 
+    groundHigh: 0
+    ornament4Ground: []
     effect: 
     fog: 0
     fogDensity: 0
@@ -1270,6 +1285,9 @@ MonoBehaviour:
   - name: "\u6BD2"
     tileTypes: 0f0000001000000011000000
     ornTypes: 2d0000002e0000001d000000
+    ground: 
+    groundHigh: 0
+    ornament4Ground: []
     effect: 
     fog: 0
     fogDensity: 0
@@ -1279,6 +1297,9 @@ MonoBehaviour:
   - name: "\u6728"
     tileTypes: 06000000
     ornTypes: 2a000000
+    ground: 
+    groundHigh: 0
+    ornament4Ground: []
     effect: 
     fog: 0
     fogDensity: 0
@@ -1288,6 +1309,9 @@ MonoBehaviour:
   - name: "\u9ED1\u767D"
     tileTypes: 1200000013000000
     ornTypes: 180000002a000000
+    ground: 
+    groundHigh: 0
+    ornament4Ground: []
     effect: 
     fog: 0
     fogDensity: 0
@@ -1297,6 +1321,9 @@ MonoBehaviour:
   - name: mid
     tileTypes: 2f000000
     ornTypes: 2f000000
+    ground: 
+    groundHigh: 0
+    ornament4Ground: []
     effect: 
     fog: 0
     fogDensity: 0
@@ -1307,6 +1334,9 @@ MonoBehaviour:
     name: 
     tileTypes: 
     ornTypes: 
+    ground: 
+    groundHigh: 0
+    ornament4Ground: []
     effect: 
     fog: 0
     fogDensity: 0
