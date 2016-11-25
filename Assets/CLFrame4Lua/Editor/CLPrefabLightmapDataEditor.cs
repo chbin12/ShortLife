@@ -10,7 +10,11 @@ public class CLPrefabLightmapDataEditor : Editor
 	static void SaveLightmapInfo ()
 	{
 		GameObject go = Selection.activeGameObject;
-		if (go == null) return;
+		if (go == null) {
+			EditorUtility.DisplayDialog("Alert", "Please select a gameObject!", "Okey");
+			return;
+		}
+
 		CLPrefabLightmapData data = go.GetComponent<CLPrefabLightmapData>();
 		if (data == null) {
 			data = go.AddComponent<CLPrefabLightmapData>();
@@ -25,27 +29,38 @@ public class CLPrefabLightmapDataEditor : Editor
 	static void LoadLightmapInfo()
 	{
 		GameObject go = Selection.activeGameObject;
-		if (go == null) return;
-		
+		if (go == null) {
+			EditorUtility.DisplayDialog("Alert", "Please select a gameObject!", "Okey");
+			return;
+		}
+
 		CLPrefabLightmapData data = go.GetComponent<CLPrefabLightmapData>();
-		if (data == null) return;
+		if (data == null) {
+			EditorUtility.DisplayDialog("Alert", "Can't find [CLPrefabLightmapData] component!", "Okey");
+			return;
+		}
 		
 		data.LoadLightmap();
 		EditorUtility.SetDirty(go);
-		
-		new GameObject();
 	}
 	
 	[MenuItem("Coolape/Lightmap/Clear", false, 0)]
 	static void ClearLightmapInfo()
 	{
 		GameObject go = Selection.activeGameObject;
-		if (go == null) return;
+		if (go == null) {
+			EditorUtility.DisplayDialog("Alert", "Please select a gameObject!", "Okey");
+			return;
+		}
 		
 		CLPrefabLightmapData data = go.GetComponent<CLPrefabLightmapData>();
-		if (data == null) return;
-		
+		if (data == null) {
+			EditorUtility.DisplayDialog("Alert", "Can't find [CLPrefabLightmapData] component!", "Okey");
+			return;
+		}
+
 		data.m_RendererInfo.Clear();
+		data.m_Lightmaps = null;
 		EditorUtility.SetDirty(go);
 	}
 }

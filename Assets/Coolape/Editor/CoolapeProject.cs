@@ -5,21 +5,26 @@ using Toolkit;
 using System.IO;
 using System.Collections.Generic;
 using System;
+using UnityEditorHelper;
 
 public class CoolapeProject : EditorWindow
 {
 	string configFile = "Coolape/Editor/CoolapeProject.cfg";
 	#if UNITY_ANDROID || UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX
-	public const string ver4DevelopeMd5 = "Coolape/verControl/android/ver4DevelopeMd5.v";				// 开发中的版本文件
-	public const string ver4Publish = "Coolape/verControl/android/ver4Publish.v";											//打包时的版本
-	public const string ver4Upgrade = "Coolape/verControl/android/ver4Upgrade.v";											//每次更新时的版本
-	public const string ver4UpgradeMd5 = "Coolape/verControl/android/ver4UpgradeMd5.v";					//每次更新时的版本
+	public const string ver4DevelopeMd5 = "Coolape/verControl/android/ver4DevelopeMd5.v";
+	// 开发中的版本文件
+	public const string ver4Publish = "Coolape/verControl/android/ver4Publish.v";
+	//打包时的版本
+	public const string ver4Upgrade = "Coolape/verControl/android/ver4Upgrade.v";
+	//每次更新时的版本
+	public const string ver4UpgradeMd5 = "Coolape/verControl/android/ver4UpgradeMd5.v";
+	//每次更新时的版本
 	#elif UNITY_IOS
 	public const string ver4DevelopeMd5 = "Coolape/verControl/ios/ver4DevelopeMd5.v";				// 开发中的版本文件
 	public const string ver4Publish = "Coolape/verControl/ios/ver4Publish.v";											//打包时的版本
 	public const string ver4Upgrade = "Coolape/verControl/ios/ver4Upgrade.v";											//每次更新时的版本
 	public const string ver4UpgradeMd5 = "Coolape/verControl/ios/ver4UpgradeMd5.v";					//每次更新时的版本
-	#else
+#else
 	public const string ver4DevelopeMd5 = "Coolape/verControl/android/ver4DevelopeMd5.v";				// 开发中的版本文件
 	public const string ver4Publish = "Coolape/verControl/android/ver4Publish.v";											//打包时的版本
 	public const string ver4Upgrade = "Coolape/verControl/android/ver4Upgrade.v";											//每次更新时的版本
@@ -32,7 +37,11 @@ public class CoolapeProject : EditorWindow
 	string newProjName = "";
 	List<string> cfgFiles = new List<string> ();
 	Vector2 scrollPos = Vector2.zero;
-	
+
+	bool state1 = false;
+	bool state2 = true;
+	bool state3 = false;
+
 	void OnGUI ()
 	{
 		if (SCfg.self == null) {
@@ -65,143 +74,112 @@ public class CoolapeProject : EditorWindow
 		GUILayout.EndHorizontal ();
 		
 		GUILayout.Space (5);
-		NGUIEditorTools.BeginContents ();
-		{
-			GUI.color = Color.yellow;
-			GUILayout.Label ("Project init", GUILayout.Width (125));
-			GUI.color = Color.white;
-			GUILayout.BeginHorizontal ();
-			{
-				GUILayout.Label ("Project Name:", GUILayout.Width (125));
-				data.name = GUILayout.TextField (data.name, GUILayout.Width (300));
-			}
-			GUILayout.EndHorizontal ();
-			if (GUILayout.Button ("Create Folders", GUILayout.Width (300))) {
-				CreateFolders ();
-			}
+		using (new FoldableBlock (ref state1, "Project init  " + (state1 ? "(Click to hide)" : "(Click to show detail)"))) {
+			if (state1) {
+				using (new HighlightBox ()) {
+					GUI.color = Color.white;
+					GUILayout.BeginHorizontal ();
+					{
+						GUILayout.Label ("Project Name:", GUILayout.Width (125));
+						data.name = GUILayout.TextField (data.name);
+					}
+					GUILayout.EndHorizontal ();
+					if (GUILayout.Button ("Create Folders", GUILayout.Width (300))) {
+						CreateFolders ();
+					}
 			
-			GUILayout.BeginHorizontal ();
-			{
-				GUILayout.Label ("New Project Name:", GUILayout.Width (125));
-				newProjName = GUILayout.TextField (newProjName, GUILayout.Width (200));
-			}
-			GUILayout.EndHorizontal ();
+					GUILayout.BeginHorizontal ();
+					{
+						GUILayout.Label ("New Project Name:", GUILayout.Width (125));
+						newProjName = GUILayout.TextField (newProjName);
+					}
+					GUILayout.EndHorizontal ();
 			
-			if (GUILayout.Button ("Modify Project Name", GUILayout.Width (150))) {
-				modifyProjectName ();
-			}
-		}
-		NGUIEditorTools.EndContents ();
-		
-		//生成unity3d格式
-		GUILayout.Space (5);
-		NGUIEditorTools.BeginContents ();
-		{
-			GUI.color = Color.yellow;
-			GUILayout.Label ("Create Cfg Data Files", GUILayout.Width (125));
-			GUI.color = Color.white;
-			GUILayout.BeginHorizontal ();
-			{
-				GUILayout.Label ("Cfg data Folder", GUILayout.Width (125));
-				data.cfgFolder = EditorGUILayout.ObjectField (data.cfgFolder, 
-				                                              typeof(UnityEngine.Object), GUILayout.Width (125));
+					if (GUILayout.Button ("Modify Project Name", GUILayout.Width (300))) {
+						modifyProjectName ();
+					}
+					GUI.color = Color.white;
+					GUILayout.BeginHorizontal ();
+					{
+						GUILayout.Label ("Json Cfg data Folder", GUILayout.Width (125));
+						data.cfgFolder = EditorGUILayout.ObjectField (data.cfgFolder, 
+							typeof(UnityEngine.Object));
 				
-				//              if (GUILayout.Button("Refresh", GUILayout.Width(100))) {
-				//                  refreshCfgFiles();
-				//              }
+					}
+					GUILayout.EndHorizontal ();
+				}
 			}
-			GUILayout.EndHorizontal ();
-			//          for (int i = 0; i < cfgFiles.Count; i++) {
-			//              GUILayout.BeginHorizontal();
-			//              {
-			//                  GUI.color = Color.yellow;
-			//                  if (GUILayout.Button("Create", GUILayout.Width(100))) {
-			//                      string className = Path.GetFileNameWithoutExtension(cfgFiles [i]);
-			//                      Debug.Log(className);
-			//                      EditorUtility.DisplayDialog("success", "Create cfg data cuccess!\n" + createCfgBioData(className), "Okey");
-			//                  }
-			//                  GUI.color = Color.white;
-			//                  GUILayout.Label(cfgFiles [i], GUILayout.Width(300));
-			//              }
-			//              GUILayout.EndHorizontal();
-			//          }
 		}
-		NGUIEditorTools.EndContents ();
 		
 		GUI.color = Color.white;
 		GUILayout.Space (5);
-		NGUIEditorTools.BeginContents ();
-		{
-			GUI.color = Color.red;
-			GUILayout.Label ("Refresh All AssetBundles", GUILayout.Width (155));
+//		NGUIEditorTools.BeginContents ();
+//		{
+		using (new FoldableBlock (ref state2, "Refresh All AssetBundles  " + (state2 ? "(Click to hide)" : "(Click to show detail)"))) {
+			if (state2) {
+				using (new HighlightBox ()) {
+					GUI.color = Color.green;
+					if (GUILayout.Button ("One Key Refresh All AssetBundles", GUILayout.Width (300), GUILayout.Height (50))) {
+						if (EditorUtility.DisplayDialog ("Alert", "Really want to refresh all assetbundles!", "Okey", "cancel")) {
+							refreshAllAssetbundles ();
+						}
+					}
+
+					GUILayout.Space (20);
+					GUI.color = Color.red;
+					if (GUILayout.Button ("PubshlishSetting\n(打包配置（每次打包前先执行一次）)", GUILayout.Width (300))) {
+						if (EditorUtility.DisplayDialog ("Alert", "打包配置（每次打包前先执行一次）!", "Okey", "cancel")) {
+							publishSetting ();
+						}
+					}
 			
-			if (GUILayout.Button ("One Key Refresh All AssetBundles", GUILayout.Width (300))) {
-				if (EditorUtility.DisplayDialog ("Alert", "Really want to refresh all assetbundles!", "Okey", "cancel")) {
-					refreshAllAssetbundles ();
-				}
-			}
-			
-			GUI.color = Color.yellow;
-			if (GUILayout.Button ("PubshlishSetting\n(打包配置（每次打包前先执行一次）)", GUILayout.Width (300))) {
-				if (EditorUtility.DisplayDialog ("Alert", "打包配置（每次打包前先执行一次）!", "Okey", "cancel")) {
-					publishSetting ();
-				}
-			}
-			
-			if (GUILayout.Button ("Update & Publish All AssetBundles\n(每次更新执行)", GUILayout.Width (300))) {
-				if (EditorUtility.DisplayDialog ("Alert", "Really want to Refresh & Publish all assetbundles!", "Okey", "cancel")) {
-					if (EditorUtility.DisplayDialog ("Alert", "OKay, let me confirm again:)\n Really want to Refresh & Publish all assetbundles!", "Do it now!", "cancel")) {
-						//						if (EditorUtility.DisplayDialog("Alert", refreshAllAssetbundles(true, true), "Do it now!", "cancel")) {
-						//						GUIMsgBox.show ("", upgrade4Publish (), publishAllAssetbundle, null);
-						upgrade4Publish ();
+					if (GUILayout.Button ("Update & Publish All AssetBundles\n(每次更新执行)", GUILayout.Width (300))) {
+						if (EditorUtility.DisplayDialog ("Alert", "Really want to Refresh & Publish all assetbundles!", "Okey", "cancel")) {
+							if (EditorUtility.DisplayDialog ("Alert", "OKay, let me confirm again:)\n Really want to Refresh & Publish all assetbundles!", "Do it now!", "cancel")) {
+								//						if (EditorUtility.DisplayDialog("Alert", refreshAllAssetbundles(true, true), "Do it now!", "cancel")) {
+								//						GUIMsgBox.show ("", upgrade4Publish (), publishAllAssetbundle, null);
+								upgrade4Publish ();
+							}
+						}
 					}
 				}
 			}
 		}
-		NGUIEditorTools.EndContents ();
+//		}
+//		NGUIEditorTools.EndContents ();
 		GUI.color = Color.white;
 		
-		//		GUILayout.Space (5);
-		//		NGUIEditorTools.BeginContents ();
-		//		{
-		//			GUI.color = Color.yellow;
-		//			GUILayout.Label ("Create Version Files", GUILayout.Width (125));
-		//            
-		//			if (GUILayout.Button ("Create Version Files", GUILayout.Width (300))) {
-		//				CreateVersionFiles ();
-		//			}
-		//		}
-		//		NGUIEditorTools.EndContents ();
 		
 		GUI.color = Color.white;
 		GUILayout.Space (5);
-		NGUIEditorTools.BeginContents ();
-		{
-			GUILayout.Label ("Create StreamingAssets", GUILayout.Width (125));
+//		NGUIEditorTools.BeginContents ();
+//		{
+		using (new FoldableBlock (ref state3, "Create StreamingAssets  " + (state3 ? "(Click to hide)" : "(Click to show detail)"))) {
+			if (state3) {
+				using (new HighlightBox ()) {
 			
-			GUI.color = Color.red;
-			GUILayout.Toggle (SCfg.self.isUseEncodedLua, "use encoded Lua ");
+					GUI.color = Color.red;
+					GUILayout.Toggle (SCfg.self.isUseEncodedLua, "use encoded Lua ");
 			
-			GUI.color = Color.yellow;
-			if (GUILayout.Button ("Create Priority StreamingAssets", GUILayout.Width (300))) {
-				CreateStreamingAssets ();
+					GUI.color = Color.yellow;
+					if (GUILayout.Button ("Create Priority StreamingAssets", GUILayout.Width (300))) {
+						CreateStreamingAssets ();
+					}
+					if (GUILayout.Button ("Move Other to StreamingAssets", GUILayout.Width (300))) {
+						MoveOtherToStreamingAssets ();
+					}
+					GUI.color = Color.white;
+				}
 			}
-			if (GUILayout.Button ("Move Other to StreamingAssets", GUILayout.Width (300))) {
-				MoveOtherToStreamingAssets ();
-			}
-			GUI.color = Color.white;
 		}
-		NGUIEditorTools.EndContents ();
-		
-		if (isShowAlert) {
-			
-		}
+//		}
+//		NGUIEditorTools.EndContents ();
 		
 		EditorGUILayout.EndScrollView ();
 	}
-	
+
 	bool isShowAlert = false;
-	
+
 	void CreateFolders ()
 	{
 		Directory.CreateDirectory (Application.dataPath + "/" + data.name);
@@ -215,39 +193,43 @@ public class CoolapeProject : EditorWindow
 		Directory.CreateDirectory (Application.dataPath + "/" + data.name + "/xRes");
 		EditorUtility.DisplayDialog ("success", "Create Folders cuccess!", "Okey");
 	}
-	
-	void modifyProjectName() {
-		if(string.IsNullOrEmpty(newProjName)) {
+
+	void modifyProjectName ()
+	{
+		if (string.IsNullOrEmpty (newProjName)) {
 			EditorUtility.DisplayDialog ("Alert", "The new project name is empty!", "Okey");
 			return;
 		}
-		doModifyProjectName(Application.dataPath + "/" + data.name + "/upgradeResMedium/priority", data.name , newProjName);
-		if(PathCfg.self != null) {
+		doModifyProjectName (Application.dataPath + "/" + data.name + "/upgradeResMedium/priority", data.name, newProjName);
+		if (PathCfg.self != null) {
 			PathCfg.self.basePath = newProjName;
-			PathCfg.self.resetPath(newProjName);
+			PathCfg.self.resetPath (newProjName);
 		}
 		
 		modifyLuaPath (data.name, newProjName);
 		
-		if(Directory.Exists(Application.dataPath + "/" + data.name)) {
-			Directory.Move(Application.dataPath + "/" + data.name, Application.dataPath + "/" + newProjName);
+		if (Directory.Exists (Application.dataPath + "/" + data.name)) {
+			Directory.Move (Application.dataPath + "/" + data.name, Application.dataPath + "/" + newProjName);
 		}
 		data.name = newProjName;
-		data.cfgFolderStr = data.cfgFolderStr.Replace(data.name+"/", newProjName+"/");
-		saveData();
+		data.cfgFolderStr = data.cfgFolderStr.Replace (data.name + "/", newProjName + "/");
+		saveData ();
 	}
-	
-	public static void modifyLuaPath (string oldProjName, string newProjName) {
+
+	public static void modifyLuaPath (string oldProjName, string newProjName)
+	{
 		CLBaseLua[] bcs = FindObjectsOfType (typeof(CLBaseLua)) as CLBaseLua[];
-		for(int i=0; bcs != null && i < bcs.Length; i++) {
-			Debug.LogError("=====" + bcs[i].luaPath);
-			bcs[i].luaPath = bcs[i].luaPath.Replace(oldProjName+"/", newProjName+"/");
-			EditorUtility.SetDirty(bcs[i]);
+		for (int i = 0; bcs != null && i < bcs.Length; i++) {
+			Debug.LogError ("=====" + bcs [i].luaPath);
+			bcs [i].luaPath = bcs [i].luaPath.Replace (oldProjName + "/", newProjName + "/");
+			EditorUtility.SetDirty (bcs [i]);
 		}
 	}
-	
-	public static void doModifyProjectName(string path, string oldProjName, string newProjName) {
-		if(!Directory.Exists(path)) return;
+
+	public static void doModifyProjectName (string path, string oldProjName, string newProjName)
+	{
+		if (!Directory.Exists (path))
+			return;
 		string[] fileEntries = Directory.GetFiles (path);
 		string extension = "";
 		string filePath = "";
@@ -258,15 +240,15 @@ public class CoolapeProject : EditorWindow
 			if (extension.ToLower () == ".meta" || extension.ToLower () == ".ds_store") {
 				continue;
 			}
-			obj = CLEditorTools.getObjectByPath(fileName.Replace(Application.dataPath+"/", ""));
-			if(obj != null && obj is GameObject) {
-				CLBaseLua[] baseLuaList = ((GameObject)obj).GetComponents<CLBaseLua>();
-				for(int i =0; baseLuaList != null && i < baseLuaList.Length; i++) {
-					baseLua = baseLuaList[i];
-					if(baseLua != null && baseLua.luaPath != null) {
-						Debug.Log(baseLua.name +"====" +  baseLua.luaPath);
-						baseLua.luaPath = baseLua.luaPath.Replace(oldProjName+"/", newProjName+"/");
-						EditorUtility.SetDirty(baseLua);
+			obj = CLEditorTools.getObjectByPath (fileName.Replace (Application.dataPath + "/", ""));
+			if (obj != null && obj is GameObject) {
+				CLBaseLua[] baseLuaList = ((GameObject)obj).GetComponents<CLBaseLua> ();
+				for (int i = 0; baseLuaList != null && i < baseLuaList.Length; i++) {
+					baseLua = baseLuaList [i];
+					if (baseLua != null && baseLua.luaPath != null) {
+						Debug.Log (baseLua.name + "====" + baseLua.luaPath);
+						baseLua.luaPath = baseLua.luaPath.Replace (oldProjName + "/", newProjName + "/");
+						EditorUtility.SetDirty (baseLua);
 					}
 				}
 			}
@@ -277,7 +259,7 @@ public class CoolapeProject : EditorWindow
 			doModifyProjectName (dir, oldProjName, newProjName);
 		}
 	}
-	
+
 	void initData ()
 	{
 		if (FileEx.FileExists (configFile)) {
@@ -298,7 +280,7 @@ public class CoolapeProject : EditorWindow
 			data = new ProjectData ();
 		}
 	}
-	
+
 	void createScene ()
 	{
 		GameObject go = new GameObject ("Main");
@@ -309,7 +291,7 @@ public class CoolapeProject : EditorWindow
 		go.AddComponent<CLVerManager> ();
 		go.AddComponent<SAssetsManager> ();
 	}
-	
+
 	void saveData ()
 	{
 		PathCfg.self.resetPath (data.name);
@@ -317,18 +299,18 @@ public class CoolapeProject : EditorWindow
 		B2OutputStream.writeObject (ms, data.ToMap ());
 		FileEx.WriteAllBytes (configFile, ms.ToArray ());
 	}
-	
+
 	public class ProjectData
 	{
 		public string name = "";
 		public string cfgFolderStr = "";
 		UnityEngine.Object _cfgFolder;
-		
+
 		public UnityEngine.Object cfgFolder {
 			get {
 				if (_cfgFolder == null && !string.IsNullOrEmpty (cfgFolderStr)) {
 					_cfgFolder = AssetDatabase.LoadAssetAtPath (cfgFolderStr, 
-					                                            typeof(UnityEngine.Object));
+						typeof(UnityEngine.Object));
 				}
 				return _cfgFolder;
 			}
@@ -341,7 +323,7 @@ public class CoolapeProject : EditorWindow
 				}
 			}
 		}
-		
+
 		public Hashtable ToMap ()
 		{
 			Hashtable r = new Hashtable ();
@@ -349,7 +331,7 @@ public class CoolapeProject : EditorWindow
 			r ["cfgFolderStr"] = cfgFolderStr;
 			return r;
 		}
-		
+
 		public static ProjectData parse (Hashtable map)
 		{
 			if (map == null) {
@@ -361,7 +343,7 @@ public class CoolapeProject : EditorWindow
 			return r;
 		}
 	}
-	
+
 	void CreateStreamingAssets ()
 	{
 		string publishVerPath = Application.dataPath + "/" + ver4Publish;
@@ -395,7 +377,7 @@ public class CoolapeProject : EditorWindow
 		File.WriteAllBytes (streamingAssetsPackge, ms.ToArray ());
 		EditorUtility.DisplayDialog ("success", "Create Priority StreamingAssets cuccess!", "Okey");
 	}
-	
+
 	void copyPriorityFiles (Hashtable resMap)
 	{
 		
@@ -411,7 +393,7 @@ public class CoolapeProject : EditorWindow
 				key = filter (filePath); 
 				key = key.Replace ("/upgradeRes4Publish/", "/upgradeRes/");
 				key = key.Replace ("/upgradeResMedium/", "/upgradeRes/");
-				if (!SCfg.self.isUseEncodedLua 
+				if (!SCfg.self.isUseEncodedLua
 				    && Path.GetExtension (filePath) == ".lua") {
 					filePath = filePath.Replace ("/upgradeRes4Publish/", "/upgradeResMedium/");
 				}
@@ -421,7 +403,7 @@ public class CoolapeProject : EditorWindow
 			}
 		}
 	}
-	
+
 	void doCreateStreamingAssets (Hashtable resMap, ref Hashtable map)
 	{
 		string extension = "";
@@ -442,7 +424,7 @@ public class CoolapeProject : EditorWindow
 			key = filter (filePath); 
 			key = key.Replace ("/upgradeRes4Publish/", "/upgradeRes/");
 			key = key.Replace ("/upgradeResMedium/", "/upgradeRes/");
-			if (!SCfg.self.isUseEncodedLua 
+			if (!SCfg.self.isUseEncodedLua
 			    && Path.GetExtension (filePath) == ".lua") {
 				filePath = filePath.Replace ("/upgradeRes4Publish/", "/upgradeResMedium/");
 			}
@@ -452,7 +434,7 @@ public class CoolapeProject : EditorWindow
 		}
 		
 	}
-	
+
 	void doCreateStreamingAssets (string path, ref Hashtable map)
 	{
 		string[] fileEntries = Directory.GetFiles (path);//因为Application.dataPath得到的是型如 "工程名称/Assets"
@@ -469,7 +451,7 @@ public class CoolapeProject : EditorWindow
 			key = filter (fileName);
 			key = key.Replace ("/upgradeRes4Publish/", "/upgradeRes/");
 			key = key.Replace ("/upgradeResMedium/", "/upgradeRes/");
-			if (!SCfg.self.isUseEncodedLua 
+			if (!SCfg.self.isUseEncodedLua
 			    && Path.GetExtension (fileName) == ".lua") {
 				filePath = fileName.Replace ("/upgradeRes4Publish/", "/upgradeResMedium/");
 			}
@@ -483,7 +465,7 @@ public class CoolapeProject : EditorWindow
 			
 			//跳过不同平台的资源
 			#if UNITY_ANDROID || UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX
-			if(Path.GetFileName(dir).Equals("IOS")) {
+			if (Path.GetFileName (dir).Equals ("IOS")) {
 				continue;
 			}
 			#elif UNITY_IOS
@@ -504,16 +486,17 @@ public class CoolapeProject : EditorWindow
 		
 		string[] replaces = {basePath + "StreamingAssets/",
 			basePath + "Resources/",
-			basePath + "Assets/"};
+			basePath + "Assets/"
+		};
 		string str = oldStr;
 		string rep = "";
-		for (int i =0; i < replaces.Length; i++) {
+		for (int i = 0; i < replaces.Length; i++) {
 			rep = replaces [i];
 			str = str.Replace (rep, "");
 		}
 		return str;
 	}
-	
+
 	void MoveOtherToStreamingAssets ()
 	{
 		string publishVerPath = Application.dataPath + "/" + ver4Publish;
@@ -550,7 +533,7 @@ public class CoolapeProject : EditorWindow
 		
 		EditorUtility.DisplayDialog ("success", "Move Others to StreamingAssets cuccess!", "Okey");
 	}
-	
+
 	void cpyDir (string path, string toPath)
 	{
 		
@@ -558,7 +541,7 @@ public class CoolapeProject : EditorWindow
 		string f = "";
 		string extension = "";
 		Directory.CreateDirectory (toPath);
-		for (int i =0; i < fileEntries.Length; i++) {
+		for (int i = 0; i < fileEntries.Length; i++) {
 			f = fileEntries [i];
 			extension = Path.GetExtension (f);
 			if (extension.ToLower () == ".meta" || extension.ToLower () == ".ds_store") {
@@ -572,7 +555,7 @@ public class CoolapeProject : EditorWindow
 		foreach (string dir in dirEntries) {
 			//跳过不同平台的资源
 			#if UNITY_ANDROID || UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX
-			if(Path.GetFileName(dir).Equals("IOS")) {
+			if (Path.GetFileName (dir).Equals ("IOS")) {
 				continue;
 			}
 			#elif UNITY_IOS
@@ -583,7 +566,7 @@ public class CoolapeProject : EditorWindow
 			cpyDir (dir, toPath + Path.GetFileName (dir) + "/");
 		}
 	}
-	
+
 	void refreshCfgFiles ()
 	{
 		cfgFiles.Clear ();
@@ -601,30 +584,31 @@ public class CoolapeProject : EditorWindow
 			cfgFiles.Add (f);
 		}
 	}
-	
+
 	string createCfgBioDataFromJson (string className, string jsonPath)
 	{
-		Debug.Log(jsonPath);
-		ArrayList list = JSON.DecodeList(File.ReadAllText(Application.dataPath + "/" + jsonPath)) ;
+		Debug.Log (jsonPath);
+		ArrayList list = JSON.DecodeList (File.ReadAllText (Application.dataPath + "/" + jsonPath));
 		if (list == null)
 			return "";
 		string outVerFile = getCfgBioDataPath (className);
 		Directory.CreateDirectory (Path.GetDirectoryName (outVerFile));
 		ArrayList _list = null;
-		for(int i = 1; i < list.Count; i++) {
-			_list = (ArrayList)(list[i]);
-			for(int j = 0; j < _list.Count; j++) {
-				if(_list[j] is System.Double) {
-					_list[j] = NumEx.int2Bio(NumEx.stringToInt (_list[j].ToString()));
+		for (int i = 1; i < list.Count; i++) {
+			_list = (ArrayList)(list [i]);
+			for (int j = 0; j < _list.Count; j++) {
+				if (_list [j] is System.Double) {
+					_list [j] = NumEx.int2Bio (NumEx.stringToInt (_list [j].ToString ()));
 				}
 			}
-			list[i] = _list;
+			list [i] = _list;
 		}
 		MemoryStream ms = new MemoryStream ();
 		B2OutputStream.writeObject (ms, list);
 		File.WriteAllBytes (outVerFile, ms.ToArray ());
 		return outVerFile;
 	}
+
 	string createCfgBioData (string className)
 	{
 		ArrayList list = null;
@@ -652,13 +636,13 @@ public class CoolapeProject : EditorWindow
 		File.WriteAllBytes (outVerFile, ms.ToArray ());
 		return outVerFile;
 	}
-	
+
 	string getCfgBioDataPath (string className)
 	{
 		string outVerFile = "Assets/" + data.name + "/upgradeRes4Publish/priority/cfg/" + className + ".cfg";
 		return outVerFile;
 	}
-	
+
 	/// <summary>
 	/// 取得最后一次更新后的版本信息
 	/// </summary>
@@ -668,13 +652,13 @@ public class CoolapeProject : EditorWindow
 		string path = Application.dataPath + "/" + ver4Upgrade;
 		return fileToMap (path);
 	}
-	
+
 	public static Hashtable getLastUpgradeMd5Ver ()
 	{
 		string path = Application.dataPath + "/" + ver4UpgradeMd5;
 		return fileToMap (path);
 	}
-	
+
 	public static Hashtable fileToMap (string path)
 	{
 		Hashtable r = new Hashtable ();
@@ -684,7 +668,7 @@ public class CoolapeProject : EditorWindow
 		string[] content = File.ReadAllLines (path);
 		int count = content.Length;
 		string str = "";
-		for (int i =0; i < count; i++) {
+		for (int i = 0; i < count; i++) {
 			str = content [i];
 			if (str.StartsWith ("#"))
 				continue;
@@ -695,7 +679,7 @@ public class CoolapeProject : EditorWindow
 		}
 		return r;
 	}
-	
+
 	string refreshAllAssetbundles (bool isOnlyGetResult = false)
 	{
 		AssetDatabase.Refresh ();
@@ -749,27 +733,27 @@ public class CoolapeProject : EditorWindow
 				resultPstr.a (path).a ("\n");
 				if (!isOnlyGetResult) {
 					//					GameObject obj = (GameObject)(AssetDatabase.LoadAssetAtPath("Assets/" + path, typeof(GameObject)));
-					UnityEngine.Object obj = CLEditorTools.getObjectByPath("Assets/" + path);
-					if(obj != null && obj is GameObject) {
-						textureMgr = ((GameObject)obj).GetComponent<CLTextureMgr>();
-						modelMgr = ((GameObject)obj).GetComponent<CLModelMgr>();
+					UnityEngine.Object obj = CLEditorTools.getObjectByPath ("Assets/" + path);
+					if (obj != null && obj is GameObject) {
+						textureMgr = ((GameObject)obj).GetComponent<CLTextureMgr> ();
+						modelMgr = ((GameObject)obj).GetComponent<CLModelMgr> ();
 					} else {
 						modelMgr = null;
 						textureMgr = null;
 					}
 
-					if( textureMgr != null ) {
-						textureMgr.cleanMat();
+					if (textureMgr != null) {
+						textureMgr.cleanMat ();
 					}
-					if(modelMgr != null) {
-						modelMgr.cleanModel();
+					if (modelMgr != null) {
+						modelMgr.cleanModel ();
 					}
 					CreatUnity3dType.createAssets4Upgrade ("Assets/" + path);
-					if( textureMgr != null ) {
-						textureMgr.resetMat();
+					if (textureMgr != null) {
+						textureMgr.resetMat ();
 					}
-					if(modelMgr != null) {
-						modelMgr.resetModel();
+					if (modelMgr != null) {
+						modelMgr.resetModel ();
 					}
 				}
 			}
@@ -780,7 +764,7 @@ public class CoolapeProject : EditorWindow
 		foreach (DictionaryEntry cell in tmpPriorityVer) {
 			path = cell.Key.ToString ();
 			md5str = cell.Value.ToString ();
-			if(path.Contains(".project") || path.Contains(".buildpath")) {
+			if (path.Contains (".project") || path.Contains (".buildpath")) {
 				continue;
 			}
 			if (path.Contains ("/priority/atlas/") ||
@@ -820,7 +804,7 @@ public class CoolapeProject : EditorWindow
 							CLCellLuaInspector.doSaveAsset (uicell);
 						}
 					} else {
-						Debug.LogError("The object can not get the [CLCellLu]!");
+						Debug.LogError ("The object can not get the [CLCellLu]!");
 					}
 				}
 			} else if (path.Contains ("/priority/ui/panel/")) {
@@ -836,7 +820,7 @@ public class CoolapeProject : EditorWindow
 							CLPanelLuaInspector.doSaveAsset (panel);
 						}
 					} else {
-						Debug.LogError("The object can not get the [CLPanelLua]!");
+						Debug.LogError ("The object can not get the [CLPanelLua]!");
 					}
 				}
 			} else {
@@ -887,13 +871,13 @@ public class CoolapeProject : EditorWindow
 			return result;
 		}
 	}
-	
+
 	void publishSetting ()
 	{
 		string path = Application.dataPath + "/" + data.name + "/upgradeRes4Publish";
 		GUIResList.show4PublishSeting (path, (Callback)onGetFiles4PublishSetting, null);
 	}
-	
+
 	void onGetFiles4PublishSetting (params object[] args)
 	{
 		ArrayList files = (ArrayList)(args [0]);
@@ -978,13 +962,13 @@ public class CoolapeProject : EditorWindow
 		
 		EditorUtility.DisplayDialog ("success", "Publish Version File Created!", "Okay");
 	}
-	
+
 	void upgrade4Publish ()
 	{
 		string path = Application.dataPath + "/" + data.name + "/upgradeRes4Publish";
 		GUIResList.show4Upgrade (path, (Callback)onGetFiles4Upgrade, null);
 	}
-	
+
 	void onGetFiles4Upgrade (params object[] args)
 	{
 		ArrayList list = (ArrayList)(args [0]);
@@ -1014,7 +998,7 @@ public class CoolapeProject : EditorWindow
 			Directory.Delete (toPath, true);
 		}
 		int verVal = 0;
-		for (int i=0; i < count; i++) {
+		for (int i = 0; i < count; i++) {
 			ri = (ResInfor)(list [i]);
 			//
 			//			toPath = Application.dataPath +"/" + data.name +  "/upgradeRes4Publish/" + ri.publishPath;
