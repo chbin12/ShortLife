@@ -243,6 +243,7 @@ public class CoolapePublisher : EditorWindow
 						}
 						GUILayout.EndHorizontal();
 						GUI.color = Color.white;
+						GUILayout.Space(10);
 					}
 				}
 				GUILayout.Space(-11);
@@ -250,7 +251,6 @@ public class CoolapePublisher : EditorWindow
 				{
 					if (currChlIndex >= 0) {
 						using (new UnityEditorHelper.HighlightBox()) {
-
 							GUILayout.Space(10);
 							channelCell(currChlKey, false);
 							GUI.backgroundColor = Color.white;
@@ -372,7 +372,7 @@ public class CoolapePublisher : EditorWindow
 					GUI.color = Color.yellow;
 					if (GUILayout.Button("Add", GUILayout.Width(60f))) {
 						if (!string.IsNullOrEmpty(newChlKey) &&
-						  !string.IsNullOrEmpty(newChlName)) {
+						    !string.IsNullOrEmpty(newChlName)) {
 							if (channelMap [newChlKey] != null) {
 								Debug.LogWarning("Key is same with other!");
 								EditorUtility.DisplayDialog("Alert", "Key is same with other!", "Okey");
@@ -512,7 +512,7 @@ public class CoolapePublisher : EditorWindow
 		if (currChlData == null) {
 			return;
 		}
-		int width = 150;
+		int width = 200;
 		GUI.color = Color.white;
 		//Product Name
 		GUILayout.BeginHorizontal();
@@ -524,7 +524,8 @@ public class CoolapePublisher : EditorWindow
 		//Platform ios or android
 		GUILayout.BeginHorizontal();
 		{
-			currChlData.mPlatform = (ChlPlatform)EditorGUILayout.EnumPopup("Select Platform", currChlData.mPlatform);
+			GUILayout.Label("Select Platform", GUILayout.Width(width));
+			currChlData.mPlatform = (ChlPlatform)EditorGUILayout.EnumPopup("", currChlData.mPlatform);
 			if (currChlData.mPlatform == ChlPlatform.ios) {
 				currChlData.mCreateEclipseProject = false;
 			}
@@ -541,19 +542,21 @@ public class CoolapePublisher : EditorWindow
 		GUILayout.EndHorizontal();
 
 		if (isShowIcons) {
-			if (currChlData.mPlatform == ChlPlatform.android) {
-				for (int i = 0; i < AndroidIconsName.Length; i++) {
-					currChlData.mDefaultIcon [AndroidIconsName [i]] = 
+			using (new UnityEditorHelper.HighlightBox(Color.gray)) {
+				if (currChlData.mPlatform == ChlPlatform.android) {
+					for (int i = 0; i < AndroidIconsName.Length; i++) {
+						currChlData.mDefaultIcon [AndroidIconsName [i]] = 
 						EditorGUILayout.ObjectField(AndroidIconsName [i], 
-						(Texture2D)(currChlData.mDefaultIcon [AndroidIconsName [i]]),
-						typeof(Texture2D), false) as Texture2D;
-				}
-			} else if (currChlData.mPlatform == ChlPlatform.ios) {
-				for (int i = 0; i < IosIconsName.Length; i++) {
-					currChlData.mDefaultIcon [IosIconsName [i]] = 
+							(Texture2D)(currChlData.mDefaultIcon [AndroidIconsName [i]]),
+							typeof(Texture2D), false) as Texture2D;
+					}
+				} else if (currChlData.mPlatform == ChlPlatform.ios) {
+					for (int i = 0; i < IosIconsName.Length; i++) {
+						currChlData.mDefaultIcon [IosIconsName [i]] = 
 							EditorGUILayout.ObjectField(IosIconsName [i], 
-						(Texture2D)(currChlData.mDefaultIcon [IosIconsName [i]]),
-						typeof(Texture2D), false) as Texture2D;
+							(Texture2D)(currChlData.mDefaultIcon [IosIconsName [i]]),
+							typeof(Texture2D), false) as Texture2D;
+					}
 				}
 			}
 		}
