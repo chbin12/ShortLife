@@ -91,6 +91,7 @@ public class CoolapePublisher : EditorWindow
 	Vector2 scrollPos = Vector2.zero;
 	Vector2 scrollPos2 = Vector2.zero;
 	bool isShowIcons = false;
+	bool isCanEdite = false;
 
 	void OnGUI()
 	{
@@ -207,6 +208,10 @@ public class CoolapePublisher : EditorWindow
 								if (GUILayout.Button("Apply&Build")) {
 									showMsgBox(currChlKey + ":确认各参数是否正确!", MessageType.Warning, applyAndBuild);
 								}
+								GUI.color = Color.yellow;
+								if (GUILayout.Button(isCanEdite ? "Lock Edite" : "Unlock Edite")) {
+									isCanEdite = !isCanEdite;	
+								}
 								GUI.color = Color.red;
 								if (GUILayout.Button("Clean")) {
 									isComfireDelete = true;
@@ -252,7 +257,9 @@ public class CoolapePublisher : EditorWindow
 					if (currChlIndex >= 0) {
 						using (new UnityEditorHelper.HighlightBox()) {
 							GUILayout.Space(10);
+							GUI.enabled = isCanEdite;
 							channelCell(currChlKey, false);
+							GUI.enabled = true;
 							GUI.backgroundColor = Color.white;
 						}
 					}
@@ -480,6 +487,7 @@ public class CoolapePublisher : EditorWindow
 
 	void refreshData()
 	{
+		isCanEdite = false;
 		copyChlFromKey = "";
 		newChlKey = "";
 		newChlName = "";
@@ -535,9 +543,11 @@ public class CoolapePublisher : EditorWindow
 
 		GUILayout.BeginHorizontal();
 		{
+			GUI.enabled = true;
 			if (GUILayout.Button("Icons")) {
 				isShowIcons = !isShowIcons;
 			}
+			GUI.enabled = isCanEdite;
 		}
 		GUILayout.EndHorizontal();
 
