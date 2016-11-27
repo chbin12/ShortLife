@@ -199,7 +199,7 @@ public class CoolapeProject : EditorWindow
 					GUILayout.EndHorizontal();
 					GUILayout.Space(5);
 					GUILayout.Label("Step.3");
-					if (GUILayout.Button("Show Build Tool Dialog", GUILayout.Width(300))) {
+					if (GUILayout.Button("Show Publish Tool Dialog", GUILayout.Width(300))) {
 						EditorWindow.GetWindow<CoolapePublisher>(false, "CoolapePublisher", true);
 					}
 					GUI.color = Color.white;
