@@ -21,7 +21,8 @@ do
   LayerMask= luanet.import_type('UnityEngine.LayerMask')
   Directory = luanet.import_type('System.IO.Directory');
   Shader = luanet.import_type('UnityEngine.Shader');
-  
+  CLMaterialPool = luanet.import_type('CLMaterialPool');
+  Path = luanet.import_type('System.IO.Path');
   -------------------------------------------------------
   -- 重新命名
   MapEx = Toolkit.MapEx

@@ -21,211 +21,246 @@ public class CLSceneInspector : Editor
 	private static bool showNewTerrain = false;
 	MapTileType tmpTileType = MapTileType.s_01;
 	string tmpOrnament4Ground = "";
-
+	bool isShow = false;
 	public override void OnInspectorGUI ()
 	{
 		scene = target as CLScene;
 		//		DrawDefaultInspector ();
 		init ();
-		NGUIEditorTools.BeginContents ();
-		{
-			GUI.color = Color.white;
+//		NGUIEditorTools.BeginContents ();
+		using (new UnityEditorHelper.FoldableBlock (ref isShow, "List")) {
+			if (isShow) {
+				
+				GUI.color = Color.white;
 
-			if (scene.terrainInfor == null) {
-				scene.terrainInfor = new List<CLTerrainInfor> ();
-			}
-			for (int i = 0; i < scene.terrainInfor.Count; i++) {
-				CLTerrainInfor terrain = scene.terrainInfor [i];
-				GUILayout.BeginHorizontal ();
-				{
-					if (GUILayout.Button (terrain.name)) {
-						if (seletectTerrainIndex == i) {
-							seletectTerrainIndex = -1;
-						} else {
-							seletectTerrainIndex = i;
-						}
-					}
-					if (GUILayout.Button ("-", GUILayout.Width (100))) {
-						if (EditorUtility.DisplayDialog ("Alert", "Really whant to delete it?", "yes", "no")) {
-							scene.terrainInfor.RemoveAt (i);
-							seletectTerrainIndex = -1;
-							break;
-						}
-					}
+				if (scene.terrainInfor == null) {
+					scene.terrainInfor = new List<CLTerrainInfor> ();
 				}
-				GUILayout.EndHorizontal ();
-				if (seletectTerrainIndex == i) {
-					using (new HighlightBox (Color.black)) {
-						GUILayout.BeginHorizontal ();
-						{
-							EditorGUILayout.LabelField ("Tile Types", GUILayout.Width (100));
-							if (terrain.tileTypes == null) {
-								terrain.tileTypes = new List<MapTileType> ();
+				for (int i = 0; i < scene.terrainInfor.Count; i++) {
+					CLTerrainInfor terrain = scene.terrainInfor [i];
+					GUILayout.BeginHorizontal ();
+					{
+						if (GUILayout.Button (terrain.name)) {
+							if (seletectTerrainIndex == i) {
+								seletectTerrainIndex = -1;
+							} else {
+								seletectTerrainIndex = i;
 							}
-							GUILayout.BeginVertical ();
+						}
+						if (GUILayout.Button ("-", GUILayout.Width (100))) {
+							if (EditorUtility.DisplayDialog ("Alert", "Really whant to delete it?", "yes", "no")) {
+								scene.terrainInfor.RemoveAt (i);
+								seletectTerrainIndex = -1;
+								break;
+							}
+						}
+					}
+					GUILayout.EndHorizontal ();
+					if (seletectTerrainIndex == i) {
+						using (new HighlightBox (Color.black)) {
+							GUILayout.BeginHorizontal ();
 							{
-								for (int j = 0; j < terrain.tileTypes.Count; j++) {
+								EditorGUILayout.LabelField ("Tile Types", GUILayout.Width (100));
+								if (terrain.tileTypes == null) {
+									terrain.tileTypes = new List<MapTileType> ();
+								}
+								GUILayout.BeginVertical ();
+								{
+									for (int j = 0; j < terrain.tileTypes.Count; j++) {
 								
+										GUILayout.BeginHorizontal ();
+										{
+											terrain.tileTypes [j] = (MapTileType)EditorGUILayout.EnumPopup ("", terrain.tileTypes [j]);
+											if (GUILayout.Button ("-", GUILayout.Width (50))) {
+												terrain.tileTypes.RemoveAt (j);
+												break;
+											}
+										}
+										GUILayout.EndHorizontal ();
+									}
+							
 									GUILayout.BeginHorizontal ();
 									{
-										terrain.tileTypes [j] = (MapTileType)EditorGUILayout.EnumPopup ("", terrain.tileTypes [j]);
-										if (GUILayout.Button ("-", GUILayout.Width (50))) {
-											terrain.tileTypes.RemoveAt (j);
-											break;
+										tmpTileType = (MapTileType)EditorGUILayout.EnumPopup ("", tmpTileType);
+										if (GUILayout.Button ("+", GUILayout.Width (50))) {
+											terrain.tileTypes.Add (tmpTileType);
 										}
 									}
 									GUILayout.EndHorizontal ();
 								}
-							
-								GUILayout.BeginHorizontal ();
-								{
-									tmpTileType = (MapTileType)EditorGUILayout.EnumPopup ("", tmpTileType);
-									if (GUILayout.Button ("+", GUILayout.Width (50))) {
-										terrain.tileTypes.Add (tmpTileType);
-									}
-								}
-								GUILayout.EndHorizontal ();
+								GUILayout.EndVertical ();
 							}
-							GUILayout.EndVertical ();
-						}
-						GUILayout.EndHorizontal ();
+							GUILayout.EndHorizontal ();
 					
-						GUILayout.BeginHorizontal ();
-						{
-							EditorGUILayout.LabelField ("Oranment Types", GUILayout.Width (100));
-							if (terrain.ornTypes == null) {
-								terrain.ornTypes = new List<MapTileType> ();
-							}
-							GUILayout.BeginVertical ();
+							GUILayout.BeginHorizontal ();
 							{
-								for (int j = 0; j < terrain.ornTypes.Count; j++) {
+								EditorGUILayout.LabelField ("Oranment Types", GUILayout.Width (100));
+								if (terrain.ornTypes == null) {
+									terrain.ornTypes = new List<MapTileType> ();
+								}
+								GUILayout.BeginVertical ();
+								{
+									for (int j = 0; j < terrain.ornTypes.Count; j++) {
 								
-									GUILayout.BeginHorizontal ();
-									{
-										terrain.ornTypes [j] = (MapTileType)EditorGUILayout.EnumPopup ("", terrain.ornTypes [j]);
-										if (GUILayout.Button ("-", GUILayout.Width (50))) {
-											terrain.ornTypes.RemoveAt (j);
-											break;
+										GUILayout.BeginHorizontal ();
+										{
+											terrain.ornTypes [j] = (MapTileType)EditorGUILayout.EnumPopup ("", terrain.ornTypes [j]);
+											if (GUILayout.Button ("-", GUILayout.Width (50))) {
+												terrain.ornTypes.RemoveAt (j);
+												break;
+											}
 										}
+										GUILayout.EndHorizontal ();
 									}
-									GUILayout.EndHorizontal ();
-								}
 							
-								GUILayout.BeginHorizontal ();
-								{
-									tmpTileType = (MapTileType)EditorGUILayout.EnumPopup ("", tmpTileType);
-									if (GUILayout.Button ("+", GUILayout.Width (50))) {
-										terrain.ornTypes.Add (tmpTileType);
-									}
-								}
-								GUILayout.EndHorizontal ();
-							}
-							GUILayout.EndVertical ();
-						}
-						GUILayout.EndHorizontal ();
-
-						GUILayout.BeginHorizontal ();
-						{
-							EditorGUILayout.LabelField ("Ground", GUILayout.Width (100));
-							terrain.ground = GUILayout.TextField (terrain.ground);
-						}
-						GUILayout.EndHorizontal ();
-
-						GUILayout.BeginHorizontal ();
-						{
-							EditorGUILayout.LabelField ("Ground High", GUILayout.Width (100));
-							terrain.groundHigh = EditorGUILayout.FloatField (terrain.groundHigh);
-						}
-						GUILayout.EndHorizontal ();
-						GUILayout.BeginHorizontal ();
-						{
-							EditorGUILayout.LabelField ("Oranment 4 Ground", GUILayout.Width (100));
-							if (terrain.ornament4Ground == null) {
-								terrain.ornament4Ground = new List<string> ();
-							}
-							GUILayout.BeginVertical ();
-							{
-								for (int j = 0; j < terrain.ornament4Ground.Count; j++) {
-
 									GUILayout.BeginHorizontal ();
 									{
-										terrain.ornament4Ground [j] = EditorGUILayout.TextField (terrain.ornament4Ground [j]);
-										if (GUILayout.Button ("-", GUILayout.Width (50))) {
-											terrain.ornament4Ground.RemoveAt (j);
-											break;
+										tmpTileType = (MapTileType)EditorGUILayout.EnumPopup ("", tmpTileType);
+										if (GUILayout.Button ("+", GUILayout.Width (50))) {
+											terrain.ornTypes.Add (tmpTileType);
 										}
 									}
 									GUILayout.EndHorizontal ();
 								}
+								GUILayout.EndVertical ();
+							}
+							GUILayout.EndHorizontal ();
 
+							GUILayout.BeginHorizontal ();
+							{
+								EditorGUILayout.LabelField ("Ground Name", GUILayout.Width (100));
+								terrain.ground = EditorGUILayout.TextField (terrain.ground);
+
+								Object obj = CLEditorTools.getObjectByPath (terrain.ground);
+								obj = EditorGUILayout.ObjectField (obj, typeof(GameObject));
+								if (obj != null) {
+									terrain.ground = CLEditorTools.getPathByObject (obj);
+								}
+							}
+							GUILayout.EndHorizontal ();
+
+							GUILayout.BeginHorizontal ();
+							{
+								EditorGUILayout.LabelField ("Ground High", GUILayout.Width (100));
+								terrain.groundHigh = EditorGUILayout.FloatField (terrain.groundHigh);
+							}
+							GUILayout.EndHorizontal ();
+							GUILayout.BeginHorizontal ();
+							{
+								EditorGUILayout.LabelField ("Oranment 4 Ground", GUILayout.Width (100));
+								if (terrain.ornament4Ground == null) {
+									terrain.ornament4Ground = new List<string> ();
+								}
+								GUILayout.BeginVertical ();
+								{
+									for (int j = 0; j < terrain.ornament4Ground.Count; j++) {
+
+										GUILayout.BeginHorizontal ();
+										{
+											terrain.ornament4Ground [j] = EditorGUILayout.TextField (terrain.ornament4Ground [j]);
+
+											Object obj = CLEditorTools.getObjectByPath (terrain.ornament4Ground [j]);
+											obj = EditorGUILayout.ObjectField (obj, typeof(GameObject));
+											if (obj != null) {
+												terrain.ornament4Ground [j] = CLEditorTools.getPathByObject (obj);
+											}
+
+											if (GUILayout.Button ("-", GUILayout.Width (50))) {
+												terrain.ornament4Ground.RemoveAt (j);
+												break;
+											}
+										}
+										GUILayout.EndHorizontal ();
+									}
+
+									GUILayout.BeginHorizontal ();
+									{
+										tmpOrnament4Ground = EditorGUILayout.TextField (tmpOrnament4Ground);
+
+										Object obj = CLEditorTools.getObjectByPath (tmpOrnament4Ground);
+										obj = EditorGUILayout.ObjectField (obj, typeof(GameObject));
+										if (obj != null) {
+											tmpOrnament4Ground = CLEditorTools.getPathByObject (obj);
+										}
+
+										if (GUILayout.Button ("+", GUILayout.Width (50))) {
+											terrain.ornament4Ground.Add (tmpOrnament4Ground);
+										}
+									}
+									GUILayout.EndHorizontal ();
+								}
+								GUILayout.EndVertical ();
+							}
+							GUILayout.EndHorizontal ();
+
+							GUILayout.BeginHorizontal ();
+							{
+								EditorGUILayout.LabelField ("Sky Shader", GUILayout.Width (100));
+								terrain.skyMaterial = EditorGUILayout.TextField (terrain.skyMaterial);
+
+								Object obj = CLEditorTools.getObjectByPath (terrain.skyMaterial);
+								obj = EditorGUILayout.ObjectField (obj, typeof(Material));
+								if (obj != null) {
+									terrain.skyMaterial = CLEditorTools.getPathByObject (obj);
+								}
+							}
+							GUILayout.EndHorizontal ();
+
+							GUILayout.BeginHorizontal ();
+							{
+								EditorGUILayout.LabelField ("Effect Name", GUILayout.Width (100));
+								terrain.effect = EditorGUILayout.TextField (terrain.effect);
+							}
+							GUILayout.EndHorizontal ();
+
+							GUILayout.BeginHorizontal ();
+							{
+								EditorGUILayout.LabelField ("use Fog", GUILayout.Width (100));
+								terrain.fog = EditorGUILayout.Toggle (terrain.fog, "");
+							}
+							GUILayout.EndHorizontal ();
+							if (terrain.fog) {
 								GUILayout.BeginHorizontal ();
 								{
-									tmpOrnament4Ground = EditorGUILayout.TextField (tmpOrnament4Ground);
-									if (GUILayout.Button ("+", GUILayout.Width (50))) {
-										terrain.ornament4Ground.Add (tmpOrnament4Ground);
-									}
+									EditorGUILayout.LabelField ("fogColor", GUILayout.Width (100));
+									terrain.fogColor = EditorGUILayout.ColorField ("", terrain.fogColor);
+								}
+								GUILayout.EndHorizontal ();
+						
+								GUILayout.BeginHorizontal ();
+								{
+									EditorGUILayout.LabelField ("fogDensity", GUILayout.Width (100));
+									terrain.fogDensity = EditorGUILayout.FloatField (terrain.fogDensity, "");
+								}
+								GUILayout.EndHorizontal ();
+								GUILayout.BeginHorizontal ();
+								{
+									EditorGUILayout.LabelField ("fogStartDis", GUILayout.Width (100));
+									terrain.fogStartDis = EditorGUILayout.FloatField (terrain.fogStartDis, "");
+								}
+								GUILayout.EndHorizontal ();
+								GUILayout.BeginHorizontal ();
+								{
+									EditorGUILayout.LabelField ("fogEndDis", GUILayout.Width (100));
+									terrain.fogEndDis = EditorGUILayout.FloatField (terrain.fogEndDis, "");
 								}
 								GUILayout.EndHorizontal ();
 							}
-							GUILayout.EndVertical ();
-						}
-						GUILayout.EndHorizontal ();
-
-
-						GUILayout.BeginHorizontal ();
-						{
-							EditorGUILayout.LabelField ("Effect Name", GUILayout.Width (100));
-							terrain.effect = GUILayout.TextField (terrain.effect);
-						}
-						GUILayout.EndHorizontal ();
-
-						GUILayout.BeginHorizontal ();
-						{
-							EditorGUILayout.LabelField ("use Fog", GUILayout.Width (100));
-							terrain.fog = GUILayout.Toggle (terrain.fog, "");
-						}
-						GUILayout.EndHorizontal ();
-						if (terrain.fog) {
-							GUILayout.BeginHorizontal ();
-							{
-								EditorGUILayout.LabelField ("fogColor", GUILayout.Width (100));
-								terrain.fogColor = EditorGUILayout.ColorField ("", terrain.fogColor);
-							}
-							GUILayout.EndHorizontal ();
-						
-							GUILayout.BeginHorizontal ();
-							{
-								EditorGUILayout.LabelField ("fogDensity", GUILayout.Width (100));
-								terrain.fogDensity = EditorGUILayout.FloatField (terrain.fogDensity, "");
-							}
-							GUILayout.EndHorizontal ();
-							GUILayout.BeginHorizontal ();
-							{
-								EditorGUILayout.LabelField ("fogStartDis", GUILayout.Width (100));
-								terrain.fogStartDis = EditorGUILayout.FloatField (terrain.fogStartDis, "");
-							}
-							GUILayout.EndHorizontal ();
-							GUILayout.BeginHorizontal ();
-							{
-								EditorGUILayout.LabelField ("fogEndDis", GUILayout.Width (100));
-								terrain.fogEndDis = EditorGUILayout.FloatField (terrain.fogEndDis, "");
-							}
-							GUILayout.EndHorizontal ();
 						}
 					}
 				}
 			}
 		}
-		NGUIEditorTools.EndContents ();
+//		NGUIEditorTools.EndContents ();
 
 		NGUIEditorTools.BeginContents ();
 		{
-			using (new HighlightBox (Color.black)) {
+			using (new HighlightBox ()) {
 				EditorGUILayout.LabelField ("新增一种地形");
 				GUILayout.BeginHorizontal ();
 				{
 					EditorGUILayout.LabelField ("Terrain Name", GUILayout.Width (100));
-					tmpTerrain.name = GUILayout.TextField (tmpTerrain.name);
+					tmpTerrain.name = EditorGUILayout.TextField (tmpTerrain.name);
 					if (!showNewTerrain && GUILayout.Button ("+", GUILayout.Width (100))) {
 						seletectTerrainIndex = -1;
 						showNewTerrain = true;
@@ -306,18 +341,96 @@ public class CLSceneInspector : Editor
 						GUILayout.EndVertical ();
 					}
 					GUILayout.EndHorizontal ();
-				
+
+					GUILayout.BeginHorizontal ();
+					{
+						EditorGUILayout.LabelField ("Ground Name", GUILayout.Width (100));
+						tmpTerrain.ground = EditorGUILayout.TextField (tmpTerrain.ground);
+
+						Object obj = CLEditorTools.getObjectByPath (tmpTerrain.ground);
+						obj = EditorGUILayout.ObjectField (obj, typeof(GameObject));
+						if (obj != null) {
+							tmpTerrain.ground = CLEditorTools.getPathByObject (obj);
+						}
+					}
+					GUILayout.EndHorizontal ();
+
+					GUILayout.BeginHorizontal ();
+					{
+						EditorGUILayout.LabelField ("Ground High", GUILayout.Width (100));
+						tmpTerrain.groundHigh = EditorGUILayout.FloatField (tmpTerrain.groundHigh);
+					}
+					GUILayout.EndHorizontal ();
+					GUILayout.BeginHorizontal ();
+					{
+						EditorGUILayout.LabelField ("Oranment 4 Ground", GUILayout.Width (100));
+						if (tmpTerrain.ornament4Ground == null) {
+							tmpTerrain.ornament4Ground = new List<string> ();
+						}
+						GUILayout.BeginVertical ();
+						{
+							for (int j = 0; j < tmpTerrain.ornament4Ground.Count; j++) {
+
+								GUILayout.BeginHorizontal ();
+								{
+									tmpTerrain.ornament4Ground [j] = EditorGUILayout.TextField (tmpTerrain.ornament4Ground [j]);
+
+									Object obj = CLEditorTools.getObjectByPath (tmpTerrain.ornament4Ground [j]);
+									obj = EditorGUILayout.ObjectField (obj, typeof(GameObject));
+									if (obj != null) {
+										tmpTerrain.ornament4Ground [j] = CLEditorTools.getPathByObject (obj);
+									}
+
+									if (GUILayout.Button ("-", GUILayout.Width (50))) {
+										tmpTerrain.ornament4Ground.RemoveAt (j);
+										break;
+									}
+								}
+								GUILayout.EndHorizontal ();
+							}
+
+							GUILayout.BeginHorizontal ();
+							{
+								tmpOrnament4Ground = EditorGUILayout.TextField (tmpOrnament4Ground);
+
+								Object obj = CLEditorTools.getObjectByPath (tmpOrnament4Ground);
+								obj = EditorGUILayout.ObjectField (obj, typeof(GameObject));
+								if (obj != null) {
+									tmpOrnament4Ground = CLEditorTools.getPathByObject (obj);
+								}
+
+								if (GUILayout.Button ("+", GUILayout.Width (50))) {
+									tmpTerrain.ornament4Ground.Add (tmpOrnament4Ground);
+								}
+							}
+							GUILayout.EndHorizontal ();
+						}
+						GUILayout.EndVertical ();
+					}
+					GUILayout.EndHorizontal ();
+					GUILayout.BeginHorizontal ();
+					{
+						EditorGUILayout.LabelField ("Sky Shader", GUILayout.Width (100));
+						tmpTerrain.skyMaterial = EditorGUILayout.TextField (tmpTerrain.skyMaterial);
+						Object obj = CLEditorTools.getObjectByPath (tmpTerrain.skyMaterial);
+						obj = EditorGUILayout.ObjectField (obj, typeof(Material));
+						if (obj != null) {
+							tmpTerrain.skyMaterial = CLEditorTools.getPathByObject (obj);
+						}
+					}
+					GUILayout.EndHorizontal ();
+
 					GUILayout.BeginHorizontal ();
 					{
 						EditorGUILayout.LabelField ("Effect Name", GUILayout.Width (100));
-						tmpTerrain.effect = GUILayout.TextField (tmpTerrain.effect);
+						tmpTerrain.effect = EditorGUILayout.TextField (tmpTerrain.effect);
 					}
 					GUILayout.EndHorizontal ();
 
 					GUILayout.BeginHorizontal ();
 					{
 						EditorGUILayout.LabelField ("use Fog", GUILayout.Width (100));
-						tmpTerrain.fog = GUILayout.Toggle (tmpTerrain.fog, "");
+						tmpTerrain.fog = EditorGUILayout.Toggle (tmpTerrain.fog, "");
 					}
 					GUILayout.EndHorizontal ();
 					if (tmpTerrain.fog) {

@@ -1,6 +1,5 @@
 -- 更新热更器处理
 do
-  local Path = luanet.import_type('System.IO.Path');
   local Directory = luanet.import_type('System.IO.Directory');
   -- local FileEx = luanet.import_type('Toolkit.FileEx')
 

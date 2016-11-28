@@ -250,10 +250,6 @@ Material:
         second: 1
       data:
         first:
-          name: _Occlusion
-        second: 7.5
-      data:
-        first:
           name: _Parallax
         second: 0.02
       data:
@@ -290,30 +286,6 @@ Material:
         second: 0
       data:
         first:
-          name: _InvFade
-        second: 1
-      data:
-        first:
-          name: _Emission
-        second: 1
-      data:
-        first:
-          name: _Intensity
-        second: 1
-      data:
-        first:
-          name: _Exponent
-        second: 1
-      data:
-        first:
-          name: _DirectionYaw
-        second: 0
-      data:
-        first:
-          name: _DirectionPitch
-        second: 0
-      data:
-        first:
           name: _GradientYStartPos
         second: 0
       data:
@@ -332,6 +304,18 @@ Material:
         first:
           name: _ShadowPower
         second: 0.25
+      data:
+        first:
+          name: _Emission
+        second: 1
+      data:
+        first:
+          name: _Occlusion
+        second: 7.5
+      data:
+        first:
+          name: _InvFade
+        second: 1
       data:
         first:
           name: _Stencil
@@ -356,6 +340,22 @@ Material:
         first:
           name: _ColorMask
         second: 15
+      data:
+        first:
+          name: _Intensity
+        second: 1
+      data:
+        first:
+          name: _Exponent
+        second: 1
+      data:
+        first:
+          name: _DirectionYaw
+        second: 0
+      data:
+        first:
+          name: _DirectionPitch
+        second: 0
       data:
         first:
           name: _UseUIAlphaClip
@@ -405,22 +405,6 @@ Material:
         first:
           name: _GroundColor
         second: {r: 0.369, g: 0.349, b: 0.341, a: 1}
-      data:
-        first:
-          name: _Emission
-        second: {r: 0, g: 0, b: 0, a: 0}
-      data:
-        first:
-          name: _Color2
-        second: {r: 0.97, g: 0.67, b: 0.51, a: 0}
-      data:
-        first:
-          name: _Color1
-        second: {r: 0, g: 0.7, b: 0.74, a: 0}
-      data:
-        first:
-          name: _Direction
-        second: {r: 0, g: 1, b: 0, a: 0}
       data:
         first:
           name: _TopColor
@@ -475,16 +459,36 @@ Material:
         second: {r: 0, g: 0, b: 0, a: 0}
       data:
         first:
+          name: _Emission
+        second: {r: 0, g: 0, b: 0, a: 0}
+      data:
+        first:
+          name: _EmisColor
+        second: {r: 0.9044118, g: 0.14630188, b: 0.14630188, a: 0}
+      data:
+        first:
+          name: _TintColor
+        second: {r: 1, g: 0.1544118, b: 0.1544118, a: 0.5}
+      data:
+        first:
+          name: _Color2
+        second: {r: 0.97, g: 0.67, b: 0.51, a: 0}
+      data:
+        first:
+          name: _Color1
+        second: {r: 0, g: 0.7, b: 0.74, a: 0}
+      data:
+        first:
+          name: _Direction
+        second: {r: 0, g: 1, b: 0, a: 0}
+      data:
+        first:
           name: _ReflectColor
         second: {r: 1, g: 1, b: 1, a: 0.5}
       data:
         first:
           name: _Tint
         second: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
-      data:
-        first:
-          name: _EmisColor
-        second: {r: 0.9044118, g: 0.14630188, b: 0.14630188, a: 0}
       data:
         first:
           name: _TranslucencyColor
@@ -497,7 +501,3 @@ Material:
         first:
           name: _TreeInstanceScale
         second: {r: 1, g: 1, b: 1, a: 1}
-      data:
-        first:
-          name: _TintColor
-        second: {r: 1, g: 0.1544118, b: 0.1544118, a: 0.5}

@@ -46,8 +46,34 @@ do
         end
         sideRight = mapSizeX - 1;
 
+        -- set skybox
+        if(currTerrain.skyMaterial ~= nil and currTerrain.skyMaterial ~= "") then
+            CLMaterialPool.borrowMatAsyn(Path.GetFileNameWithoutExtension(currTerrain.skyMaterial), function(name, mat)
+                mat.shader = Shader.Find(mat.shader.name);
+                RenderSettings.skybox = mat;
+            end);
+        end
+        CLLScene.loadGround(currTerrain);
+
         CLLScene.newMap(currTerrain, speed, onFinishLoadMap);
         --        csSelf:invoke4Lua("checkLeftSideTilesTimeout", tileTimeout, tileTimeout);
+    end
+
+    -- 加载地表（水，草地。。。）
+    function CLLScene.loadGround(terrainCfg)
+        if(terrainCfg == nil or terrainCfg.ground == nil or terrainCfg.ground == "") then
+            return;
+        end
+
+        local onLoadGround = function(name, obj)
+            obj.transform.localPosition = Vector3(0, terrainCfg.groundHigh, 0);
+            NGUITools.SetActive(obj, true);
+        end
+
+        local rootPath = PStr.b():a(PathCfg.self.basePath):a("/"):a("upgradeResMedium"):a("/other/things/"):e();
+        local thingName = string.gsub(terrainCfg.ground, rootPath, "");
+        thingName = string.gsub(thingName, ".prefab", "");
+        CLThingsPool.borrowObjAsyn(thingName, onLoadGround);
     end
 
     function CLLScene.newMap(terrainInfor, speed, onFinishLoadMap)
