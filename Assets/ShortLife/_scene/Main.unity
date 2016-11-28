@@ -1331,7 +1331,9 @@ MonoBehaviour:
     ornTypes: 2f000000
     ground: ShortLife/upgradeResMedium/other/things/tiles/M_water.prefab
     groundHigh: -80
-    ornament4Ground: []
+    ornament4Ground:
+    - ShortLife/upgradeResMedium/other/things/tiles/M_tree.prefab
+    - ShortLife/upgradeResMedium/other/things/tiles/M_tree2.prefab
     skyMaterial: ShortLife/upgradeResMedium/other/Materials/sky5.mat
     effect: 
     fog: 0
