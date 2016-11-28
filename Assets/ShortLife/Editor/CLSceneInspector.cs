@@ -22,6 +22,8 @@ public class CLSceneInspector : Editor
 	MapTileType tmpTileType = MapTileType.s_01;
 	string tmpOrnament4Ground = "";
 	bool isShow = false;
+	CLTerrainInfor terrain;
+
 	public override void OnInspectorGUI ()
 	{
 		scene = target as CLScene;
@@ -30,14 +32,13 @@ public class CLSceneInspector : Editor
 //		NGUIEditorTools.BeginContents ();
 		using (new UnityEditorHelper.FoldableBlock (ref isShow, "List")) {
 			if (isShow) {
-				
 				GUI.color = Color.white;
 
 				if (scene.terrainInfor == null) {
 					scene.terrainInfor = new List<CLTerrainInfor> ();
 				}
 				for (int i = 0; i < scene.terrainInfor.Count; i++) {
-					CLTerrainInfor terrain = scene.terrainInfor [i];
+					terrain = scene.terrainInfor [i];
 					GUILayout.BeginHorizontal ();
 					{
 						if (GUILayout.Button (terrain.name)) {
@@ -197,7 +198,6 @@ public class CLSceneInspector : Editor
 							{
 								EditorGUILayout.LabelField ("Sky Shader", GUILayout.Width (100));
 								terrain.skyMaterial = EditorGUILayout.TextField (terrain.skyMaterial);
-
 								Object obj = CLEditorTools.getObjectByPath (terrain.skyMaterial);
 								obj = EditorGUILayout.ObjectField (obj, typeof(Material));
 								if (obj != null) {
@@ -216,7 +216,7 @@ public class CLSceneInspector : Editor
 							GUILayout.BeginHorizontal ();
 							{
 								EditorGUILayout.LabelField ("use Fog", GUILayout.Width (100));
-								terrain.fog = EditorGUILayout.Toggle (terrain.fog, "");
+								terrain.fog = GUILayout.Toggle (terrain.fog, "");
 							}
 							GUILayout.EndHorizontal ();
 							if (terrain.fog) {
@@ -230,25 +230,27 @@ public class CLSceneInspector : Editor
 								GUILayout.BeginHorizontal ();
 								{
 									EditorGUILayout.LabelField ("fogDensity", GUILayout.Width (100));
-									terrain.fogDensity = EditorGUILayout.FloatField (terrain.fogDensity, "");
+									terrain.fogDensity = EditorGUILayout.FloatField (terrain.fogDensity);
 								}
 								GUILayout.EndHorizontal ();
 								GUILayout.BeginHorizontal ();
 								{
 									EditorGUILayout.LabelField ("fogStartDis", GUILayout.Width (100));
-									terrain.fogStartDis = EditorGUILayout.FloatField (terrain.fogStartDis, "");
+									terrain.fogStartDis = EditorGUILayout.FloatField (terrain.fogStartDis);
 								}
 								GUILayout.EndHorizontal ();
 								GUILayout.BeginHorizontal ();
 								{
 									EditorGUILayout.LabelField ("fogEndDis", GUILayout.Width (100));
-									terrain.fogEndDis = EditorGUILayout.FloatField (terrain.fogEndDis, "");
+									terrain.fogEndDis = EditorGUILayout.FloatField (terrain.fogEndDis);
 								}
 								GUILayout.EndHorizontal ();
 							}
 						}
+						scene.terrainInfor [i] = terrain;
 					}
 				}
+				EditorUtility.SetDirty(scene);
 			}
 		}
 //		NGUIEditorTools.EndContents ();
@@ -430,7 +432,7 @@ public class CLSceneInspector : Editor
 					GUILayout.BeginHorizontal ();
 					{
 						EditorGUILayout.LabelField ("use Fog", GUILayout.Width (100));
-						tmpTerrain.fog = EditorGUILayout.Toggle (tmpTerrain.fog, "");
+						tmpTerrain.fog = GUILayout.Toggle (tmpTerrain.fog, "");
 					}
 					GUILayout.EndHorizontal ();
 					if (tmpTerrain.fog) {
@@ -444,19 +446,19 @@ public class CLSceneInspector : Editor
 						GUILayout.BeginHorizontal ();
 						{
 							EditorGUILayout.LabelField ("fogDensity", GUILayout.Width (100));
-							tmpTerrain.fogDensity = EditorGUILayout.FloatField (tmpTerrain.fogDensity, "");
+							tmpTerrain.fogDensity = EditorGUILayout.FloatField (tmpTerrain.fogDensity);
 						}
 						GUILayout.EndHorizontal ();
 						GUILayout.BeginHorizontal ();
 						{
 							EditorGUILayout.LabelField ("fogStartDis", GUILayout.Width (100));
-							tmpTerrain.fogStartDis = EditorGUILayout.FloatField (tmpTerrain.fogStartDis, "");
+							tmpTerrain.fogStartDis = EditorGUILayout.FloatField (tmpTerrain.fogStartDis);
 						}
 						GUILayout.EndHorizontal ();
 						GUILayout.BeginHorizontal ();
 						{
 							EditorGUILayout.LabelField ("fogEndDis", GUILayout.Width (100));
-							tmpTerrain.fogEndDis = EditorGUILayout.FloatField (tmpTerrain.fogEndDis, "");
+							tmpTerrain.fogEndDis = EditorGUILayout.FloatField (tmpTerrain.fogEndDis);
 						}
 						GUILayout.EndHorizontal ();
 					}

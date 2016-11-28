@@ -306,12 +306,10 @@ public class CLTerrainInfor {
 	public string name = "";
 	public List<MapTileType> tileTypes;
 	public List<MapTileType> ornTypes;
-
 	public string ground = "";
 	public float groundHigh = 0;
 	public List<string> ornament4Ground;
 	public string skyMaterial = "";
-
 	public string effect = "";
 	public bool fog;
 	public float fogDensity;

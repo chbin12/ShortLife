@@ -175,7 +175,7 @@ Material:
       data:
         first:
           name: _BackTopColor
-        second: {r: 0.33333334, g: 0.24313727, b: 0.15686275, a: 0}
+        second: {r: 0.9191176, g: 0.48369816, b: 0.39197662, a: 0}
       data:
         first:
           name: _BackBottomColor
@@ -183,7 +183,7 @@ Material:
       data:
         first:
           name: _RightTopColor
-        second: {r: 0.33333334, g: 0.24313727, b: 0.15686275, a: 0}
+        second: {r: 0.9191176, g: 0.48369816, b: 0.39197662, a: 0}
       data:
         first:
           name: _RightBottomColor
@@ -191,7 +191,7 @@ Material:
       data:
         first:
           name: _LeftTopColor
-        second: {r: 0.33333334, g: 0.24313727, b: 0.15686275, a: 0}
+        second: {r: 0.9191176, g: 0.48369816, b: 0.39197662, a: 0}
       data:
         first:
           name: _LeftBottomColor
