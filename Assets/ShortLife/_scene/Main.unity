@@ -1228,7 +1228,7 @@ MonoBehaviour:
     ground: 
     groundHigh: 0
     ornament4Ground: []
-    skyShader: 
+    skyMaterial: 
     effect: 
     fog: 0
     fogDensity: 0
@@ -1241,7 +1241,7 @@ MonoBehaviour:
     ground: 
     groundHigh: 0
     ornament4Ground: []
-    skyShader: 
+    skyMaterial: 
     effect: 
     fog: 0
     fogDensity: 0
@@ -1254,7 +1254,7 @@ MonoBehaviour:
     ground: 
     groundHigh: 0
     ornament4Ground: []
-    skyShader: 
+    skyMaterial: 
     effect: 
     fog: 0
     fogDensity: 0
@@ -1267,7 +1267,7 @@ MonoBehaviour:
     ground: 
     groundHigh: 0
     ornament4Ground: []
-    skyShader: 
+    skyMaterial: 
     effect: 
     fog: 0
     fogDensity: 0
@@ -1280,7 +1280,7 @@ MonoBehaviour:
     ground: 
     groundHigh: 0
     ornament4Ground: []
-    skyShader: 
+    skyMaterial: 
     effect: 
     fog: 0
     fogDensity: 0
@@ -1293,7 +1293,7 @@ MonoBehaviour:
     ground: 
     groundHigh: 0
     ornament4Ground: []
-    skyShader: 
+    skyMaterial: 
     effect: 
     fog: 0
     fogDensity: 0
@@ -1306,7 +1306,7 @@ MonoBehaviour:
     ground: 
     groundHigh: 0
     ornament4Ground: []
-    skyShader: 
+    skyMaterial: 
     effect: 
     fog: 0
     fogDensity: 0
@@ -1319,7 +1319,7 @@ MonoBehaviour:
     ground: 
     groundHigh: 0
     ornament4Ground: []
-    skyShader: 
+    skyMaterial: 
     effect: 
     fog: 0
     fogDensity: 0
@@ -1332,7 +1332,7 @@ MonoBehaviour:
     ground: ShortLife/upgradeResMedium/other/things/tiles/M_water.prefab
     groundHigh: -80
     ornament4Ground: []
-    skyShader: 
+    skyMaterial: ShortLife/upgradeResMedium/other/Materials/sky5.mat
     effect: 
     fog: 0
     fogDensity: 0
@@ -1346,7 +1346,7 @@ MonoBehaviour:
     ground: 
     groundHigh: 0
     ornament4Ground: []
-    skyShader: 
+    skyMaterial: 
     effect: 
     fog: 0
     fogDensity: 0
