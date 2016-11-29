@@ -15,6 +15,7 @@ do
     local MAX_Length = 30;
     local currTerrain = nil;
     local creatureCount = 0;
+    local ground;
     local spin;
     local tiles = {};
     -- 最右边的一列的状态
@@ -66,8 +67,19 @@ do
         end
 
         local onLoadGround = function(name, obj)
-            obj.transform.localPosition = Vector3(0, terrainCfg.groundHigh, 0);
-            NGUITools.SetActive(obj, true);
+            ground = obj;
+            ground.transform.parent = csSelf.transform;
+            local groundReposition = ground:GetComponent("SLGroundReposition");
+            groundReposition.high = terrainCfg.groundHigh;
+            groundReposition.target = SCfg.self.mainCamera.transform;
+            NGUITools.SetActive(ground, true);
+            local groundCS = ground:GetComponent("CLBaseLua");
+            if(groundCS.luaTable == nil) then
+                groundCS:setLua();
+                groundCS.luaTable.init(groundCS);
+            end
+            print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+            groundCS.luaTable.playMoving();
         end
 
         local rootPath = PStr.b():a(PathCfg.self.basePath):a("/"):a("upgradeResMedium"):a("/other/things/"):e();
@@ -442,6 +454,12 @@ do
         end
         tiles = {};
         oldSwitchMapeStep = 0;
+
+        if(ground ~= nil) then
+            NGUITools.SetActive(ground, false);
+            CLThingsPool.returnObj(ground.name, ground);
+            ground = nil;
+        end
     end
 
     function CLLScene.GetTileAt(x, y, z)

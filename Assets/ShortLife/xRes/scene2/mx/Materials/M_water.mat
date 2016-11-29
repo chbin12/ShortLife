@@ -250,10 +250,6 @@ Material:
         second: 1
       data:
         first:
-          name: _Occlusion
-        second: 7.5
-      data:
-        first:
           name: _Parallax
         second: 0.02
       data:
@@ -290,26 +286,6 @@ Material:
         second: 0
       data:
         first:
-          name: _InvFade
-        second: 1
-      data:
-        first:
-          name: _Intensity
-        second: 1
-      data:
-        first:
-          name: _Exponent
-        second: 1
-      data:
-        first:
-          name: _DirectionYaw
-        second: 0
-      data:
-        first:
-          name: _DirectionPitch
-        second: 0
-      data:
-        first:
           name: _GradientYStartPos
         second: 0
       data:
@@ -332,6 +308,30 @@ Material:
         first:
           name: _Emission
         second: 1
+      data:
+        first:
+          name: _Occlusion
+        second: 7.5
+      data:
+        first:
+          name: _InvFade
+        second: 1
+      data:
+        first:
+          name: _Intensity
+        second: 1
+      data:
+        first:
+          name: _Exponent
+        second: 1
+      data:
+        first:
+          name: _DirectionYaw
+        second: 0
+      data:
+        first:
+          name: _DirectionPitch
+        second: 0
       data:
         first:
           name: _Stencil
@@ -407,18 +407,6 @@ Material:
         second: {r: 0.369, g: 0.349, b: 0.341, a: 1}
       data:
         first:
-          name: _Color2
-        second: {r: 0.97, g: 0.67, b: 0.51, a: 0}
-      data:
-        first:
-          name: _Color1
-        second: {r: 0, g: 0.7, b: 0.74, a: 0}
-      data:
-        first:
-          name: _Direction
-        second: {r: 0, g: 1, b: 0, a: 0}
-      data:
-        first:
           name: _TopColor
         second: {r: 0.12262111, g: 0.61764705, b: 0.61764705, a: 0}
       data:
@@ -473,6 +461,18 @@ Material:
         first:
           name: _Emission
         second: {r: 0, g: 0, b: 0, a: 0}
+      data:
+        first:
+          name: _Color2
+        second: {r: 0.97, g: 0.67, b: 0.51, a: 0}
+      data:
+        first:
+          name: _Color1
+        second: {r: 0, g: 0.7, b: 0.74, a: 0}
+      data:
+        first:
+          name: _Direction
+        second: {r: 0, g: 1, b: 0, a: 0}
       data:
         first:
           name: _TintColor

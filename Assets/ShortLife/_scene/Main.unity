@@ -1330,7 +1330,7 @@ MonoBehaviour:
     tileTypes: 2f000000
     ornTypes: 2f000000
     ground: ShortLife/upgradeResMedium/other/things/tiles/M_water.prefab
-    groundHigh: -80
+    groundHigh: -20
     ornament4Ground:
     - ShortLife/upgradeResMedium/other/things/tiles/M_tree.prefab
     - ShortLife/upgradeResMedium/other/things/tiles/M_tree2.prefab
