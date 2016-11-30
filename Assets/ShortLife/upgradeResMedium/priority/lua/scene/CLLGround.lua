@@ -50,7 +50,6 @@ do
 
     function _cell.onNotifyLua(go)
         local goName = go.name;
-        print(goName);
         if (goName == "Part1") then
             part1.transform.localPosition = Vector3(200, 0, 0);
             part1:flyout(Vector3(-200, 0, 0), 0.001,0,nil,_cell.onNotifyLua, false);

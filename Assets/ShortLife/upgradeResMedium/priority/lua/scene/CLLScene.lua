@@ -18,6 +18,7 @@ do
     local ground;
     local spin;
     local tiles = {};
+    local groundOranments = {};
     -- 最右边的一列的状态
     local lastRightSideState = {};
     local mLevLength = 0;
@@ -54,6 +55,8 @@ do
                 RenderSettings.skybox = mat;
             end);
         end
+
+        -- 地表
         CLLScene.loadGround(currTerrain);
 
         CLLScene.newMap(currTerrain, speed, onFinishLoadMap);
@@ -78,8 +81,6 @@ do
                 groundCS:setLua();
                 groundCS.luaTable.init(groundCS);
             end
-            print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-            groundCS.luaTable.playMoving();
         end
 
         local rootPath = PStr.b():a(PathCfg.self.basePath):a("/"):a("upgradeResMedium"):a("/other/things/"):e();
@@ -97,6 +98,10 @@ do
             end
         end
 
+        for x = 0, mapSizeX - 1 do
+            CLLScene.addGroundOranment(x, currTerrain);
+        end
+
         local b = 0;
         if (SCfg.self.mode == GameMode.explore) then
             b = 3
@@ -106,6 +111,43 @@ do
         end
 
         CLLScene.createTile({ tileInforList, 1, speed, onFinishLoadMap });
+    end
+
+    -- 增加地表的装饰
+    function CLLScene.addGroundOranment(side, terrainCfg)
+        local x = side;
+
+--        if(NumEx.NextBool()) then
+            local y1 = NumEx.NextInt(-10, -2);
+            CLLScene.doAddGroundOranment(x, y1, terrainCfg)
+--        end
+
+--        if(NumEx.NextBool()) then
+--            local y2 = NumEx.NextInt(mapSizeY + 2, mapSizeY + 10);
+--            CLLScene.doAddGroundOranment(x, y2, terrainCfg)
+--        end
+    end
+
+    function CLLScene.doAddGroundOranment(x, y, terrainCfg)
+        local index = NumEx.NextInt(0, terrainCfg.ornament4Ground.Count);
+        local oranmentName = terrainCfg.ornament4Ground[index];
+
+        local rootPath = PStr.b():a(PathCfg.self.basePath):a("/"):a("upgradeResMedium"):a("/other/things/"):e();
+        oranmentName = string.gsub(oranmentName, rootPath, "");
+        oranmentName = string.gsub(oranmentName, ".prefab", "");
+
+        local onLoadGroundOranment = function(name, obj, orgs)
+            local pos = CLLScene.getPos(x, y);
+            pos.y = terrainCfg.groundHigh;
+            obj.transform.parent = csSelf.transform;
+            obj.transform.position = pos;
+            NGUITools.SetActive(obj, true);
+
+            local gridPos = CLLScene.getMapPos(pos);
+            local posStr = CLLScene.getPosStr(gridPos.x, gridPos.y, gridPos.z);
+            groundOranments[posStr] = obj;
+        end
+        CLThingsPool.borrowObjAsyn(oranmentName, onLoadGroundOranment, {x, y, terrainCfg});
     end
 
     function CLLScene.createTile(orgs)
@@ -206,6 +248,8 @@ do
         lastRightSideState = tmpLastRightSideState;
 
         CLLScene.createTile({ tileInforList, 1, speed, onFinishAddSideTiles });
+
+        CLLScene.addGroundOranment(sideRight, currTerrain);
     end
 
     --
@@ -340,6 +384,7 @@ do
     end
 
     function CLLScene.getPos(x, y, z)
+        z = z == nil and 0 or z;
         local pos = Vector3(x * CLMapTile.OffsetX, z * CLMapTile.OffsetZ, y * CLMapTile.OffsetY);
         local off = y % 2;
         local rowIndexIsUneven = (off == 1 or off == -1);
@@ -454,6 +499,14 @@ do
         end
         tiles = {};
         oldSwitchMapeStep = 0;
+
+
+        for k, oranment in pairs(groundOranments) do
+            NGUITools.SetActive(oranment.gameObject, false);
+--            tile.luaTable.clean();
+            CLThingsPool.returnObj(oranment.name, oranment.gameObject);
+        end
+        groundOranments = {};
 
         if(ground ~= nil) then
             NGUITools.SetActive(ground, false);

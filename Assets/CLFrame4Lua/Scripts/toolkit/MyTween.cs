@@ -96,7 +96,6 @@ public class MyTween : MonoBehaviour
 	//弹出
 	public  void flyout(Vector3 toPos, float speed, float ihight, object onMovingCallback, object finishCallback, bool isWoldPos = true)
 	{
-		Debug.Log ("flyout=======" + name);
 		this.onFinishCallback = finishCallback;
 		this.onMovingCallback = onMovingCallback;
 		this.speed = speed;
