@@ -37,7 +37,7 @@
         <entry file="file://$PROJECT_DIR$/lua/explore/CLLExplore.lua">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.45316935">
-              <caret line="175" column="52" selection-start-line="175" selection-start-column="52" selection-end-line="175" selection-end-column="52" />
+              <caret line="175" column="51" selection-start-line="175" selection-start-column="51" selection-end-line="175" selection-end-column="51" />
               <folding />
             </state>
           </provider>
@@ -640,12 +640,12 @@
       <workItem from="1480317141302" duration="4142000" />
       <workItem from="1480383008223" duration="3429000" />
       <workItem from="1480470008805" duration="9479000" />
-      <workItem from="1480553867403" duration="4403000" />
+      <workItem from="1480553867403" duration="4663000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="124124000" />
+    <option name="totallyTimeSpent" value="124384000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1070,7 +1070,7 @@
     <entry file="file://$PROJECT_DIR$/lua/explore/CLLExplore.lua">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.45316935">
-          <caret line="175" column="52" selection-start-line="175" selection-start-column="52" selection-end-line="175" selection-end-column="52" />
+          <caret line="175" column="51" selection-start-line="175" selection-start-column="51" selection-end-line="175" selection-end-column="51" />
           <folding />
         </state>
       </provider>
