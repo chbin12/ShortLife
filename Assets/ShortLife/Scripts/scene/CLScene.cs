@@ -309,6 +309,7 @@ public class CLTerrainInfor {
 	public string ground = "";
 	public float groundHigh = 0;
 	public List<string> ornament4Ground;
+	public float ornament4GroundHigh = 0;
 	public string skyMaterial = "";
 	public string effect = "";
 	public bool fog;

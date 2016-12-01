@@ -39,9 +39,16 @@ do
     return mData;
   end
 
+  -- 形变
   function _cell.distort(isRotate, isScale)
     if(isRotate) then
       local angel = NumEx.NextInt(0, 360);
+      transform.localEulerAngles = Vector3(0, angel, 0);
+    end
+
+    if(isScale) then
+      local offset = NumEx.NextInt(-20, 20)/100;
+      transform.localScale = Vector3.one *(1+ offset);
     end
   end
 

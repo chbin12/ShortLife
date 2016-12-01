@@ -146,6 +146,14 @@ public class CLSceneInspector : Editor
 								terrain.groundHigh = EditorGUILayout.FloatField (terrain.groundHigh);
 							}
 							GUILayout.EndHorizontal ();
+
+							GUILayout.BeginHorizontal ();
+							{
+								EditorGUILayout.LabelField ("Oranment 4 Ground High", GUILayout.Width (100));
+								terrain.ornament4GroundHigh = EditorGUILayout.FloatField (terrain.ornament4GroundHigh);
+							}
+							GUILayout.EndHorizontal ();
+
 							GUILayout.BeginHorizontal ();
 							{
 								EditorGUILayout.LabelField ("Oranment 4 Ground", GUILayout.Width (100));
@@ -363,6 +371,14 @@ public class CLSceneInspector : Editor
 						tmpTerrain.groundHigh = EditorGUILayout.FloatField (tmpTerrain.groundHigh);
 					}
 					GUILayout.EndHorizontal ();
+
+					GUILayout.BeginHorizontal ();
+					{
+						EditorGUILayout.LabelField ("Oranment 4 Ground High", GUILayout.Width (100));
+						tmpTerrain.ornament4GroundHigh = EditorGUILayout.FloatField (tmpTerrain.ornament4GroundHigh);
+					}
+					GUILayout.EndHorizontal ();
+
 					GUILayout.BeginHorizontal ();
 					{
 						EditorGUILayout.LabelField ("Oranment 4 Ground", GUILayout.Width (100));

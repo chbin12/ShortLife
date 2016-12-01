@@ -19,6 +19,7 @@ do
     local spin;
     local tiles = {};
     local groundOranments = {};
+    local groundOranmentHeadLen = 15;
     -- 最右边的一列的状态
     local lastRightSideState = {};
     local mLevLength = 0;
@@ -100,7 +101,7 @@ do
             end
         end
 
-        for x = 0, mapSizeX - 1 do
+        for x = 0, mapSizeX-1+groundOranmentHeadLen do
             CLLScene.addGroundOranment(x, currTerrain);
         end
 
@@ -140,10 +141,16 @@ do
 
         local onLoadGroundOranment = function(name, obj, orgs)
             local pos = CLLScene.getPos(x, -y, 0) + topLeftPosition;
-            pos.y = terrainCfg.groundHigh;
+            pos.y = terrainCfg.ornament4GroundHigh;
             obj.transform.parent = csSelf.transform;
             obj.transform.localPosition = pos;
             NGUITools.SetActive(obj, true);
+            local baseLua = obj:GetComponent("CLBaseLua");
+            if(baseLua.luaTable == nil) then
+                baseLua:setLua();
+                baseLua.luaTable.init(baseLua);
+            end
+            baseLua.luaTable.distort(true, true);
 
             local gridPos = CLLScene.getMapPos(pos);
             local posStr = CLLScene.getPosStr(gridPos.x, gridPos.y, gridPos.z);
@@ -252,7 +259,7 @@ do
 
         CLLScene.createTile({ tileInforList, 1, speed, onFinishAddSideTiles });
 
-        CLLScene.addGroundOranment(sideRight, currTerrain);
+        CLLScene.addGroundOranment(sideRight+groundOranmentHeadLen, currTerrain);
     end
 
     --
