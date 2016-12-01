@@ -216,6 +216,18 @@ public class CLSceneInspector : Editor
 
 							GUILayout.BeginHorizontal ();
 							{
+								EditorGUILayout.LabelField ("Sky Oranment", GUILayout.Width (100));
+								terrain.skyOranment = EditorGUILayout.TextField (terrain.skyOranment);
+								Object obj = CLEditorTools.getObjectByPath (terrain.skyOranment);
+								obj = EditorGUILayout.ObjectField (obj, typeof(GameObject));
+								if (obj != null) {
+									terrain.skyOranment = CLEditorTools.getPathByObject (obj);
+								}
+							}
+							GUILayout.EndHorizontal ();
+
+							GUILayout.BeginHorizontal ();
+							{
 								EditorGUILayout.LabelField ("Effect Name", GUILayout.Width (100));
 								terrain.effect = EditorGUILayout.TextField (terrain.effect);
 							}
@@ -434,6 +446,18 @@ public class CLSceneInspector : Editor
 						obj = EditorGUILayout.ObjectField (obj, typeof(Material));
 						if (obj != null) {
 							tmpTerrain.skyMaterial = CLEditorTools.getPathByObject (obj);
+						}
+					}
+					GUILayout.EndHorizontal ();
+
+					GUILayout.BeginHorizontal ();
+					{
+						EditorGUILayout.LabelField ("Sky Oranment", GUILayout.Width (100));
+						tmpTerrain.skyOranment = EditorGUILayout.TextField (tmpTerrain.skyOranment);
+						Object obj = CLEditorTools.getObjectByPath (tmpTerrain.skyOranment);
+						obj = EditorGUILayout.ObjectField (obj, typeof(GameObject));
+						if (obj != null) {
+							tmpTerrain.skyOranment = CLEditorTools.getPathByObject (obj);
 						}
 					}
 					GUILayout.EndHorizontal ();

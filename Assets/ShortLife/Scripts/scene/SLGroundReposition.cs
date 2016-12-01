@@ -3,6 +3,7 @@ using System.Collections;
 
 public class SLGroundReposition : MonoBehaviour {
 	public float high = 0;
+	public Vector3 offset = Vector3.zero;
 	public Transform target;
 	Vector3 pos = Vector3.zero;
 	Vector3 newPos = Vector3.zero;
@@ -23,7 +24,7 @@ public class SLGroundReposition : MonoBehaviour {
 		if (target == null)
 			return;
 		pos = target.position;
-		newPos = new Vector3 (pos.x, high, pos.z);
+		newPos = new Vector3 (pos.x, high, pos.z) + offset;
 		transform.position = newPos;
 	}
 }

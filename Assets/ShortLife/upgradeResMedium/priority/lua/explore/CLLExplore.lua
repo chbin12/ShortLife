@@ -49,7 +49,7 @@ do
         SCfg.self.player.transform.localEulerAngles = Vector3(0, 90, 0);
 
         smoothFollowTween:flyout(SCfg.self.player.transform.position, 1, 0, nil, CLLExplore.moveLookatTarget, true);
-        smoothFollow4Camera:tween(Vector3(8, 4, 0), Vector3(15, 15, 0), 1, nil);
+        smoothFollow4Camera:tween(Vector3(8, 4, 0), Vector3(20, 10, 0), 1, nil);
         NGUITools.SetActive(SCfg.self.player.gameObject, true);
         SCfg.self.player:init(bio2Int(playerData.gid), 0, 1, true, nil);
         SCfg.self.player.luaTable.setFollower(nil);
@@ -173,7 +173,7 @@ do
                 Time:SetTimeScale(1);
                 CLPanelManager.getPanelAsy("PanelLevels", onLoadedPanel);
             end
-            smoothFollow4Camera:tween(Vector3(15, 15, 0), Vector3(8, 4, 0),  1, onFinishFollowCamera);
+            smoothFollow4Camera:tween(Vector3(20, 10, 0), Vector3(8, 4, 0),  1, onFinishFollowCamera);
         end
     end
 

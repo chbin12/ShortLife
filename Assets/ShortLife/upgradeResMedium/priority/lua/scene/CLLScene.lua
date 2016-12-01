@@ -24,7 +24,7 @@ do
     local lastRightSideState = {};
     local mLevLength = 0;
     local topLeftPosition = Vector3.zero;
-
+    local skyOranment;
 
     -- 初始化，只会调用一次
     function CLLScene.init(csObj)
@@ -57,6 +57,23 @@ do
                 mat.shader = Shader.Find(mat.shader.name);
                 RenderSettings.skybox = mat;
             end);
+        end
+
+        -- load sky oranment
+        print(currTerrain.skyOranment);
+        if(currTerrain.skyOranment ~= nil and currTerrain.skyOranment ~= "") then
+            local rootPath = PStr.b():a(PathCfg.self.basePath):a("/"):a("upgradeResMedium"):a("/other/things/"):e();
+            local thingName = string.gsub(currTerrain.skyOranment, rootPath, "");
+            thingName = string.gsub(thingName, ".prefab", "");
+            print(thingName);
+            CLThingsPool.borrowObjAsyn(thingName,
+                function(name, obj, orgs)
+                    skyOranment = obj;
+                    skyOranment.transform.parent = csSelf.transform;
+                    local reposition = skyOranment:GetComponent("SLGroundReposition");
+                    reposition.target = SCfg.self.mainCamera.transform;
+                    NGUITools.SetActive(skyOranment, true);
+                end);
         end
 
         -- 地表
@@ -509,7 +526,6 @@ do
         tiles = {};
         oldSwitchMapeStep = 0;
 
-
         for k, oranment in pairs(groundOranments) do
             NGUITools.SetActive(oranment.gameObject, false);
 --            tile.luaTable.clean();
@@ -521,6 +537,13 @@ do
             NGUITools.SetActive(ground, false);
             CLThingsPool.returnObj(ground.name, ground);
             ground = nil;
+        end
+
+        if(skyOranment ~= nil) then
+            NGUITools.SetActive(skyOranment, false);
+            skyOranment.transform.parent = nil;
+            CLThingsPool.returnObj(skyOranment.name, skyOranment);
+            skyOranment = nil;
         end
     end
 
