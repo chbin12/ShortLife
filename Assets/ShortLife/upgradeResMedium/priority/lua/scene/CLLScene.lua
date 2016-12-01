@@ -22,6 +22,7 @@ do
     -- 最右边的一列的状态
     local lastRightSideState = {};
     local mLevLength = 0;
+    local topLeftPosition = Vector3.zero;
 
 
     -- 初始化，只会调用一次
@@ -41,6 +42,7 @@ do
         mapSizeY = y;
         sideLeft = 0;
         sideRight = 0;
+        topLeftPosition = CLLScene.getTopLeftPosition();
         if (defalutTerrainIndex < 0) then
             currTerrain = csSelf.terrainInfor[NumEx.NextInt(0, csSelf.terrainInfor.Count)];
         else
@@ -117,15 +119,15 @@ do
     function CLLScene.addGroundOranment(side, terrainCfg)
         local x = side;
 
---        if(NumEx.NextBool()) then
+        if(NumEx.NextBool()) then
             local y1 = NumEx.NextInt(-10, -2);
             CLLScene.doAddGroundOranment(x, y1, terrainCfg)
---        end
+        end
 
---        if(NumEx.NextBool()) then
---            local y2 = NumEx.NextInt(mapSizeY + 2, mapSizeY + 10);
---            CLLScene.doAddGroundOranment(x, y2, terrainCfg)
---        end
+        if(NumEx.NextBool()) then
+            local y2 = NumEx.NextInt(mapSizeY + 2, mapSizeY + 10);
+            CLLScene.doAddGroundOranment(x, y2, terrainCfg)
+        end
     end
 
     function CLLScene.doAddGroundOranment(x, y, terrainCfg)
@@ -137,14 +139,15 @@ do
         oranmentName = string.gsub(oranmentName, ".prefab", "");
 
         local onLoadGroundOranment = function(name, obj, orgs)
-            local pos = CLLScene.getPos(x, y);
+            local pos = CLLScene.getPos(x, -y, 0) + topLeftPosition;
             pos.y = terrainCfg.groundHigh;
             obj.transform.parent = csSelf.transform;
-            obj.transform.position = pos;
+            obj.transform.localPosition = pos;
             NGUITools.SetActive(obj, true);
 
             local gridPos = CLLScene.getMapPos(pos);
             local posStr = CLLScene.getPosStr(gridPos.x, gridPos.y, gridPos.z);
+            obj.name = posStr;
             groundOranments[posStr] = obj;
         end
         CLThingsPool.borrowObjAsyn(oranmentName, onLoadGroundOranment, {x, y, terrainCfg});
@@ -368,7 +371,7 @@ do
             z = 0;
         end
         tile:GetComponent("Rigidbody").isKinematic = true;
-        local topLeftPosition = Vector3(-0.5 * mapSizeX * CLMapTile.OffsetX, 0, 0.5 * mapSizeY * CLMapTile.OffsetY);
+--        local topLeftPosition = Vector3(-0.5 * mapSizeX * CLMapTile.OffsetX, 0, 0.5 * mapSizeY * CLMapTile.OffsetY);
         local tilePos = topLeftPosition + CLLScene.getPos(x, -y, z);
         tile.mapX = x;
         tile.mapY = y;
@@ -384,7 +387,6 @@ do
     end
 
     function CLLScene.getPos(x, y, z)
-        z = z == nil and 0 or z;
         local pos = Vector3(x * CLMapTile.OffsetX, z * CLMapTile.OffsetZ, y * CLMapTile.OffsetY);
         local off = y % 2;
         local rowIndexIsUneven = (off == 1 or off == -1);
@@ -594,6 +596,10 @@ do
         end
     end
 
+    function CLLScene.getTopLeftPosition()
+        local _topLeftPosition = Vector3(-0.5 * mapSizeX * CLMapTile.OffsetX, 0, 0.5 * mapSizeY * CLMapTile.OffsetY);
+        return _topLeftPosition;
+    end
     --[[
     /// <summary>
     /// Gets the map position.根据坐标取得在地图格子中的坐标
@@ -628,7 +634,7 @@ do
             flagZ = -1;
         end
 
-        local topLeftPosition = Vector3(-0.5 * mapSizeX * CLMapTile.OffsetX, 0, 0.5 * mapSizeY * CLMapTile.OffsetY);
+--        local topLeftPosition = Vector3(-0.5 * mapSizeX * CLMapTile.OffsetX, 0, 0.5 * mapSizeY * CLMapTile.OffsetY);
         --        local tilePos = topLeftPosition + CLLScene.getPos(x, -y, z);
         pos = pos - topLeftPosition;
 

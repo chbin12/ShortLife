@@ -128,6 +128,7 @@ public class WWWEx  :MonoBehaviour
 		wwwMapUrl[url] = www;
         yield return www;
 		try {
+//			Debug.Log("Location==="  + www.responseHeaders["Location"]);
 			uncheckWWWTimeout (go, www);
 			if (string.IsNullOrEmpty (www.error)) {
                 object content = null;
@@ -147,7 +148,23 @@ public class WWWEx  :MonoBehaviour
                 }
                 doCallback (finishCallback, content, orgs);
             } else {
-                doCallback (exceptionCallback, null, orgs);
+				int retCode = getResponseCode(www);
+				if(retCode == 300 || retCode == 301 || retCode == 302) {
+					if(www.responseHeaders.ContainsKey("Location")) {
+						string url2 = www.responseHeaders["Location"];
+						if(string.IsNullOrEmpty(url2)) {
+							doCallback (exceptionCallback, null, orgs);
+						} else {
+							newWWW (go, url2, type, 
+								checkProgressSec, timeOutSec, finishCallback, 
+								exceptionCallback, timeOutCallback, orgs);
+						}
+					} else {
+						doCallback (exceptionCallback, null, orgs);
+					}
+				} else {
+					doCallback (exceptionCallback, null, orgs);
+				}
             }
             www.Dispose ();
             www = null;
@@ -166,4 +183,35 @@ public class WWWEx  :MonoBehaviour
 		if(string.IsNullOrEmpty(Url)) return null;
 		return (WWW)(wwwMapUrl[Url]);
 	}
+
+	public static int getResponseCode(WWW request) {
+		int ret = 0;
+		if (request.responseHeaders == null) {
+			Debug.LogError("no response headers.");
+		}
+		else {
+			if (!request.responseHeaders.ContainsKey("STATUS")) {
+				Debug.LogError("response headers has no STATUS.");
+			}
+			else {
+				ret = parseResponseCode(request.responseHeaders["STATUS"]);
+			}
+		}
+
+		return ret;
+	}
+
+	public static int parseResponseCode(string statusLine) {
+		int ret = 0;
+		string[] components = statusLine.Split(' ');
+		if (components.Length < 3) {
+			Debug.LogError("invalid response status: " + statusLine);
+		} else {
+			if (!int.TryParse(components[1], out ret)) {
+				Debug.LogError("invalid response code: " + components[1]);
+			}
+		}
+		return ret;
+	}
+
 }
