@@ -19,7 +19,9 @@ do
     local spin;
     local tiles = {};
     local groundOranments = {};
-    local groundOranmentHeadLen = 15;
+    local groundOranmentHeadLen = 30;
+    local groundOranmentsLeftSide = 0;
+    local MaxGroundOranmentLen = 30;
     -- 最右边的一列的状态
     local lastRightSideState = {};
     local mLevLength = 0;
@@ -43,6 +45,7 @@ do
         mapSizeY = y;
         sideLeft = 0;
         sideRight = 0;
+        groundOranmentsLeftSide = 0;
         topLeftPosition = CLLScene.getTopLeftPosition();
         if (defalutTerrainIndex < 0) then
             currTerrain = csSelf.terrainInfor[NumEx.NextInt(0, csSelf.terrainInfor.Count)];
@@ -65,7 +68,6 @@ do
             local rootPath = PStr.b():a(PathCfg.self.basePath):a("/"):a("upgradeResMedium"):a("/other/things/"):e();
             local thingName = string.gsub(currTerrain.skyOranment, rootPath, "");
             thingName = string.gsub(thingName, ".prefab", "");
-            print(thingName);
             CLThingsPool.borrowObjAsyn(thingName,
                 function(name, obj, orgs)
                     skyOranment = obj;
@@ -169,9 +171,7 @@ do
             end
             baseLua.luaTable.distort(true, true);
 
-            local gridPos = CLLScene.getMapPos(pos);
-            local posStr = CLLScene.getPosStr(gridPos.x, gridPos.y, gridPos.z);
-            obj.name = posStr;
+            local posStr = CLLScene.getPosStr(x, y, 0);
             groundOranments[posStr] = obj;
         end
         CLThingsPool.borrowObjAsyn(oranmentName, onLoadGroundOranment, {x, y, terrainCfg});
@@ -502,7 +502,36 @@ do
             end
         end
 
+        CLLScene.releaseGroundOranmentWhenSoFar();
+
         csSelf:invoke4Lua("checkLeftSideTilesTimeout", tileTimeout, tileTimeout);
+    end
+
+    function CLLScene.releaseGroundOranmentWhenSoFar()
+        while(groundOranmentsLeftSide + MaxGroundOranmentLen < sideRight) do
+            local posStr = "";
+            local oranment;
+            for i=-10, -2 do
+                posStr = CLLScene.getPosStr(groundOranmentsLeftSide, i, 0);
+                oranment = groundOranments[posStr];
+                if(oranment ~= nil) then
+                    CLThingsPool.returnObj(oranment.name, oranment.gameObject);
+                    NGUITools.SetActive(oranment.gameObject, false);
+                    groundOranments[posStr] = nil;
+                end
+            end
+            for i=mapSizeY + 2, mapSizeY + 10 do
+                posStr = CLLScene.getPosStr(groundOranmentsLeftSide, i, 0);
+                oranment = groundOranments[posStr];
+                if(oranment ~= nil) then
+                    CLThingsPool.returnObj(oranment.name, oranment.gameObject);
+                    NGUITools.SetActive(oranment.gameObject, false);
+                    groundOranments[posStr] = nil;
+                end
+            end
+
+            groundOranmentsLeftSide = groundOranmentsLeftSide + 1;
+        end
     end
 
     function CLLScene.fallTile(tile)
