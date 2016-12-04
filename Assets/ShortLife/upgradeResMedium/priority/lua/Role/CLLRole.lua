@@ -1003,7 +1003,7 @@ do
     function CLLRole.doOnTurn()
         if (leader ~= nil) then
             local dis = Vector3.Distance(transform.position, leader.transform.position);
-            if (dis < 1.5) then
+            if (dis < 2) then
                 csSelf.aiPath:stop();
                 csSelf.tween:stopMoveForward();
                 CLLRole.setAction("idel");
