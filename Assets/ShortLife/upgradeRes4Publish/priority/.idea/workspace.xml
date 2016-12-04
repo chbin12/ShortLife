@@ -26,8 +26,8 @@
       <file leaf-file-name="CLLRole.lua" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/lua/Role/CLLRole.lua">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="4.531783">
-              <caret line="1005" column="23" selection-start-line="1005" selection-start-column="23" selection-end-line="1005" selection-end-column="23" />
+            <state vertical-scroll-proportion="0.31472868">
+              <caret line="845" column="41" selection-start-line="845" selection-start-column="41" selection-end-line="845" selection-end-column="41" />
               <folding />
             </state>
           </provider>
@@ -542,12 +542,12 @@
       <workItem from="1480246735085" duration="1583000" />
       <workItem from="1480335513592" duration="1051000" />
       <workItem from="1480598487502" duration="1930000" />
-      <workItem from="1480815516114" duration="223000" />
+      <workItem from="1480815516114" duration="2476000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="13476000" />
+    <option name="totallyTimeSpent" value="15729000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="22" width="1366" height="742" extended-state="6" />
@@ -997,8 +997,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/lua/Role/CLLRole.lua">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="4.531783">
-          <caret line="1005" column="23" selection-start-line="1005" selection-start-column="23" selection-end-line="1005" selection-end-column="23" />
+        <state vertical-scroll-proportion="0.31472868">
+          <caret line="845" column="41" selection-start-line="845" selection-start-column="41" selection-end-line="845" selection-end-column="41" />
           <folding />
         </state>
       </provider>
