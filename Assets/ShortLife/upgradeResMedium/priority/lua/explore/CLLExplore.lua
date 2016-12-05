@@ -1,5 +1,6 @@
 -- 探索处理
 do
+    local json = require "cjson";
     CLLExplore = {}
     local smoothFollow4Camera = SCfg.self.mainCamera:GetComponent("CLSmoothFollow");
     local smoothFollow = SCfg.self.mLookatTarget:GetComponent("CLSmoothFollow");
@@ -33,15 +34,18 @@ do
         local levAttr = CLLDBCfg.getLevByID(curLev);
         local passStep = bio2Int(levAttr.Steps);
         CLLScene.setMaxLevLength(passStep);
+        local roleid = bio2Int(levAttr.Role);
 
-        local attr = CLLDBCfg.getRoleByGIDAndLev(bio2Int(playerData.gid), 1);
-        CLRolePool.borrowUnitAsyn(attr.base.PrefabName, CLLExplore.onLoadedPlayer, { playerData, attr });
+        --        local attr = CLLDBCfg.getRoleByGIDAndLev(bio2Int(playerData.gid), 1);
+        local attr = CLLDBCfg.getRoleByGIDAndLev(roleid, 1);
+        CLRolePool.borrowUnitAsyn(attr.base.PrefabName, CLLExplore.onLoadedPlayer, { playerData, attr, levAttr});
     end
 
     function CLLExplore.onLoadedPlayer(name, unit, orgs)
         SCfg.self.player = unit;
         local playerData = orgs[1];
-        --        local attr = orgs[2];
+        local attr = orgs[2];
+        local levAttr = orgs[3];
         ---------------------------------
         SCfg.self.player.transform.parent = CLBattle.self.transform;
         SCfg.self.player.transform.position = CLLScene.getCenterTile().transform.position;
@@ -51,12 +55,12 @@ do
         smoothFollowTween:flyout(SCfg.self.player.transform.position, 1, 0, nil, CLLExplore.moveLookatTarget, true);
         smoothFollow4Camera:tween(Vector3(8, 4, 0), Vector3(20, 10, 0), 1, nil);
         NGUITools.SetActive(SCfg.self.player.gameObject, true);
-        SCfg.self.player:init(bio2Int(playerData.gid), 0, 1, true, nil);
+        SCfg.self.player:init(bio2Int(attr.base.GID), 0, 1, true, nil);
         SCfg.self.player.luaTable.setFollower(nil);
         SCfg.self.player.luaTable.setLeader(nil);
         offense:Add(SCfg.self.player);
         ---------------------------------
-        CLLExplore.loadFollowers();
+        CLLExplore.loadFollowers(levAttr);
         ---------------------------------
         -- 地图块掉落
         CLLScene.checkLeftSideTilesTimeout(4);
@@ -70,29 +74,16 @@ do
     end
 
     -- 加载跟随者
-    function CLLExplore.loadFollowers()
-        local playerData = CLLData.player;
-        local curLev = bio2Int(playerData.lev);
-        local count = 0;
-        if(curLev == 1) then
-            count = 0;
-        elseif(curLev == 2) then
-            count = 0;
-        elseif(curLev == 3) then
-            count = 1;
-        elseif(curLev == 4) then
-            count = 3;
-        elseif(curLev == 5) then
-            count = 3;
-        elseif(curLev == 6) then
-            count = 1;
-        end
-        if(count == 0) then
+    function CLLExplore.loadFollowers(levAttr)
+        if(levAttr.Followers == "") then
             return;
         end
 
-        local attr = CLLDBCfg.getRoleByGIDAndLev(bio2Int(playerData.gid), 1);
-        CLRolePool.borrowUnitAsyn(attr.base.PrefabName, CLLExplore.onLoadedFollower, { playerData, attr, 1, SCfg.self.player, count});
+        local list = json.decode(levAttr.Followers);
+        if(list ~= nil and #list > 0) then
+            local attr = CLLDBCfg.getRoleByGIDAndLev(list[1], 1);
+            CLRolePool.borrowUnitAsyn(attr.base.PrefabName, CLLExplore.onLoadedFollower, { playerData, attr, 1, SCfg.self.player, list});
+        end
     end
 
     function CLLExplore.onLoadedFollower(name, unit, orgs)
@@ -100,10 +91,10 @@ do
         local attr = orgs[2];
         local index = orgs[3];
         local leader = orgs[4];
-        local count = orgs[5];
+        local list = orgs[5];
 
         local tile = CLLScene.getCenterTile();
-        local x = tile.mapX - index;
+        local x = tile.mapX - index-1;
         local y = tile.mapY;
         tile = CLLScene.GetTileAt(x, y, 0);
         unit.transform.parent = CLBattle.self.transform;
@@ -112,13 +103,14 @@ do
         unit.transform.localEulerAngles = Vector3(0, 90, 0);
 
         NGUITools.SetActive(unit.gameObject, true);
-        unit:init(bio2Int(playerData.gid), 0, 1, true, nil);
+        unit:init(list[index], 0, 1, true, nil);
         leader.luaTable.setFollower(unit);
         unit.luaTable.setLeader(leader);
         offense:Add(unit);
 
-        if (index < count) then
-            CLRolePool.borrowUnitAsyn(attr.base.PrefabName, CLLExplore.onLoadedFollower, { playerData, attr, index + 1, unit, count});
+        if (index < #list) then
+            local attr2 = CLLDBCfg.getRoleByGIDAndLev(list[index+1], 1);
+            CLRolePool.borrowUnitAsyn(attr2.base.PrefabName, CLLExplore.onLoadedFollower, { playerData, attr2, index + 1, unit, list});
         end
     end
 

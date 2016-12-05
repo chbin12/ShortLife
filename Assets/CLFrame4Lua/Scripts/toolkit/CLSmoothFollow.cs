@@ -12,6 +12,7 @@ public class CLSmoothFollow : MonoBehaviour
 	// How much we 
 	public float heightDamping = 2.0f;
 	public float  rotationDamping = 3.0f;
+	public Vector3 offset = Vector3.zero;
 	public bool  isCanRotate = true;
 	public bool  isRole = false;
 	float wantedRotationAngle = 0;
@@ -61,7 +62,7 @@ public class CLSmoothFollow : MonoBehaviour
 		// Set the height of the camera
 		pos = transform.position;
 		pos.y = currentHeight;
-		transform.position = pos;
+		transform.position = pos + offset;
 	
 		// Always look at the target
 		if (isCanRotate) {
