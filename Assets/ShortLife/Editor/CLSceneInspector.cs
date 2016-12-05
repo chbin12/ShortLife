@@ -21,6 +21,7 @@ public class CLSceneInspector : Editor
 	private static bool showNewTerrain = false;
 	MapTileType tmpTileType = MapTileType.s_01;
 	string tmpOrnament4Ground = "";
+	string tmpTileMaterial = "";
 	bool isShow = false;
 	CLTerrainInfor terrain;
 
@@ -119,6 +120,57 @@ public class CLSceneInspector : Editor
 										tmpTileType = (MapTileType)EditorGUILayout.EnumPopup ("", tmpTileType);
 										if (GUILayout.Button ("+", GUILayout.Width (50))) {
 											terrain.ornTypes.Add (tmpTileType);
+										}
+									}
+									GUILayout.EndHorizontal ();
+								}
+								GUILayout.EndVertical ();
+							}
+							GUILayout.EndHorizontal ();
+
+
+							GUILayout.BeginHorizontal ();
+							{
+								EditorGUILayout.LabelField ("Tile Materials", GUILayout.Width (100));
+								if (terrain.tileMaterials == null) {
+									terrain.tileMaterials = new List<string> ();
+								}
+								GUILayout.BeginVertical ();
+								{
+									for (int j = 0; j < terrain.tileMaterials.Count; j++) {
+
+										GUILayout.BeginHorizontal ();
+										{
+											terrain.tileMaterials [j] = EditorGUILayout.TextField (terrain.tileMaterials [j]);
+											string path = PStr.b ().a (PathCfg.self.basePath).a ("/upgradeResMedium/other/Materials/").a (terrain.tileMaterials [j]).a(".mat").e();
+											Object obj = CLEditorTools.getObjectByPath (path);
+											obj = EditorGUILayout.ObjectField (obj, typeof(Material));
+											if (obj != null) {
+												terrain.tileMaterials [j] =  Path.GetFileNameWithoutExtension(CLEditorTools.getPathByObject (obj));
+											}
+
+											if (GUILayout.Button ("-", GUILayout.Width (50))) {
+												terrain.tileMaterials.RemoveAt (j);
+												break;
+											}
+										}
+										GUILayout.EndHorizontal ();
+									}
+
+									GUILayout.BeginHorizontal ();
+									{
+										tmpTileMaterial = EditorGUILayout.TextField (tmpTileMaterial);
+
+										Object obj = CLEditorTools.getObjectByPath (tmpTileMaterial);
+										obj = EditorGUILayout.ObjectField (obj, typeof(Material));
+										if (obj != null) {
+											tmpTileMaterial = CLEditorTools.getPathByObject (obj);
+										}
+
+										if (GUILayout.Button ("+", GUILayout.Width (50))) {
+											Path.GetFileNameWithoutExtension(CLEditorTools.getPathByObject (obj));
+											terrain.tileMaterials.Add (Path.GetFileNameWithoutExtension(tmpTileMaterial));
+											tmpTileMaterial = "";
 										}
 									}
 									GUILayout.EndHorizontal ();
@@ -356,6 +408,57 @@ public class CLSceneInspector : Editor
 								tmpTileType = (MapTileType)EditorGUILayout.EnumPopup ("", tmpTileType);
 								if (GUILayout.Button ("+", GUILayout.Width (50))) {
 									tmpTerrain.ornTypes.Add (tmpTileType);
+								}
+							}
+							GUILayout.EndHorizontal ();
+						}
+						GUILayout.EndVertical ();
+					}
+					GUILayout.EndHorizontal ();
+
+
+					GUILayout.BeginHorizontal ();
+					{
+						EditorGUILayout.LabelField ("Tile Materials", GUILayout.Width (100));
+						if (tmpTerrain.tileMaterials == null) {
+							tmpTerrain.tileMaterials = new List<string> ();
+						}
+						GUILayout.BeginVertical ();
+						{
+							for (int j = 0; j < tmpTerrain.tileMaterials.Count; j++) {
+
+								GUILayout.BeginHorizontal ();
+								{
+									tmpTerrain.tileMaterials [j] = EditorGUILayout.TextField (tmpTerrain.tileMaterials [j]);
+									string path = PStr.b ().a (PathCfg.self.basePath).a ("/upgradeResMedium/other/Materials/").a (tmpTerrain.tileMaterials [j]).a(".mat").e();
+									Object obj = CLEditorTools.getObjectByPath (path);
+									obj = EditorGUILayout.ObjectField (obj, typeof(Material));
+									if (obj != null) {
+										tmpTerrain.tileMaterials [j] =  Path.GetFileNameWithoutExtension(CLEditorTools.getPathByObject (obj));
+									}
+
+									if (GUILayout.Button ("-", GUILayout.Width (50))) {
+										tmpTerrain.tileMaterials.RemoveAt (j);
+										break;
+									}
+								}
+								GUILayout.EndHorizontal ();
+							}
+
+							GUILayout.BeginHorizontal ();
+							{
+								tmpTileMaterial = EditorGUILayout.TextField (tmpTileMaterial);
+
+								Object obj = CLEditorTools.getObjectByPath (tmpTileMaterial);
+								obj = EditorGUILayout.ObjectField (obj, typeof(Material));
+								if (obj != null) {
+									tmpTileMaterial = CLEditorTools.getPathByObject (obj);
+								}
+
+								if (GUILayout.Button ("+", GUILayout.Width (50))) {
+									Path.GetFileNameWithoutExtension(CLEditorTools.getPathByObject (obj));
+									tmpTerrain.tileMaterials.Add (Path.GetFileNameWithoutExtension(tmpTileMaterial));
+									tmpTileMaterial = "";
 								}
 							}
 							GUILayout.EndHorizontal ();

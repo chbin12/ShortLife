@@ -306,6 +306,8 @@ public class CLTerrainInfor {
 	public string name = "";
 	public List<MapTileType> tileTypes;
 	public List<MapTileType> ornTypes;
+
+	public List<string> tileMaterials;
 	public string ground = "";
 	public float groundHigh = 0;
 	public List<string> ornament4Ground;

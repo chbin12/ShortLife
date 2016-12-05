@@ -58,7 +58,7 @@ do
     end
 
     --设置帧率
-    Application.targetFrameRate = 60;
+    Application.targetFrameRate = 30;
 
     -- 设置是否测试环境
     if (Prefs.getTestMode()) then

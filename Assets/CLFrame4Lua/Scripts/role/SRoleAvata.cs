@@ -12,7 +12,6 @@ using System.Collections.Generic;
 public class SRoleAvata : MonoBehaviour
 {
 	// 需要用到的骨骼关节点
-
 	[SerializeField]
 	public List<string> bonesNames = new List<string> ();
 	[SerializeField]
@@ -148,6 +147,10 @@ public class CLBodyPart
 
 		Material mat = CLMaterialPool.borrowMat(name);
         render.material = mat;
+
+		#if UNITY_EDITOR
+		Utl.setBodyMatEdit (render.transform);
+		#endif
     }
 
     void onSetPrefab(params object[] args) {

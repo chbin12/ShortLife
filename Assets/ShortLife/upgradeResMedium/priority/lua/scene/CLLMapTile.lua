@@ -9,15 +9,15 @@ do
     local isPlayFall = false;
     local rigidbody;
     local propObj; -- 道具对象
+    local avata;
 
     -- 初始化，只调用一次
     function _cell.init(csObj)
         csSelf = csObj;
         transform = csSelf.transform;
         rigidbody = transform:GetComponent("Rigidbody");
-        --[[
-        上的组件：getChild(transform, "offset", "Progress BarHong"):GetComponent("UISlider");
-        --]]
+        avata = transform:GetComponent("SRoleAvata");
+--        avatar = getChild(transform, "offset", "Progress BarHong"):GetComponent("UISlider");
     end
 
     -- 显示，
@@ -38,6 +38,12 @@ do
           -- TODO:
         end
         --]]
+    end
+
+    function _cell.setBody(name)
+        if(avata ~= nil) then
+            avata:switch2xx("body", name);
+        end
     end
 
     -- 取得数据

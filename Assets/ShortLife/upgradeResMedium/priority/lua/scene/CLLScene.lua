@@ -1,5 +1,6 @@
 ﻿-- 场景
 do
+    local json = require "cjson";
     CLLScene = {}
 
     local csSelf = nil;
@@ -201,7 +202,7 @@ do
             tileName = "tiles/" .. tileType:ToString();
         end
 
-        CLThingsPool.borrowObjAsyn(tileName, CLLScene.onGetTile, { x, y, speed, terrainInfor, list, i, onFinishLoadMap, fallSpeed});
+        CLThingsPool.borrowObjAsyn(tileName, CLLScene.onGetTile, { x, y, speed, terrainInfor, list, i, onFinishLoadMap, fallSpeed, isEmptyTile});
     end
 
     function CLLScene.onGetTile(name, obj, orgs)
@@ -210,6 +211,12 @@ do
             tile:setLua();
             tile.luaTable.init(tile);
         end
+        local isEmptyTile = orgs[9];
+        if(not isEmptyTile) then
+            local index = NumEx.NextInt(0, currTerrain.tileMaterials.Count);
+            tile.luaTable.setBody(currTerrain.tileMaterials[index]);
+        end
+
         CLLScene.addMapTileToMap(tile, orgs[1], orgs[2], 0, orgs[8]);
         local speed = orgs[3];
         local list = orgs[5];

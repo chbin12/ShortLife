@@ -379,7 +379,7 @@ public class CLRoleAvataInspector : CLBehaviour4LuaInspector
 	{
 		if (string.IsNullOrEmpty (matName))
 			return null;
-		string path = "Assets/" + PathCfg.self.basePath + "/upgradeResMedium/other/dress/" + matName + ".mat";
+		string path = "Assets/" + PathCfg.self.basePath + "/upgradeResMedium/other/Materials/" + matName + ".mat";
 		Material mat = AssetDatabase.LoadAssetAtPath (path, typeof(Material)) as Material;
 		return mat;
 	}
