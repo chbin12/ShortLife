@@ -102,7 +102,7 @@ public class CLModelPool
 		GameObject go = (GameObject)(prefabMap [path]);
 		Transform tr = null;
 		Mesh mesh = null;
-		if (go.name == meshName) {
+		if (go.name == meshName || go.transform.childCount == 0) {
 			tr = go.transform;
 		} else {
 			tr = go.transform.FindChild (meshName);

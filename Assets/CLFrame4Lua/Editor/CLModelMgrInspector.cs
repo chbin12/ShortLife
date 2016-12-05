@@ -5,8 +5,9 @@ using System.IO;
 
 #if UNITY_3_5
 [CustomEditor(typeof(CLModelMgr))]
+
 #else
-[CustomEditor(typeof(CLModelMgr), true)]
+[CustomEditor (typeof(CLModelMgr), true)]
 #endif
 public class CLModelMgrInspector : Editor
 {
@@ -23,7 +24,7 @@ public class CLModelMgrInspector : Editor
 		GUILayout.Label ("【特别注意】");
 		GUI.color = Color.yellow;
 		GUILayout.Label ("在使用该脚本时，同时也使用了CLTextureMgr，\n" +
-		                 			"那么可以把FBX文件的设置中model选项卡里\n的“Import Materials“勾除掉");
+		"那么可以把FBX文件的设置中model选项卡里\n的“Import Materials“勾除掉");
 		GUI.color = Color.white;
 		if (GUILayout.Button ("Get Model Reference")) {
 			setModelRef ();
@@ -45,50 +46,52 @@ public class CLModelMgrInspector : Editor
 			isShowModelsRef = !isShowModelsRef;
 		}
 		if (isShowModelsRef) {
-			for (int i=0; i < modelMgr.data.Count; i++) {
+			for (int i = 0; i < modelMgr.data.Count; i++) {
 				CLEditorTools.BeginContents ();
 				{
 					mat = modelMgr.data [i];
-					GUILayout.BeginHorizontal ();
+					GUILayout.BeginVertical ();
 					{
-						GUILayout.BeginVertical ();
-						{
-							GUILayout.BeginHorizontal ();
-							{
-								if(mat.meshFilter != null) {
-									EditorGUILayout.ObjectField (mat.meshFilter, typeof(UnityEngine.Object));
-								} else {
-									EditorGUILayout.ObjectField (mat.skinnedMesh, typeof(UnityEngine.Object));
-								}
-//								EditorGUILayout.ObjectField (mat.material, typeof(UnityEngine.Object));
-							}
-							GUILayout.EndHorizontal ();
+						if (mat.meshFilter != null) {
+							EditorGUILayout.ObjectField (mat.meshFilter, typeof(UnityEngine.Object));
+						} else {
+							EditorGUILayout.ObjectField (mat.skinnedMesh, typeof(UnityEngine.Object));
+						}
 
+						GUILayout.BeginHorizontal ();
+						{
+							EditorGUILayout.LabelField ("Model Path", GUILayout.Width (100));
 							EditorGUILayout.TextField (mat.model);
+						}
+						GUILayout.EndHorizontal ();
+
+						GUILayout.BeginHorizontal ();
+						{
+							EditorGUILayout.LabelField ("Model 4 Editor", GUILayout.Width (100));
 							EditorGUILayout.TextField (mat.model4Editor);
-							if (!mat.model4Editor.Contains ("/upgradeResMedium/")) {
-								GUI.color = Color.yellow;
-								GUILayout.Label("Model is not in [upgradeResMedium]!");
-								GUI.color = Color.white;
-							}
 						}
-						GUILayout.EndVertical ();
-						GameObject go = (GameObject)(CLEditorTools.getObjectByPath (mat.model4Editor));
-						Transform tr = null;
-						if (go.name == mat.meshName) {
-							tr = go.transform;
-						} else {
-							tr = go.transform.FindChild (mat.meshName);
-						}
-						MeshFilter mf = tr.GetComponent<MeshFilter>();
-						if(mf != null) {
-							EditorGUILayout.ObjectField ("", mf.sharedMesh, typeof(Mesh), false, GUILayout.MinWidth (0));
-						} else {
-							SkinnedMeshRenderer smr = tr.GetComponent<SkinnedMeshRenderer>();
-							EditorGUILayout.ObjectField ("", smr.sharedMesh, typeof(Mesh), false, GUILayout.MinWidth (0));
+						GUILayout.EndHorizontal ();
+						if (!mat.model4Editor.Contains ("/upgradeResMedium/")) {
+							GUI.color = Color.yellow;
+							GUILayout.Label ("Model is not in [upgradeResMedium]!");
+							GUI.color = Color.white;
 						}
 					}
-					GUILayout.EndHorizontal ();
+					GUILayout.EndVertical ();
+					GameObject go = (GameObject)(CLEditorTools.getObjectByPath (mat.model4Editor));
+					Transform tr = null;
+					if (go.name == mat.meshName || go.transform.childCount == 0) {
+						tr = go.transform;
+					} else {
+						tr = go.transform.FindChild (mat.meshName);
+					}
+					MeshFilter mf = tr.GetComponent<MeshFilter> ();
+					if (mf != null) {
+						EditorGUILayout.ObjectField ("", mf.sharedMesh, typeof(Mesh), false, GUILayout.MinWidth (0));
+					} else {
+						SkinnedMeshRenderer smr = tr.GetComponent<SkinnedMeshRenderer> ();
+						EditorGUILayout.ObjectField ("", smr.sharedMesh, typeof(Mesh), false, GUILayout.MinWidth (0));
+					}
 				}
 				CLEditorTools.EndContents ();
 			}
@@ -104,7 +107,7 @@ public class CLModelMgrInspector : Editor
 		modelMgr.data.Clear ();
 		getModelRef (modelMgr.transform);
 	}
-	
+
 	public void getModelRef (Transform tr)
 	{
 		ArrayList meshList = new ArrayList ();
@@ -120,16 +123,17 @@ public class CLModelMgrInspector : Editor
 				continue;
 			MeshFilter mf = null;
 			SkinnedMeshRenderer smr = null;
-			if(obj is MeshFilter) {
+			if (obj is MeshFilter) {
 				mf = (MeshFilter)obj;
 				mesh = mf.sharedMesh;
-			} else if(obj is SkinnedMeshRenderer) {
+			} else if (obj is SkinnedMeshRenderer) {
 				smr = (SkinnedMeshRenderer)obj;
 				mesh = smr.sharedMesh;
 			}
 			if (mesh != null) {
 				CLModel clMat = new CLModel ();
 				clMat.meshFilter = mf;
+
 				clMat.skinnedMesh = smr;
 //				clMat.mesh = rd.sharedMesh;
 				clMat.meshName = mesh.name;
@@ -141,7 +145,7 @@ public class CLModelMgrInspector : Editor
 			}
 		}
 
-		for (int i=0; i < tr.childCount; i++) {
+		for (int i = 0; i < tr.childCount; i++) {
 			getModelRef (tr.GetChild (i));
 		}
 	}

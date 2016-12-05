@@ -108,7 +108,7 @@ public class CLModelMgr : MonoBehaviour
 				GameObject go = AssetDatabase.LoadAssetAtPath (
 					tmpPath, typeof(UnityEngine.Object)) as GameObject;
 
-				if (go.name == clMod.meshName) {
+				if (go.name == clMod.meshName || go.transform.childCount == 0) {
 					tr = go.transform;
 				} else {
 					tr = go.transform.FindChild (clMod.meshName);
