@@ -166,11 +166,13 @@ do
             obj.transform.localPosition = pos;
             NGUITools.SetActive(obj, true);
             local baseLua = obj:GetComponent("CLBaseLua");
-            if(baseLua.luaTable == nil) then
-                baseLua:setLua();
-                baseLua.luaTable.init(baseLua);
+            if(baseLua ~= nil) then
+                if(baseLua.luaTable == nil) then
+                    baseLua:setLua();
+                    baseLua.luaTable.init(baseLua);
+                end
+                baseLua.luaTable.distort(true, true);
             end
-            baseLua.luaTable.distort(true, true);
 
             local posStr = CLLScene.getPosStr(x, y, 0);
             groundOranments[posStr] = obj;

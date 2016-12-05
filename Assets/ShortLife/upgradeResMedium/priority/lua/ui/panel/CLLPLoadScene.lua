@@ -116,7 +116,7 @@ do
         CLLScene.stopSpin();
         local onLoadRole = function(name, role, ors)
             NGUITools.SetActive(role.gameObject, false);
-            CLLScene.loadInfiniteMap(20, 8, 0.01, 5, 8, PanelLoadScene.onLoadMap);
+            CLLScene.loadInfiniteMap(20, 8, 0.01, 5, 9, PanelLoadScene.onLoadMap);
         end
 
         local playerData = CLLData.player;
