@@ -280,6 +280,13 @@ public class CLSceneInspector : Editor
 
 							GUILayout.BeginHorizontal ();
 							{
+								EditorGUILayout.LabelField ("Lookat Angle", GUILayout.Width (100));
+								terrain.lookatAngle = EditorGUILayout.FloatField (terrain.lookatAngle);
+							}
+							GUILayout.EndHorizontal ();
+
+							GUILayout.BeginHorizontal ();
+							{
 								EditorGUILayout.LabelField ("Effect Name", GUILayout.Width (100));
 								terrain.effect = EditorGUILayout.TextField (terrain.effect);
 							}
@@ -562,6 +569,13 @@ public class CLSceneInspector : Editor
 						if (obj != null) {
 							tmpTerrain.skyOranment = CLEditorTools.getPathByObject (obj);
 						}
+					}
+					GUILayout.EndHorizontal ();
+
+					GUILayout.BeginHorizontal ();
+					{
+						EditorGUILayout.LabelField ("Lookat Angle", GUILayout.Width (100));
+						tmpTerrain.lookatAngle = EditorGUILayout.FloatField (tmpTerrain.lookatAngle);
 					}
 					GUILayout.EndHorizontal ();
 

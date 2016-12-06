@@ -68,7 +68,8 @@ do
 
     function CLLExplore.moveLookatTarget()
         SCfg.self.mLookatTarget.transform.parent = CLBattle.self.transform;
-        SCfg.self.mLookatTarget.transform.localEulerAngles = Vector3(0, 70, 0);
+        local currTerrain = CLLScene.getCurrTerrain();
+        SCfg.self.mLookatTarget.transform.localEulerAngles = Vector3(0, currTerrain.lookatAngle, 0);
         SCfg.self.mLookatTarget.transform.position = SCfg.self.player.transform.position;
         smoothFollow.target = SCfg.self.player.transform;
     end

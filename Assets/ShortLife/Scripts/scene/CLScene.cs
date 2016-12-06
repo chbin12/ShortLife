@@ -314,6 +314,7 @@ public class CLTerrainInfor {
 	public float ornament4GroundHigh = 0;
 	public string skyMaterial = "";
 	public string skyOranment = "";
+	public float lookatAngle = 0;
 	public string effect = "";
 	public bool fog;
 	public float fogDensity;

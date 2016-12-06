@@ -37,6 +37,10 @@ do
         spin.enabled = false;
     end
 
+    function CLLScene.getCurrTerrain()
+        return currTerrain;
+    end
+
     -- 加载无限地图
     function CLLScene.loadInfiniteMap(x, y, speed, tileTimeout, defalutTerrainIndex, onFinishLoadMap)
         if (defalutTerrainIndex == nil) then

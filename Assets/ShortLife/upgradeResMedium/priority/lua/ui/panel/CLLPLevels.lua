@@ -73,7 +73,7 @@ do
             NAlertTxt.add(Localization.Get("NotOpen"), Color.red, 1);
             return;
         end
-        CLPanelManager.getPanelAsy("PanelLoadScene", onLoadedPanel, { type = "home"});
+        CLPanelManager.getPanelAsy("PanelLoadScene", onLoadedPanel, { type = "home", lev=d});
     end
 
     -- 关闭页面
