@@ -28,6 +28,7 @@ do
     local mLevLength = 0;
     local topLeftPosition = Vector3.zero;
     local skyOranment;
+    local terrainInfor;
 
     -- 初始化，只会调用一次
     function CLLScene.init(csObj)
@@ -35,6 +36,14 @@ do
         transform = csObj.transform;
         spin = transform:GetComponent("Spin");
         spin.enabled = false;
+        local priorityPath = PStr.b():a(PathCfg.persistentDataPath):a("/"):a(PathCfg.self.basePath):a("/upgradeRes4Publish"):a("/priority/"):e();
+        local cfgBasePath = PStr.b():a(priorityPath):a("cfg/"):e();
+
+        -- 全局变量定义
+        local cfgPath = PStr.b():a(cfgBasePath):a("Terrain.cfg"):e();
+        local cfgStr = File.ReadAllText(cfgPath);
+        print(cfgStr);
+        terrainInfor = json.decode(cfgStr);
     end
 
     function CLLScene.getCurrTerrain()
@@ -53,9 +62,9 @@ do
         groundOranmentsLeftSide = 0;
         topLeftPosition = CLLScene.getTopLeftPosition();
         if (defalutTerrainIndex < 0) then
-            currTerrain = csSelf.terrainInfor[NumEx.NextInt(0, csSelf.terrainInfor.Count)];
+            currTerrain = terrainInfor[NumEx.NextInt(1, #terrainInfor+1)];
         else
-            currTerrain = csSelf.terrainInfor[defalutTerrainIndex];
+            currTerrain = terrainInfor[defalutTerrainIndex];
         end
         sideRight = mapSizeX - 1;
 
@@ -156,7 +165,7 @@ do
     end
 
     function CLLScene.doAddGroundOranment(x, y, terrainCfg)
-        local index = NumEx.NextInt(0, terrainCfg.ornament4Ground.Count);
+        local index = NumEx.NextInt(1, #(terrainCfg.ornament4Ground)+1);
         local oranmentName = terrainCfg.ornament4Ground[index];
 
         local rootPath = PStr.b():a(PathCfg.self.basePath):a("/"):a("upgradeResMedium"):a("/other/things/"):e();
@@ -199,7 +208,7 @@ do
         local isEmptyTile = data[5];
         local fallSpeed = data[6];
 
-        local index = NumEx.NextInt(0, terrainInfor.tileTypes.Count);
+        local index = NumEx.NextInt(1, #(terrainInfor.tileTypes)+1);
         local tileType = terrainInfor.tileTypes:get_Item(index);
         local tileName = "";
         if (isEmptyTile) then
@@ -219,7 +228,7 @@ do
         end
         local isEmptyTile = orgs[9];
         if(not isEmptyTile) then
-            local index = NumEx.NextInt(0, currTerrain.tileMaterials.Count);
+            local index = NumEx.NextInt(1, #(currTerrain.tileMaterials)+1);
             tile.luaTable.setBody(currTerrain.tileMaterials[index]);
         end
 
@@ -250,7 +259,7 @@ do
             local switchStep = NumEx.getIntPart(CLLScene.getSteps() / 10);
             if (switchStep ~= oldSwitchMapeStep) then
                 oldSwitchMapeStep = switchStep;
-                currTerrain = csSelf.terrainInfor[NumEx.NextInt(0, csSelf.terrainInfor.Count)];
+                currTerrain = terrainInfor[NumEx.NextInt(1, #terrainInfor+1)];
             end
         end
 
@@ -453,7 +462,7 @@ do
 
             if (createOrn) then
                 -- 有概率出现障碍物
-                local index = NumEx.NextInt(0, currTerrain.ornTypes.Count);
+                local index = NumEx.NextInt(1, #(currTerrain.ornTypes)+1);
                 local ornName = "tiles/" .. currTerrain.ornTypes[index]:ToString();
                 CLThingsPool.borrowObjAsyn(ornName, CLLScene.addOrnament, tile);
             else

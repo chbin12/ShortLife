@@ -9,6 +9,8 @@ using UnityEditorHelper;
 #if UNITY_3_5
 [CustomEditor(typeof(CLScene))]
 
+
+
 #else
 [CustomEditor (typeof(CLScene), true)]
 #endif
@@ -142,11 +144,11 @@ public class CLSceneInspector : Editor
 										GUILayout.BeginHorizontal ();
 										{
 											terrain.tileMaterials [j] = EditorGUILayout.TextField (terrain.tileMaterials [j]);
-											string path = PStr.b ().a (PathCfg.self.basePath).a ("/upgradeResMedium/other/Materials/").a (terrain.tileMaterials [j]).a(".mat").e();
+											string path = PStr.b ().a (PathCfg.self.basePath).a ("/upgradeResMedium/other/Materials/").a (terrain.tileMaterials [j]).a (".mat").e ();
 											Object obj = CLEditorTools.getObjectByPath (path);
 											obj = EditorGUILayout.ObjectField (obj, typeof(Material));
 											if (obj != null) {
-												terrain.tileMaterials [j] =  Path.GetFileNameWithoutExtension(CLEditorTools.getPathByObject (obj));
+												terrain.tileMaterials [j] = Path.GetFileNameWithoutExtension (CLEditorTools.getPathByObject (obj));
 											}
 
 											if (GUILayout.Button ("-", GUILayout.Width (50))) {
@@ -168,8 +170,8 @@ public class CLSceneInspector : Editor
 										}
 
 										if (GUILayout.Button ("+", GUILayout.Width (50))) {
-											Path.GetFileNameWithoutExtension(CLEditorTools.getPathByObject (obj));
-											terrain.tileMaterials.Add (Path.GetFileNameWithoutExtension(tmpTileMaterial));
+											Path.GetFileNameWithoutExtension (CLEditorTools.getPathByObject (obj));
+											terrain.tileMaterials.Add (Path.GetFileNameWithoutExtension (tmpTileMaterial));
 											tmpTileMaterial = "";
 										}
 									}
@@ -329,7 +331,7 @@ public class CLSceneInspector : Editor
 						scene.terrainInfor [i] = terrain;
 					}
 				}
-				EditorUtility.SetDirty(scene);
+				EditorUtility.SetDirty (scene);
 			}
 		}
 //		NGUIEditorTools.EndContents ();
@@ -437,11 +439,11 @@ public class CLSceneInspector : Editor
 								GUILayout.BeginHorizontal ();
 								{
 									tmpTerrain.tileMaterials [j] = EditorGUILayout.TextField (tmpTerrain.tileMaterials [j]);
-									string path = PStr.b ().a (PathCfg.self.basePath).a ("/upgradeResMedium/other/Materials/").a (tmpTerrain.tileMaterials [j]).a(".mat").e();
+									string path = PStr.b ().a (PathCfg.self.basePath).a ("/upgradeResMedium/other/Materials/").a (tmpTerrain.tileMaterials [j]).a (".mat").e ();
 									Object obj = CLEditorTools.getObjectByPath (path);
 									obj = EditorGUILayout.ObjectField (obj, typeof(Material));
 									if (obj != null) {
-										tmpTerrain.tileMaterials [j] =  Path.GetFileNameWithoutExtension(CLEditorTools.getPathByObject (obj));
+										tmpTerrain.tileMaterials [j] = Path.GetFileNameWithoutExtension (CLEditorTools.getPathByObject (obj));
 									}
 
 									if (GUILayout.Button ("-", GUILayout.Width (50))) {
@@ -463,8 +465,8 @@ public class CLSceneInspector : Editor
 								}
 
 								if (GUILayout.Button ("+", GUILayout.Width (50))) {
-									Path.GetFileNameWithoutExtension(CLEditorTools.getPathByObject (obj));
-									tmpTerrain.tileMaterials.Add (Path.GetFileNameWithoutExtension(tmpTileMaterial));
+									Path.GetFileNameWithoutExtension (CLEditorTools.getPathByObject (obj));
+									tmpTerrain.tileMaterials.Add (Path.GetFileNameWithoutExtension (tmpTileMaterial));
 									tmpTileMaterial = "";
 								}
 							}
@@ -635,7 +637,7 @@ public class CLSceneInspector : Editor
 
 //		NGUIEditorTools.BeginContents ();
 //		{
-			using (new HighlightBox (Color.black)) {
+		using (new HighlightBox (Color.black)) {
 			GUILayout.BeginHorizontal ();
 			{
 				EditorGUILayout.LabelField ("RefreshTiles", GUILayout.Width (100));
@@ -694,7 +696,10 @@ public class CLSceneInspector : Editor
 //			if (GUILayout.Button ("LoadPrefab")) {
 //				loadPrefabTiles ();
 //			}
-			
+
+			if (GUILayout.Button ("Save Terrain Cfg")) {
+				save2 ();
+			}
 			if (GUILayout.Button ("Save")) {
 				save ();
 			}
@@ -736,6 +741,17 @@ public class CLSceneInspector : Editor
 //				CLMap.addPrefabTile (tile);
 //			}
 //		}
+	}
+
+	void save2 ()
+	{
+		string dir = Application.dataPath + "/" + PathCfg.self.basePath + "/upgradeRes4Publish/priority/cfg/";
+		Directory.CreateDirectory (dir);
+		string path = EditorUtility.SaveFilePanel ("Save scene to data", dir, "New scene", "cfg");
+		if (string.IsNullOrEmpty (path))
+			return;
+		
+		File.WriteAllText (path, scene.getJson());
 	}
 
 	void save ()
