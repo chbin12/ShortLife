@@ -448,13 +448,15 @@ do
     end
 
     function CLLRole.checkFall()
-        if (not Physics.Raycast(transform.position + transform.up, transform.up * -1, 2, LayerMask.GetMask("Tile"))) then
-            isFalling = true;
-            rigidbody.isKinematic = false;
-            CLLRole.onDead();
-            csSelf:invoke4Lua("IamDead", 1.5);
-            return true;
-        end
+--        if(leader == nil or leader.isDead) then
+            if (not Physics.Raycast(transform.position + transform.up, transform.up * -1, 2, LayerMask.GetMask("Tile"))) then
+                isFalling = true;
+                rigidbody.isKinematic = false;
+                CLLRole.onDead();
+                csSelf:invoke4Lua("IamDead", 1.5);
+                return true;
+            end
+--        end
         return false;
     end
 

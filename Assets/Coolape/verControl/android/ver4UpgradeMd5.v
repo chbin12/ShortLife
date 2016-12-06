@@ -153,7 +153,7 @@ ShortLife/upgradeRes4Publish/other/things/tiles/Android/tree_04.unity3d,f9861875
 ShortLife/upgradeRes4Publish/other/things/tiles/Android/tree_10.unity3d,1bfe123d27f0e7def71185fe4e52b9f8
 ShortLife/upgradeRes4Publish/other/things/tiles/Android/s_15.unity3d,44a91dc2e23d9c7210e373e12a116905
 ShortLife/upgradeRes4Publish/other/sound/Android/fx_pickUp.unity3d,eb592d514651dd643029417d8bfc1edc
-ShortLife/upgradeRes4Publish/priority/.idea/workspace.xml,01a55e380a964355c24fb29eccdae14e
+ShortLife/upgradeRes4Publish/priority/.idea/workspace.xml,d29388da1d330f52cd29a0989bde0b93
 ShortLife/upgradeRes4Publish/priority/lua/chn/CLLChn.lua,1b15295238499bf85ac8795f0f2abc84
 ShortLife/upgradeRes4Publish/other/texture/effect/Android/GlowDot.unity3d,fcbb02d9edac7fe6d0dd4c74b3ef6ce0
 ShortLife/upgradeRes4Publish/priority/lua/explore/CLLExplore.lua,b02bbd11f48cacfe982c86b301a42d71
@@ -167,7 +167,7 @@ ShortLife/upgradeRes4Publish/priority/.idea/modules.xml,a8590934acf0843e6faab169
 ShortLife/upgradeRes4Publish/priority/lua/uLua/Lua/3rd/sproto/sprotoparser.lua,9ff1d620d487b78c34437e7e676887e3
 ShortLife/upgradeRes4Publish/priority/ui/panel/Android/PanelMain.unity3d,5b8beb9d46684d3f5e0948411d4d18b0
 ShortLife/upgradeRes4Publish/priority/lua/toolkit/LoadPreRole.lua,c990d2614d05e6d343d99d66b66d4d17
-ShortLife/upgradeRes4Publish/priority/lua/Role/CLLRole.lua,23857c47a73c62c64f1c3e19a091efc3
+ShortLife/upgradeRes4Publish/priority/lua/Role/CLLRole.lua,63c8fa1eba46845f8d2d39130dc1a3e7
 ShortLife/upgradeRes4Publish/priority/lua/uLua/Lua/System/Vector2.lua,ba225918f35876a164a90d266ee34415
 ShortLife/upgradeRes4Publish/priority/lua/uLua/Lua/eventlib.lua,f2908156bcbaee4c2998df31c00bad0e
 ShortLife/upgradeRes4Publish/priority/lua/uLua/Lua/3rd/pbc/test.lua,439b9acdb2b7fffd4a4077988e835898
