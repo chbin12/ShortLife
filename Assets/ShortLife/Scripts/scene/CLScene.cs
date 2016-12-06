@@ -38,7 +38,11 @@ public class CLScene : CLBaseLua
 			CLTerrainInfor terrain;
 			for (int i = 0; i < terrainInfor.Count; i++) {
 				terrain = terrainInfor [i];
-				json = PStr.b ().a(json).a (terrain.getJson ()).a (",").e ();
+				if(i == terrainInfor.Count - 1) {
+				json = PStr.b ().a(json).a (terrain.getJson ()).e ();
+				} else {
+					json = PStr.b ().a(json).a (terrain.getJson ()).a (",").e ();
+				}
 			}
 			json = PStr.b ().a(json).a ("]").e ();
 		}
@@ -380,7 +384,7 @@ public class CLTerrainInfor
 			.a ("\"tileTypes\":").a (tileTypesJson).a (",")
 			.a ("\"ornTypes\":").a (ornTypesJson).a (",")
 			.a ("\"tileMaterials\":").a (tileMaterialsJson).a (",")
-			.a ("\"ornament4Ground\":").a (ornament4GroundJson).a (",")
+			.a ("\"ornament4Ground\":").a (ornament4GroundJson)
 			.a ("}")
 			.e ();
 		Debug.Log (json);

@@ -55,7 +55,7 @@ do
         elseif goName == "ButtonPlayAgain" then
             CLLExplore.clean();
             CLLScene.clean();
-            CLPanelManager.getPanelAsy("PanelLoadScene", onLoadedPanel, {type="home"});
+            CLPanelManager.getPanelAsy("PanelLevels", onLoadedPanel);
         elseif goName == "ButtonPause" then
             isPause = (not isPause);
             if(isPause) then

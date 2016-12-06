@@ -36,13 +36,17 @@ do
         transform = csObj.transform;
         spin = transform:GetComponent("Spin");
         spin.enabled = false;
-        local priorityPath = PStr.b():a(PathCfg.persistentDataPath):a("/"):a(PathCfg.self.basePath):a("/upgradeRes4Publish"):a("/priority/"):e();
+
+        local upgradeRes = "/upgradeRes"
+        if (SCfg.self.isEditMode) then
+            upgradeRes = "/upgradeRes4Publish";
+        end;
+        local priorityPath = PStr.b():a(PathCfg.persistentDataPath):a("/"):a(PathCfg.self.basePath):a(upgradeRes):a("/priority/"):e();
         local cfgBasePath = PStr.b():a(priorityPath):a("cfg/"):e();
 
         -- 全局变量定义
         local cfgPath = PStr.b():a(cfgBasePath):a("Terrain.cfg"):e();
         local cfgStr = File.ReadAllText(cfgPath);
-        print(cfgStr);
         terrainInfor = json.decode(cfgStr);
     end
 
@@ -209,12 +213,12 @@ do
         local fallSpeed = data[6];
 
         local index = NumEx.NextInt(1, #(terrainInfor.tileTypes)+1);
-        local tileType = terrainInfor.tileTypes:get_Item(index);
+        local tileType = terrainInfor.tileTypes[index];
         local tileName = "";
         if (isEmptyTile) then
             tileName = "tiles/s_00";
         else
-            tileName = "tiles/" .. tileType:ToString();
+            tileName = "tiles/" .. tileType;
         end
 
         CLThingsPool.borrowObjAsyn(tileName, CLLScene.onGetTile, { x, y, speed, terrainInfor, list, i, onFinishLoadMap, fallSpeed, isEmptyTile});
@@ -463,7 +467,7 @@ do
             if (createOrn) then
                 -- 有概率出现障碍物
                 local index = NumEx.NextInt(1, #(currTerrain.ornTypes)+1);
-                local ornName = "tiles/" .. currTerrain.ornTypes[index]:ToString();
+                local ornName = "tiles/" .. currTerrain.ornTypes[index];
                 CLThingsPool.borrowObjAsyn(ornName, CLLScene.addOrnament, tile);
             else
                 creatureCount = creatureCount + 1;
@@ -568,6 +572,7 @@ do
     end
 
     function CLLScene.clean()
+        RenderSettings.skybox = nil;
         csSelf:cancelInvoke4Lua("");
         for k, tile in pairs(tiles) do
             NGUITools.SetActive(tile.gameObject, false);
