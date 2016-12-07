@@ -105,12 +105,13 @@ ShortLife/upgradeRes4Publish/other/things/tiles/Android/tree_13.unity3d,4
 ShortLife/upgradeRes4Publish/other/things/tiles/Android/tree_14.unity3d,4
 ShortLife/upgradeRes4Publish/other/things/tiles/Android/tree_15.unity3d,4
 ShortLife/upgradeRes4Publish/other/uiPic/public/Android/_empty.unity3d,0
+ShortLife/upgradeRes4Publish/priority/priority.iml,0
 ShortLife/upgradeRes4Publish/priority/.idea/.name,0
 ShortLife/upgradeRes4Publish/priority/.idea/compiler.xml,0
 ShortLife/upgradeRes4Publish/priority/.idea/misc.xml,1
 ShortLife/upgradeRes4Publish/priority/.idea/modules.xml,0
 ShortLife/upgradeRes4Publish/priority/.idea/vcs.xml,0
-ShortLife/upgradeRes4Publish/priority/.idea/workspace.xml,18
+ShortLife/upgradeRes4Publish/priority/.idea/workspace.xml,22
 ShortLife/upgradeRes4Publish/priority/.idea/copyright/profiles_settings.xml,0
 ShortLife/upgradeRes4Publish/priority/atlas/Android/atlasAllReal.unity3d,3
 ShortLife/upgradeRes4Publish/priority/cfg/DBCFBulletData.cfg,0
@@ -122,7 +123,7 @@ ShortLife/upgradeRes4Publish/priority/cfg/DBCFRoleLevData.cfg,1
 ShortLife/upgradeRes4Publish/priority/cfg/Terrain.cfg,1
 ShortLife/upgradeRes4Publish/priority/localization/Chinese.txt,2
 ShortLife/upgradeRes4Publish/priority/lua/CLMainLua.lua,2
-ShortLife/upgradeRes4Publish/priority/lua/Role/CLLRole.lua,3
+ShortLife/upgradeRes4Publish/priority/lua/Role/CLLRole.lua,5
 ShortLife/upgradeRes4Publish/priority/lua/Role/CLLRoleSpeci_01.lua,0
 ShortLife/upgradeRes4Publish/priority/lua/Role/CLLRoleSpeci_02.lua,0
 ShortLife/upgradeRes4Publish/priority/lua/battle/CLLBattle.lua,0
@@ -145,7 +146,7 @@ ShortLife/upgradeRes4Publish/priority/lua/scene/CLLGround.lua,1
 ShortLife/upgradeRes4Publish/priority/lua/scene/CLLGroundOranment.lua,1
 ShortLife/upgradeRes4Publish/priority/lua/scene/CLLMapTile.lua,1
 ShortLife/upgradeRes4Publish/priority/lua/scene/CLLProp.lua,0
-ShortLife/upgradeRes4Publish/priority/lua/scene/CLLScene.lua,4
+ShortLife/upgradeRes4Publish/priority/lua/scene/CLLScene.lua,6
 ShortLife/upgradeRes4Publish/priority/lua/toolkit/CLLCameraEffect.lua,1
 ShortLife/upgradeRes4Publish/priority/lua/toolkit/CLLClickListener.lua,0
 ShortLife/upgradeRes4Publish/priority/lua/toolkit/CLLPrefabInit.lua,0
@@ -224,7 +225,7 @@ ShortLife/upgradeRes4Publish/priority/lua/ui/cell/CLLUICellWWWProgress.lua,0
 ShortLife/upgradeRes4Publish/priority/lua/ui/panel/CLLPBackplate.lua,0
 ShortLife/upgradeRes4Publish/priority/lua/ui/panel/CLLPBattle.lua,0
 ShortLife/upgradeRes4Publish/priority/lua/ui/panel/CLLPConfirm.lua,0
-ShortLife/upgradeRes4Publish/priority/lua/ui/panel/CLLPExplore.lua,0
+ShortLife/upgradeRes4Publish/priority/lua/ui/panel/CLLPExplore.lua,1
 ShortLife/upgradeRes4Publish/priority/lua/ui/panel/CLLPGuid.lua,0
 ShortLife/upgradeRes4Publish/priority/lua/ui/panel/CLLPHotWheel.lua,0
 ShortLife/upgradeRes4Publish/priority/lua/ui/panel/CLLPLevels.lua,4
