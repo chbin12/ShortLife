@@ -3,11 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class UITexteara : MonoBehaviour {
+	public enum EffectMode {
+		none,
+		scale,
+		alpha,
+	}
+
 	public UILabel mLabel;
 	public UIScrollView scrollView;
+	public EffectMode effectMode = EffectMode.none;
+	public UITweener.Method method = UITweener.Method.Linear;
+	public float duration =1;
 
 	Vector2 mSize = Vector2.zero;
-	public List<UILabel> labelList = new List<UILabel>();
+	public List<UILabelEachLine> labelList = new List<UILabelEachLine>();
 
 
 	void Start() {
@@ -28,9 +37,10 @@ public class UITexteara : MonoBehaviour {
 	
 	}
 
-
-	[ContextMenu("Refresh")]
-	public void refresh(bool force = false) {
+	public void refresh() {
+		refresh(true);
+	}
+	public void refresh(bool force) {
 		if(force) {
 			getProcText ();
 		}
@@ -44,8 +54,8 @@ public class UITexteara : MonoBehaviour {
 		}
 	}
 
+	[ContextMenu("Refresh")]
 	public void onLabelChange() {
-		Debug.Log ("onLabelChange");
 		refresh (true);
 	}
 
@@ -61,16 +71,37 @@ public class UITexteara : MonoBehaviour {
 		return strs;
 	}
 
+	public void setEffect(UILabel label) {
+		switch(effectMode) {
+			case EffectMode.scale:
+				TweenScale twScale = label.gameObject.AddComponent<TweenScale>();
+				twScale.from = new Vector3(1,0,1);
+				twScale.to = Vector3.one;
+				twScale.method = method;
+				twScale.duration = duration;
+				break;
+			case EffectMode.alpha:
+				TweenAlpha twAlpha = label.gameObject.AddComponent<TweenAlpha>();
+				twAlpha.from = 0;
+				twAlpha.to = 1;
+				twAlpha.method = method;
+				twAlpha.duration = duration;
+				break;
+		}
+	}
+
 	public void show() {
 		int count = textLines.Length;
-		UILabel label = null;
+		UILabelEachLine eachLine = null;
 		for(int i = labelList.Count; i < count; i++) {
-			label = NGUITools.AddChild (gameObject, mLabel.gameObject).GetComponent<UILabel> ();
-			UILabelEachLine eachLine =  label.gameObject.AddComponent<UILabelEachLine> ();
-			eachLine.texteara = this;
+			UILabel label = NGUITools.AddChild (gameObject, mLabel.gameObject).GetComponent<UILabel> ();
+			setEffect(label);
 			label.alpha = 1;
 			label.overflowMethod = UILabel.Overflow.ResizeFreely;
-			labelList.Add (label);
+			eachLine =  label.gameObject.AddComponent<UILabelEachLine> ();
+			eachLine.texteara = this;
+			NGUITools.SetActive(label.gameObject, false);
+			labelList.Add (eachLine);
 		}
 		float heightOffset = mSize.y / count;
 		int labelCount = labelList.Count;
@@ -82,13 +113,14 @@ public class UITexteara : MonoBehaviour {
 			pos.y += (mSize.y  - mLabel.fontSize - mLabel.spacingY);
 		}
 		for(int i = 0; i < labelCount; i++) {
-			label = labelList [i];
+			eachLine = labelList [i];
 			if(i < count) {
-				label.text = textLines [i];
-				NGUITools.SetActive (label.gameObject, true);
-				label.transform.localPosition = pos + new Vector3(0, i*flag*heightOffset, 0);
+				eachLine.text = textLines [i];
+				eachLine.tweener.delay = i*0.1f;
+				NGUITools.SetActive (eachLine.gameObject, true);
+				eachLine.transform.localPosition = pos + new Vector3(0, i*flag*heightOffset, 0);
 			} else {
-				NGUITools.SetActive (label.gameObject, false);
+				NGUITools.SetActive (eachLine.gameObject, false);
 			}
 		}
 	}
@@ -96,7 +128,7 @@ public class UITexteara : MonoBehaviour {
 	[ContextMenu("Clean")]
 	public void clean() {
 		int labelCount = labelList.Count;
-		UILabel label = null;
+		UILabelEachLine label = null;
 		for (int i = 0; i < labelCount; i++) {
 			label = labelList [i];
 			if(label != null)
