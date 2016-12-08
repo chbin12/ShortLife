@@ -966,6 +966,7 @@ public class UIWidget : UIRect
 	{
 		if (NGUITools.GetActive(this))
 		{
+			mMoved = true; // add by chenbin
 			mChanged = true;
 #if UNITY_EDITOR
 			NGUITools.SetDirty(this);

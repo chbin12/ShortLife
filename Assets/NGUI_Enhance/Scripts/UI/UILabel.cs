@@ -939,7 +939,7 @@ public class UILabel : UIWidget
 	/// So... queue yet another work-around.
 	/// </summary>
 
-#if UNITY_4_3 || UNITY_4_5 || UNITY_4_6
+	#if UNITY_4_3 || UNITY_4_5 || UNITY_4_6
 	static void OnFontTextureChanged ()
 	{
 		for (int i = 0; i < mList.size; ++i)

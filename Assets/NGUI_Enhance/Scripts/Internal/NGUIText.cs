@@ -1063,6 +1063,8 @@ static public class NGUIText
 		int textLength = text.Length;
 		float remainingWidth = regionWidth;
 		int start = 0, offset = 0, lineCount = 1, prev = 0;
+		int oldOffset = 0;		// add by chenbin
+		string symbolStr = "";	// add by chenbin
 		bool lineIsEmpty = true;
 		bool fits = true;
 		bool eastern = false;
@@ -1091,7 +1093,12 @@ static public class NGUIText
 			}
 
 			// When encoded symbols such as [RrGgBb] or [-] are encountered, skip past them
-			if (encoding && ParseSymbol(text, ref offset)) { --offset; continue; }
+			oldOffset = offset;	// add by chenbin
+			if (encoding && ParseSymbol(text, ref offset)) {
+				symbolStr = text.Substring(oldOffset, offset-oldOffset);	// add by chenbin
+				--offset; 
+				continue; 
+			}
 
 			// See if there is a symbol matching this text
 			BMSymbol symbol = useSymbols ? GetSymbol(text, offset, textLength) : null;
@@ -1145,6 +1152,21 @@ static public class NGUIText
 						start = offset;
 						break;
 					}
+
+					#region  add by chenbin 目的是为了多行时可以split出每行的内容
+					if(!string.IsNullOrEmpty(symbolStr)) {
+						// only proc [RrGgBb]
+						if(symbolStr.Length == 8) {
+							sb.Append ("[-]");
+							sb.Append ('\n');
+							sb.Append (symbolStr);
+						} else {
+							sb.Append ('\n');
+						}
+					} else {
+						sb.Append ('\n');
+					}
+					#endregion 
 
 					if (keepCharCount) ReplaceSpaceWithNewline(ref sb);
 					else EndLine(ref sb);
