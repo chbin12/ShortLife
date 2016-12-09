@@ -1154,18 +1154,7 @@ static public class NGUIText
 					}
 
 					#region  add by chenbin 目的是为了多行时可以split出每行的内容
-					if(!string.IsNullOrEmpty(symbolStr)) {
-						// only proc [RrGgBb]
-						if(symbolStr.Length == 8) {
-							sb.Append ("[-]");
-							sb.Append ('\n');
-							sb.Append (symbolStr);
-						} else {
-							sb.Append ('\n');
-						}
-					} else {
-						sb.Append ('\n');
-					}
+					procSymbol4MultLines(ref sb, symbolStr);
 					#endregion 
 
 					if (keepCharCount) ReplaceSpaceWithNewline(ref sb);
@@ -1195,6 +1184,11 @@ static public class NGUIText
 					prev = 0;
 
 					if (lineCount++ == maxLineCount) break;
+
+					#region  add by chenbin 目的是为了多行时可以split出每行的内容
+					procSymbol4MultLines(ref sb, symbolStr);
+					#endregion 
+
 					if (keepCharCount) ReplaceSpaceWithNewline(ref sb);
 					else EndLine(ref sb);
 					continue;
@@ -1214,6 +1208,23 @@ static public class NGUIText
 		finalText = sb.ToString();
 		return fits && ((offset == textLength) || (lineCount <= Mathf.Min(maxLines, maxLineCount)));
 	}
+
+	#region add by chenbin
+	static void procSymbol4MultLines(ref StringBuilder sb, string symbolStr) {
+		if(!string.IsNullOrEmpty(symbolStr)) {
+			// only proc [RrGgBb]
+			if(symbolStr.Length == 8) {
+				sb.Append ("[-]");
+				sb.Append ('\n');
+				sb.Append (symbolStr);
+			} else {
+				sb.Append ('\n');
+			}
+		} else {
+			sb.Append ('\n');
+		}
+	}
+	#endregion
 
 	static Color32 s_c0, s_c1;
 

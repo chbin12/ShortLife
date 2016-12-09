@@ -83,6 +83,9 @@ public class UITexteara : MonoBehaviour
 	{
 		string text = mLabel.processedText;
 		string[] strs = text.Split ('\n');
+//		for (int i = 0; i < strs.Length; i++) {
+//			Debug.Log (strs [i]);
+//		}
 		_textLines = strs;
 		mSize = mLabel.printedSize;
 		return strs;
@@ -120,10 +123,12 @@ public class UITexteara : MonoBehaviour
 	public TweenPosition addTweenPosition (GameObject go, Vector3 from, Vector3 to)
 	{
 		TweenPosition twPosition = go.AddComponent<TweenPosition> ();
+		twPosition.enabled = false;
 		twPosition.from = from;
 		twPosition.to = to;
 		twPosition.method = method;
 		twPosition.duration = duration;	
+//		twPosition.ResetToBeginning ();
 		return twPosition;
 	}
 
@@ -133,40 +138,48 @@ public class UITexteara : MonoBehaviour
 		if (twPosition == null) {
 			twPosition = addTweenPosition (go, from, to);
 		}
+		twPosition.enabled = false;
 		twPosition.from = from;
 		twPosition.to = to;
 		twPosition.method = method;
 		twPosition.duration = duration;	
+//		twPosition.ResetToBeginning ();
 		return twPosition;
 	}
 
 	public TweenScale addTweenScrale (GameObject go, Vector3 from, Vector3 to)
 	{
 		TweenScale twScale = go.AddComponent<TweenScale> ();
+		twScale.enabled = false;
 		twScale.from = from;
 		twScale.to = to;
 		twScale.method = method;
 		twScale.duration = duration;	
+//		twScale.ResetToBeginning ();
 		return twScale;
 	}
 
 	public TweenRotation addTweenRotate (GameObject go, Vector3 from, Vector3 to)
 	{
 		TweenRotation twRotate = go.AddComponent<TweenRotation> ();
+		twRotate.enabled = false;
 		twRotate.from = from;
 		twRotate.to = to;
 		twRotate.method = method;
 		twRotate.duration = duration;
+//		twRotate.ResetToBeginning ();
 		return twRotate;
 	}
 
 	public TweenAlpha addTweenAlpha (GameObject go, float from, float to)
 	{
 		TweenAlpha twAlpha = go.AddComponent<TweenAlpha> ();
+		twAlpha.enabled = false;
 		twAlpha.from = from;
 		twAlpha.to = to;
 		twAlpha.method = method;
 		twAlpha.duration = duration;
+		twAlpha.ResetToBeginning ();
 		return twAlpha;
 	}
 
@@ -200,7 +213,6 @@ public class UITexteara : MonoBehaviour
 			eachLine = labelList [i];
 			if (i < count) {
 				toPos = pos + new Vector3 (0, i * flag * heightOffset, 0);
-				eachLine.text = textLines [i];
 				if (effectMode == EffectMode.positon1) {
 					fromPos = toPos;
 					fromPos.x -= (mLabel.localSize.x + 40);
@@ -221,6 +233,7 @@ public class UITexteara : MonoBehaviour
 					eachLine.transform.localPosition = toPos;
 				}
 				eachLine.tweenDelay = i * delay;
+				eachLine.text = textLines [i];
 				NGUITools.SetActive (eachLine.gameObject, true);
 			} else {
 				NGUITools.SetActive (eachLine.gameObject, false);

@@ -38,6 +38,18 @@ public class UITextearaInspector : Editor
 			}
 			GUILayout.EndHorizontal ();
 		}
+
+		GUILayout.BeginHorizontal ();
+		{
+			if(GUILayout.Button ("Refresh")) {
+				instance.refresh (true);
+			}
+
+			if (GUILayout.Button ("Clean")) {
+				instance.clean ();
+			}
+		}
+		GUILayout.EndHorizontal ();
 		if (!Application.isPlaying) {
 			EditorUtility.SetDirty (instance);
 			EditorSceneManager.MarkAllScenesDirty ();
