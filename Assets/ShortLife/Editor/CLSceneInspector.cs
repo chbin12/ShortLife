@@ -629,8 +629,10 @@ public class CLSceneInspector : Editor
 						}
 						scene.terrainInfor.Add (tmpTerrain);
 						tmpTerrain = new CLTerrainInfor ();
-						EditorUtility.SetDirty (scene);
-						EditorSceneManager.MarkAllScenesDirty ();
+						if (!Application.isPlaying) {
+							EditorUtility.SetDirty (scene);
+							EditorSceneManager.MarkAllScenesDirty ();
+						}
 					}
 				}
 			}

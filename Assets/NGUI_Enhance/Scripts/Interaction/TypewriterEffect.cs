@@ -151,6 +151,7 @@ public class TypewriterEffect : MonoBehaviour
 			mCurrentOffset = 0;
 			mNextChar = 0f;
 			mReset = false;
+//			mLabel = GetComponent<UILabel>();		// del by chenbin
 			mFullText = mLabel.processedText;
 			mFade.Clear();
 

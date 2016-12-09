@@ -38,7 +38,9 @@ public class UITextearaInspector : Editor
 			}
 			GUILayout.EndHorizontal ();
 		}
-		EditorUtility.SetDirty (instance);
-		EditorSceneManager.MarkAllScenesDirty ();
+		if (!Application.isPlaying) {
+			EditorUtility.SetDirty (instance);
+			EditorSceneManager.MarkAllScenesDirty ();
+		}
 	}
 }
