@@ -5,6 +5,7 @@ using System.IO;
 using Toolkit;
 using System.Collections.Generic;
 using UnityEditorHelper;
+using UnityEditor.SceneManagement;
 
 #if UNITY_3_5
 [CustomEditor(typeof(CLScene))]
@@ -629,6 +630,7 @@ public class CLSceneInspector : Editor
 						scene.terrainInfor.Add (tmpTerrain);
 						tmpTerrain = new CLTerrainInfor ();
 						EditorUtility.SetDirty (scene);
+						EditorSceneManager.MarkAllScenesDirty ();
 					}
 				}
 			}
