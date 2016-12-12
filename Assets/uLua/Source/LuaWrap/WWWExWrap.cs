@@ -17,6 +17,8 @@ public class WWWExWrap
 			new LuaMethod("newWWW", newWWW),
 			new LuaMethod("doNewWWW", doNewWWW),
 			new LuaMethod("getWwwByUrl", getWwwByUrl),
+			new LuaMethod("getResponseCode", getResponseCode),
+			new LuaMethod("parseResponseCode", parseResponseCode),
 			new LuaMethod("New", _CreateWWWEx),
 			new LuaMethod("GetClassType", GetClassType),
 			new LuaMethod("__eq", Lua_Eq),
@@ -184,6 +186,26 @@ public class WWWExWrap
 		string arg0 = LuaScriptMgr.GetLuaString(L, 1);
 		WWW o = WWWEx.getWwwByUrl(arg0);
 		LuaScriptMgr.PushObject(L, o);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int getResponseCode(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 1);
+		WWW arg0 = (WWW)LuaScriptMgr.GetNetObject(L, 1, typeof(WWW));
+		int o = WWWEx.getResponseCode(arg0);
+		LuaScriptMgr.Push(L, o);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int parseResponseCode(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 1);
+		string arg0 = LuaScriptMgr.GetLuaString(L, 1);
+		int o = WWWEx.parseResponseCode(arg0);
+		LuaScriptMgr.Push(L, o);
 		return 1;
 	}
 

@@ -23,6 +23,7 @@ public class CLSmoothFollowWrap
 			new LuaField("height", get_height, set_height),
 			new LuaField("heightDamping", get_heightDamping, set_heightDamping),
 			new LuaField("rotationDamping", get_rotationDamping, set_rotationDamping),
+			new LuaField("offset", get_offset, set_offset),
 			new LuaField("isCanRotate", get_isCanRotate, set_isCanRotate),
 			new LuaField("isRole", get_isRole, set_isRole),
 		};
@@ -163,6 +164,30 @@ public class CLSmoothFollowWrap
 		}
 
 		LuaScriptMgr.Push(L, obj.rotationDamping);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_offset(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		CLSmoothFollow obj = (CLSmoothFollow)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name offset");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index offset on a nil value");
+			}
+		}
+
+		LuaScriptMgr.Push(L, obj.offset);
 		return 1;
 	}
 
@@ -331,6 +356,30 @@ public class CLSmoothFollowWrap
 		}
 
 		obj.rotationDamping = (float)LuaScriptMgr.GetNumber(L, 3);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_offset(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		CLSmoothFollow obj = (CLSmoothFollow)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name offset");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index offset on a nil value");
+			}
+		}
+
+		obj.offset = LuaScriptMgr.GetVector3(L, 3);
 		return 0;
 	}
 

@@ -12,12 +12,6 @@ using System.Collections.Generic;
 
 public class CLScene : CLBaseLua
 {
-	
-	public bool fog;
-	public float fogDensity;
-	public Color fogColor = Color.white;
-	public float fogStartDis;
-	public float fogEndDis;
 	//--------------------------------------
 	[SerializeField]
 	public List<CLTerrainInfor> terrainInfor;

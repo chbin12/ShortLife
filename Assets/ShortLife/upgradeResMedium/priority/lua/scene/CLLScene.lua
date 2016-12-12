@@ -37,17 +37,20 @@ do
         spin = transform:GetComponent("Spin");
         spin.enabled = false;
 
+        terrainInfor = CLLScene.getCfg("Terrain.cfg");
+    end
+
+    function CLLScene.getCfg(cfgName)
         local upgradeRes = "/upgradeRes"
         if (SCfg.self.isEditMode) then
             upgradeRes = "/upgradeRes4Publish";
         end;
         local priorityPath = PStr.b():a(PathCfg.persistentDataPath):a("/"):a(PathCfg.self.basePath):a(upgradeRes):a("/priority/"):e();
         local cfgBasePath = PStr.b():a(priorityPath):a("cfg/"):e();
-
-        -- 全局变量定义
-        local cfgPath = PStr.b():a(cfgBasePath):a("Terrain.cfg"):e();
+        local cfgPath = PStr.b():a(cfgBasePath):a(cfgName):e();
         local cfgStr = File.ReadAllText(cfgPath);
-        terrainInfor = json.decode(cfgStr);
+        local cfgResult = json.decode(cfgStr);
+        return cfgResult;
     end
 
     function CLLScene.getCurrTerrain()
@@ -81,7 +84,6 @@ do
         end
 
         -- load sky oranment
-        print(currTerrain.skyOranment);
         if(currTerrain.skyOranment ~= nil and currTerrain.skyOranment ~= "") then
             local rootPath = PStr.b():a(PathCfg.self.basePath):a("/"):a("upgradeResMedium"):a("/other/things/"):e();
             local thingName = string.gsub(currTerrain.skyOranment, rootPath, "");
@@ -130,11 +132,17 @@ do
     end
 
     function CLLScene.newMap(terrainInfor, speed, onFinishLoadMap)
+        local mapShow = CLLScene.getCfg("MapShowData.json");
+
         creatureCount = 0;
         local tileInforList = {}
         for y = 0, mapSizeY - 1 do
             for x = 0, mapSizeX - 1 do
-                table.insert(tileInforList, { x, y, terrainInfor, x, false ,1});
+                if((mapShow[y+1])[x+1] == 1) then
+                    table.insert(tileInforList, { x, y, terrainInfor, x, false, 1});
+                else
+                    table.insert(tileInforList, { x, y, terrainInfor, x, true, 1});
+                end
             end
         end
 

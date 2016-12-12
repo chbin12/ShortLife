@@ -7,14 +7,7 @@ using System.Collections.Generic;
 using UnityEditorHelper;
 using UnityEditor.SceneManagement;
 
-#if UNITY_3_5
-[CustomEditor(typeof(CLScene))]
-
-
-
-#else
 [CustomEditor (typeof(CLScene), true)]
-#endif
 public class CLSceneInspector : Editor
 {
 	CLScene scene;
@@ -25,16 +18,33 @@ public class CLSceneInspector : Editor
 	MapTileType tmpTileType = MapTileType.s_01;
 	string tmpOrnament4Ground = "";
 	string tmpTileMaterial = "";
-	bool isShow = false;
+	static bool isShow = false;
+	static bool isShow2 = false;
 	CLTerrainInfor terrain;
+
+	static int x, y;
+	static Hashtable tileMap = new Hashtable ();
 
 	public override void OnInspectorGUI ()
 	{
 		scene = target as CLScene;
 		//		DrawDefaultInspector ();
 		init ();
+
+		if (scene != null) {
+			GUILayout.BeginHorizontal ();
+			{
+				EditorGUILayout.LabelField ("Lua Text", GUILayout.Width (100));
+				luaAsset = EditorGUILayout.ObjectField (luaAsset, typeof(UnityEngine.Object));
+			}
+			GUILayout.EndHorizontal ();
+			string luaPath = AssetDatabase.GetAssetPath (luaAsset);
+			scene.luaPath = Utl.filterPath (luaPath);
+			EditorUtility.SetDirty (scene);
+		}
+
 //		NGUIEditorTools.BeginContents ();
-		using (new UnityEditorHelper.FoldableBlock (ref isShow, "List")) {
+		using (new UnityEditorHelper.FoldableBlock (ref isShow, "Terrain List (Click to show)")) {
 			if (isShow) {
 				GUI.color = Color.white;
 
@@ -636,83 +646,48 @@ public class CLSceneInspector : Editor
 					}
 				}
 			}
+			if (GUILayout.Button ("Save Terrain Cfg")) {
+				save2 ();
+			}
 		}
 		NGUIEditorTools.EndContents ();
 
 //		NGUIEditorTools.BeginContents ();
 //		{
-		using (new HighlightBox (Color.black)) {
-			GUILayout.BeginHorizontal ();
-			{
-				EditorGUILayout.LabelField ("RefreshTiles", GUILayout.Width (100));
-//				scene.isRefreshTiles = GUILayout.Toggle (scene.isRefreshTiles, "");
-			}
-			GUILayout.EndHorizontal ();
-			
-			
-			GUILayout.BeginHorizontal ();
-			{
-				EditorGUILayout.LabelField ("use Fog", GUILayout.Width (100));
-				scene.fog = GUILayout.Toggle (scene.fog, "");
-			}
-			GUILayout.EndHorizontal ();
-			if (scene.fog) {
+		using (new UnityEditorHelper.FoldableBlock (ref isShow2, "Set Tile Map (Click to show)")) {
+			if (isShow2) {
 				GUILayout.BeginHorizontal ();
 				{
-					EditorGUILayout.LabelField ("fogColor", GUILayout.Width (100));
-					scene.fogColor = EditorGUILayout.ColorField ("", scene.fogColor);
+					EditorGUILayout.LabelField ("X", GUILayout.Width (100));
+					x = EditorGUILayout.IntField (x);
 				}
 				GUILayout.EndHorizontal ();
-				
-				GUILayout.BeginHorizontal ();
-				{
-					EditorGUILayout.LabelField ("fogDensity", GUILayout.Width (100));
-					scene.fogDensity = EditorGUILayout.FloatField (scene.fogDensity, "");
-				}
-				GUILayout.EndHorizontal ();
-				GUILayout.BeginHorizontal ();
-				{
-					EditorGUILayout.LabelField ("fogStartDis", GUILayout.Width (100));
-					scene.fogStartDis = EditorGUILayout.FloatField (scene.fogStartDis, "");
-				}
-				GUILayout.EndHorizontal ();
-				GUILayout.BeginHorizontal ();
-				{
-					EditorGUILayout.LabelField ("fogEndDis", GUILayout.Width (100));
-					scene.fogEndDis = EditorGUILayout.FloatField (scene.fogEndDis, "");
-				}
-				GUILayout.EndHorizontal ();
-			}
-			
-			if (scene != null) {
-				GUILayout.BeginHorizontal ();
-				{
-					EditorGUILayout.LabelField ("Lua Text", GUILayout.Width (100));
-					luaAsset = EditorGUILayout.ObjectField (luaAsset, typeof(UnityEngine.Object), GUILayout.Width (125));
-				}
-				GUILayout.EndHorizontal ();
-				string luaPath = AssetDatabase.GetAssetPath (luaAsset);
-				scene.luaPath = Utl.filterPath (luaPath);
-				EditorUtility.SetDirty (scene);
-			}
-			
-			GUILayout.Space (3);
-//			if (GUILayout.Button ("LoadPrefab")) {
-//				loadPrefabTiles ();
-//			}
 
-			if (GUILayout.Button ("Save Terrain Cfg")) {
-				save2 ();
-			}
-			if (GUILayout.Button ("Save")) {
-				save ();
-			}
-			
-			if (GUILayout.Button ("load data")) {
-				loadData ();
+				GUILayout.BeginHorizontal ();
+				{
+					EditorGUILayout.LabelField ("Y", GUILayout.Width (100));
+					y = EditorGUILayout.IntField (y);
+				}
+				GUILayout.EndHorizontal ();
+
+				GUILayout.BeginHorizontal ();
+				{
+					if (GUILayout.Button ("Create Map")) {
+						createMap ();
+					}
+
+					if (GUILayout.Button ("Clean")) {
+						clean ();
+					}
+				}
+				GUILayout.EndHorizontal ();
+
+				GUILayout.Space (3);
+				if (GUILayout.Button ("Save Map to Json")) {
+					save ();
+				}
 			}
 		}
-//		NGUIEditorTools.EndContents ();
 	}
 
 	bool isFinishInit = false;
@@ -729,22 +704,51 @@ public class CLSceneInspector : Editor
 		}
 	}
 
-	void loadPrefabTiles ()
+	//	void loadPrefabTiles ()
+	//	{
+	//		string path = "Assets/" + PathCfg.self.basePath + "/upgradeResMedium/other/map/tiles";
+	//		string[] files = Directory.GetFiles (path);
+	//		for (int i =0; i < files.Length; i++) {
+	//			if (Path.GetExtension (files [i]) .Equals (".meta"))
+	//				continue;
+	//			loadPrefabTile(files [i]);
+	//		}
+	//	}
+
+	CLMapTile loadPrefabTile (string name)
 	{
-//		string path = "Assets/" + PathCfg.self.basePath + "/upgradeResMedium/other/map/tiles";
-//		MapTile tile = null;
-//		string[] files = Directory.GetFiles (path);
-//		for (int i =0; i < files.Length; i++) {
-//			if (Path.GetExtension (files [i]) .Equals (".meta"))
-//				continue;
-//			Debug.Log (files [i]);
-//			tile = (MapTile)(AssetDatabase.LoadAssetAtPath (
-//				files [i], 
-//				typeof(MapTile)));
-//			if (tile != null) {
-//				CLMap.addPrefabTile (tile);
-//			}
-//		}
+		string path = "Assets/" + PathCfg.self.basePath + "/upgradeResMedium/other/things/tiles/";
+		CLMapTile tile = null;
+		Debug.Log(path + name);
+		tile = (CLMapTile)(AssetDatabase.LoadAssetAtPath (
+			path + name, 
+			typeof(CLMapTile)));
+		return tile;
+	}
+
+	Vector3 getPos (int x, int y, int z)
+	{
+		Vector3 pos = new Vector3 (x * CLMapTile.OffsetX, z * CLMapTile.OffsetZ, y * CLMapTile.OffsetY);
+		float off = y % 2;
+		bool rowIndexIsUneven = (off == 1 || off == -1);
+		if (rowIndexIsUneven) {
+			pos.x = pos.x + CLMapTile.RowOffsetX;
+		}
+		return pos;
+	}
+
+	void createMap ()
+	{
+		CLMapTile prefabTile = loadPrefabTile ("tile_00.prefab");
+		CLMapTile tile = null;
+		for (int i = 0; i < x; i++) {
+			for (int j = 0; j < y; j++) {
+				tile = GameObject.Instantiate (prefabTile);
+				tile.transform.parent =  scene.transform;
+				tile.transform.position = getPos(i, j, 0);
+				tileMap [i + "_" + j] = tile;
+			}
+		}	
 	}
 
 	void save2 ()
@@ -755,104 +759,34 @@ public class CLSceneInspector : Editor
 		if (string.IsNullOrEmpty (path))
 			return;
 		
-		File.WriteAllText (path, scene.getJson());
+		File.WriteAllText (path, scene.getJson ());
 	}
 
 	void save ()
 	{
-//		string dir = Application.dataPath + "/" + PathCfg.self.basePath + "/upgradeResMedium/other/map/data";
-//		Directory.CreateDirectory(dir);
-//		string path = EditorUtility.SaveFilePanel ("Save scene to data", dir, "New scene", "");
-//		if (string.IsNullOrEmpty (path))
-//			return;
-//		
-//		Hashtable tmpTilesPos = new Hashtable();	
-//		ArrayList buildingList = new ArrayList ();
-//		ArrayList tilesList = new ArrayList ();
-//		ArrayList ornList = new ArrayList ();
-//		ArrayList effectList = new ArrayList ();
-//		SceneData mapdata = new SceneData ();
-//		mapdata.fog = scene.fog;
-//		mapdata.fogColor = scene.fogColor;
-//		mapdata.fogDensity = scene.fogDensity;
-//		mapdata.fogStartDis = scene.fogStartDis;
-//		mapdata.fogEndDis = scene.fogEndDis;
-//		
-//		int count = scene.transform.childCount;
-//		MapTileData md = null;
-//		Transform child = null;
-//		MapOrnament mo = null;
-//		CLMapTile mt = null;
-//		SEffect eff = null;
-//		for (int i = 0; i < count; i++) {
-//			child = scene.transform.GetChild (i);
-//			if (!child.gameObject.activeSelf)
-//				continue;
-//				mo = child.GetComponent<MapOrnament> ();
-//				if (mo != null) {
-//					md = new MapTileData ();
-//					md.name = child.name;
-//					md.x = mo.mapX;
-//					md.y = mo.mapY;
-//					md.z = mo.mapZ;
-//					md.activeSelf = child.gameObject.activeSelf;
-//					md.layer = child.gameObject.layer;
-//					md.localEulerAngles = child.localEulerAngles;
-//					md.localPosition = child.localPosition;
-//					md.localScale = child.localScale;
-//					md.type = mo.tileType.ToString ();
-//					ornList.Add (md);
-//				} else {
-//					mt = child.GetComponent<CLMapTile> ();
-//					if (mt != null) {
-//						md = new MapTileData ();
-//						md.name = child.name;
-//						md.x = mt.mapX;
-//						md.y = mt.mapY;
-//						md.z = mt.mapZ;
-//						md.activeSelf = child.gameObject.activeSelf;
-//						md.layer = child.gameObject.layer;
-//						md.localEulerAngles = child.localEulerAngles;
-//						md.localPosition = child.localPosition;
-//						md.localScale = child.localScale;
-//						md.type = mt.tileType.ToString ();
-//						tilesList.Add (md);
-//						tmpTilesPos[mt.posStr] = md;
-//					} else {
-//						eff = child.GetComponent<SEffect> ();
-//						if (eff != null) {
-//							md = new MapTileData ();
-//							md.name = child.name;
-//							md.x = -1;
-//							md.y = -1;
-//							md.z = -1;
-//							md.activeSelf = child.gameObject.activeSelf;
-//							md.layer = child.gameObject.layer;
-//							md.localEulerAngles = child.localEulerAngles;
-//							md.localPosition = child.localPosition;
-//							md.localScale = child.localScale;
-//							effectList.Add (md);
-//						}
-//					}
-//			}
-//		}
-//		// 标识不能移动的tile
-//		for(int i =0; i < tilesList.Count; i++) {
-//			md = (MapTileData)(tilesList[i]);
-//			string posStr = Toolkit.PStr.begin (md.x, "_", md.y, "_", (md.z + 1)).end ();
-//			//取和否有其它tile在上面
-//			if(tmpTilesPos[posStr] != null) {
-//				md.onTopObjPosStr = posStr;
-//			}
-//		}
-//		
-//		mapdata.tiles = tilesList;
-//		mapdata.ornaments = ornList;
-//		mapdata.effects = effectList;
-//		mapdata.buildings = buildingList;
-//		MemoryStream ms = new MemoryStream ();
-//		B2OutputStream.writeObject (ms, mapdata.toMap ());
-//		File.WriteAllBytes (path, ms.ToArray ());
+		string json = "[";
+		CLMapTile tile = null;
+		for(int i =0; i < x; i++) {
+			json = PStr.b().a(json).a("[").e();
+			for(int j =0; j < y; i++) {
+				tile = (CLMapTile)(tileMap[i + "_" + j]);
+				if(tile == null || !tile.gameObject.activeSelf) {
+					json = PStr.b().a(json).a(0).e();
+				} else{
+					json = PStr.b().a(json).a(1).e();
+				}
+				if(j < y-1) {
+					json = PStr.b().a(json).a(",").e();
+				}
+			}
+			json = PStr.b().a(json).a("]").e();
+
+			if(i < x-1) {
+				json = PStr.b().a(json).a(",").e();
+			}
+		}
+		json = PStr.b().a(json).a("]").e();
+		Debug.Log (json);
 	}
 
 	void loadData ()
@@ -920,6 +854,7 @@ public class CLSceneInspector : Editor
 				NGUITools.DestroyImmediate (scene.transform.GetChild (0).gameObject);
 				i++;
 			}
+			tileMap.Clear ();
 		}
 	}
 }
