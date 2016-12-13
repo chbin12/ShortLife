@@ -29,6 +29,8 @@ do
     local topLeftPosition = Vector3.zero;
     local skyOranment;
     local terrainInfor;
+    local specifiedShowIndex = 0;
+    local specifiedShow;
 
     -- 初始化，只会调用一次
     function CLLScene.init(csObj)
@@ -132,17 +134,16 @@ do
     end
 
     function CLLScene.newMap(terrainInfor, speed, onFinishLoadMap)
-        local mapShow = CLLScene.getCfg("MapShowData.json");
 
         creatureCount = 0;
         local tileInforList = {}
         for y = 0, mapSizeY - 1 do
             for x = 0, mapSizeX - 1 do
-                if((mapShow[y+1])[x+1] == 1) then
+--                if((mapShow[x+1])[y+1] == 1) then
                     table.insert(tileInforList, { x, y, terrainInfor, x, false, 1});
-                else
-                    table.insert(tileInforList, { x, y, terrainInfor, x, true, 1});
-                end
+--                else
+--                    table.insert(tileInforList, { x, y, terrainInfor, x, true, 1});
+--                end
             end
         end
 
@@ -185,7 +186,7 @@ do
         oranmentName = string.gsub(oranmentName, ".prefab", "");
 
         local onLoadGroundOranment = function(name, obj, orgs)
-            local pos = CLLScene.getPos(x, -y, 0) + topLeftPosition;
+            local pos = CLLScene.getPos(x, y, 0);
             pos.y = terrainCfg.ornament4GroundHigh;
             obj.transform.parent = csSelf.transform;
             obj.transform.localPosition = pos;
@@ -313,6 +314,24 @@ do
         CLLScene.addGroundOranment(sideRight+groundOranmentHeadLen, currTerrain);
     end
 
+    -- 显示特定地图
+    function CLLScene.procSpecifiedShow()
+        if(specifiedShow == nil or specifiedShowIndex > #(specifiedShow)) then
+            specifiedShowIndex = 0;
+            specifiedShow = nil;
+            return nil;
+        end
+
+        local list = specifiedShow[specifiedShowIndex];
+        local key = "";
+        local ret = {};
+        for i, v in ipairs(list) do
+            key = PStr.b():a(sideRight):a("_"):a(i-1):e();
+            ret[key] = (v == 1 and true or false);
+        end
+        specifiedShowIndex = specifiedShowIndex + 1;
+    end
+
     --
     function CLLScene.getTileList(coefficient)
         local ret = {};
@@ -401,13 +420,13 @@ do
                 break;
             end
 
-            key = sideRight .. "_" .. i;
-            key2 = sideRight .. "_" .. (i + 1);
-            key3 = sideRight .. "_" .. (i - 1);
+            key = PStr.b():a(sideRight):a("_"):a(i):e();
+            key2 = PStr.b():a(sideRight):a("_"):a((i + 1)):e();
+            key3 = PStr.b():a(sideRight):a("_"):a((i - 1)):e();
 
-            key4 = (sideRight - 1) .. "_" .. i;
-            key5 = (sideRight - 1) .. "_" .. (i + 1);
-            key6 = (sideRight - 1) .. "_" .. (i - 1);
+            key4 = PStr.b():a((sideRight - 1)):a("_"):a(i):e();
+            key5 = PStr.b():a((sideRight - 1)):a("_"):a((i + 1)):e();
+            key6 = PStr.b():a((sideRight - 1)):a("_"):a((i - 1)):e();
 
             if (i % 2 == 1 or i % 2 == -1) then
                 if (lastRightSideState[key4] or ret[key2] or ret[key3]) then
@@ -430,7 +449,7 @@ do
         end
         tile:GetComponent("Rigidbody").isKinematic = true;
 --        local topLeftPosition = Vector3(-0.5 * mapSizeX * CLMapTile.OffsetX, 0, 0.5 * mapSizeY * CLMapTile.OffsetY);
-        local tilePos = topLeftPosition + CLLScene.getPos(x, -y, z);
+        local tilePos = CLLScene.getPos(x, y, z);
         tile.mapX = x;
         tile.mapY = y;
         tile.mapZ = z;
@@ -445,13 +464,14 @@ do
     end
 
     function CLLScene.getPos(x, y, z)
+        y = -y;
         local pos = Vector3(x * CLMapTile.OffsetX, z * CLMapTile.OffsetZ, y * CLMapTile.OffsetY);
         local off = y % 2;
         local rowIndexIsUneven = (off == 1 or off == -1);
         if (rowIndexIsUneven) then
             pos.x = pos.x + CLMapTile.RowOffsetX;
         end
-        return pos;
+        return pos + topLeftPosition;
     end
 
     function CLLScene.onFinishLoadOneTile(tile)
@@ -580,6 +600,9 @@ do
     end
 
     function CLLScene.clean()
+        specifiedShowIndex = 0;
+        specifiedShow = nil;
+
         RenderSettings.skybox = nil;
         csSelf:cancelInvoke4Lua("");
         for k, tile in pairs(tiles) do

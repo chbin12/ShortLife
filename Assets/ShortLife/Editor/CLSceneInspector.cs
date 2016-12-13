@@ -728,6 +728,7 @@ public class CLSceneInspector : Editor
 
 	Vector3 getPos(int x, int y, int z)
 	{
+		y = -y;
 		Vector3 pos = new Vector3(x * CLMapTile.OffsetX, z * CLMapTile.OffsetZ, y * CLMapTile.OffsetY);
 		float off = y % 2;
 		bool rowIndexIsUneven = (off == 1 || off == -1);
@@ -780,14 +781,14 @@ public class CLSceneInspector : Editor
 
 	void createMap()
 	{
-		CLMapTile prefabTile = loadPrefabTile("tile_00.prefab");
+		CLMapTile prefabTile = loadPrefabTile("s_01.prefab");
 		CLMapTile tile = null;
 		for (int i = 0; i < x; i++) {
 			for (int j = 0; j < y; j++) {
 				tile = GameObject.Instantiate(prefabTile);
 				tile.transform.parent = scene.transform;
-				tile.transform.position = getPos(i, j, 0);
-				tileMap [i + "_" + j] = tile;
+				tile.transform.localPosition = getPos(i, j, 0);
+				tileMap [i + "_" + j] = tile.gameObject;
 			}
 		}	
 	}
@@ -807,21 +808,24 @@ public class CLSceneInspector : Editor
 	{
 		int count = scene.transform.childCount;
 		Transform tr = null;
+		Vector3 pos = Vector3.zero;
 		for (int i = 0; i < count; i++) {
 			tr = scene.transform.GetChild(i);
-
+			pos = getMapPos (tr.localPosition);
+			tileMap [pos.x + "_" + pos.y] = tr.gameObject;
 		}
 
+
 		string json = "[";
-		CLMapTile tile = null;
+		GameObject tile = null;
 		for (int i = 0; i < x; i++) {
 			json = PStr.b().a(json).a("[").e();
-			for (int j = 0; j < y; i++) {
-				tile = (CLMapTile)(tileMap [i + "_" + j]);
-				if (tile == null || !tile.gameObject.activeSelf) {
-					json = PStr.b().a(json).a(0).e();
-				} else {
+			for (int j = 0; j < y; j++) {
+				tile = (GameObject)(tileMap [i + "_" + j]);
+				if (tile != null && tile.activeSelf) {
 					json = PStr.b().a(json).a(1).e();
+				} else {
+					json = PStr.b().a(json).a(0).e();
 				}
 				if (j < y - 1) {
 					json = PStr.b().a(json).a(",").e();
@@ -834,7 +838,14 @@ public class CLSceneInspector : Editor
 			}
 		}
 		json = PStr.b().a(json).a("]").e();
-		Debug.Log(json);
+
+		string dir = Application.dataPath + "/" + PathCfg.self.basePath + "/upgradeRes4Publish/priority/cfg/";
+		Directory.CreateDirectory(dir);
+		string path = EditorUtility.SaveFilePanel("Save map to data", dir, "New map", "json");
+		if (string.IsNullOrEmpty(path))
+			return;
+		
+		File.WriteAllText(path, json);	
 	}
 
 	void loadData()
