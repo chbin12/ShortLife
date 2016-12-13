@@ -29,7 +29,7 @@ do
     local topLeftPosition = Vector3.zero;
     local skyOranment;
     local terrainInfor;
-    local specifiedShowIndex = 0;
+    local specifiedShowIndex = 1;
     local specifiedShow;
 
     -- 初始化，只会调用一次
@@ -76,6 +76,9 @@ do
             currTerrain = terrainInfor[defalutTerrainIndex];
         end
         sideRight = mapSizeX - 1;
+
+        specifiedShowIndex = 1;
+        specifiedShow = CLLScene.getCfg("MapShowData.json");
 
         -- set skybox
         if(currTerrain.skyMaterial ~= nil and currTerrain.skyMaterial ~= "") then
@@ -317,7 +320,7 @@ do
     -- 显示特定地图
     function CLLScene.procSpecifiedShow()
         if(specifiedShow == nil or specifiedShowIndex > #(specifiedShow)) then
-            specifiedShowIndex = 0;
+            specifiedShowIndex = 1;
             specifiedShow = nil;
             return nil;
         end
@@ -330,6 +333,7 @@ do
             ret[key] = (v == 1 and true or false);
         end
         specifiedShowIndex = specifiedShowIndex + 1;
+        return ret;
     end
 
     --
@@ -342,6 +346,11 @@ do
             return ret;
         end
 
+        ret = CLLScene.procSpecifiedShow();
+        if(ret ~= nil) then
+            return ret;
+        end
+        ret = {};
         -- 至少有一个tile
         local n = NumEx.NextInt(1, mapSizeY);
         if (coefficient == nil) then
@@ -600,7 +609,7 @@ do
     end
 
     function CLLScene.clean()
-        specifiedShowIndex = 0;
+        specifiedShowIndex = 1;
         specifiedShow = nil;
 
         RenderSettings.skybox = nil;
