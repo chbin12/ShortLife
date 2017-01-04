@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[ExecuteInEditMode]
+//[ExecuteInEditMode]
 [RequireComponent(typeof(UITexture))]
 
 /// <summary>
@@ -33,9 +33,12 @@ public class CLUIParticle : MonoBehaviour
 	// Use this for initialization
 	public void Start()
 	{
+		mWidget.depth = depth;
 		#if UNITY_EDITOR
 		//因为是通过assetebundle加载的，在真机上不需要处理，只有在pc上需要重设置shader
-		Utl.setBodyMatEdit(transform);
+		if(Application.isPlaying) {
+			Utl.setBodyMatEdit(transform);
+		}
 		#endif
 
 	}
@@ -46,7 +49,7 @@ public class CLUIParticle : MonoBehaviour
 		}
 		set {
 			depth = value;
-			widget.depth = depth;
+			mWidget.depth = depth;
 		}
 	}
 
@@ -82,7 +85,10 @@ public class CLUIParticle : MonoBehaviour
 		Material mat = null;
 		if (mWidget != null && NGUITools.GetActive(mWidget) ) {
 			if (mWidget.drawCall == null) {
-				print("widget.drawCall == null \n");
+				#if UNITY_EDITOR
+				Debug.LogWarning("widget.drawCall == null");
+				#endif
+				mWidget.depth = depth;
 			} else {
 				newRenderQ = mWidget.drawCall.finalRenderQueue;
 			}

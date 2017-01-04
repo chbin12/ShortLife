@@ -13,6 +13,7 @@ public class SUnitWrap
 			new LuaMethod("createLifeBar", createLifeBar),
 			new LuaMethod("hiddenLifeBar", hiddenLifeBar),
 			new LuaMethod("clean", clean),
+			new LuaMethod("OnDrawGizmos", OnDrawGizmos),
 			new LuaMethod("setMatOutLine", setMatOutLine),
 			new LuaMethod("setMatIceEffect", setMatIceEffect),
 			new LuaMethod("setMatViolent", setMatViolent),
@@ -56,6 +57,7 @@ public class SUnitWrap
 			new LuaField("state", get_state, set_state),
 			new LuaField("isOffense", get_isOffense, set_isOffense),
 			new LuaField("isCopyBody", get_isCopyBody, set_isCopyBody),
+			new LuaField("size", get_size, set_size),
 			new LuaField("mbody", get_mbody, set_mbody),
 			new LuaField("matMap", get_matMap, set_matMap),
 			new LuaField("RandomFactor", get_RandomFactor, set_RandomFactor),
@@ -63,6 +65,7 @@ public class SUnitWrap
 			new LuaField("lifeBar", get_lifeBar, set_lifeBar),
 			new LuaField("isDefense", get_isDefense, null),
 			new LuaField("collider", get_collider, null),
+			new LuaField("minSize", get_minSize, null),
 			new LuaField("materials", get_materials, null),
 		};
 
@@ -357,6 +360,30 @@ public class SUnitWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_size(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		SUnit obj = (SUnit)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name size");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index size on a nil value");
+			}
+		}
+
+		LuaScriptMgr.Push(L, obj.size);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int get_mbody(IntPtr L)
 	{
 		object o = LuaScriptMgr.GetLuaObject(L, 1);
@@ -504,6 +531,30 @@ public class SUnitWrap
 		}
 
 		LuaScriptMgr.Push(L, obj.collider);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_minSize(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		SUnit obj = (SUnit)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name minSize");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index minSize on a nil value");
+			}
+		}
+
+		LuaScriptMgr.Push(L, obj.minSize);
 		return 1;
 	}
 
@@ -803,6 +854,30 @@ public class SUnitWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_size(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		SUnit obj = (SUnit)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name size");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index size on a nil value");
+			}
+		}
+
+		obj.size = LuaScriptMgr.GetVector3(L, 3);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int set_mbody(IntPtr L)
 	{
 		object o = LuaScriptMgr.GetLuaObject(L, 1);
@@ -929,6 +1004,15 @@ public class SUnitWrap
 		LuaScriptMgr.CheckArgsCount(L, 1);
 		SUnit obj = (SUnit)LuaScriptMgr.GetUnityObjectSelf(L, 1, "SUnit");
 		obj.clean();
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int OnDrawGizmos(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 1);
+		SUnit obj = (SUnit)LuaScriptMgr.GetUnityObjectSelf(L, 1, "SUnit");
+		obj.OnDrawGizmos();
 		return 0;
 	}
 

@@ -8,17 +8,18 @@ using LuaInterface;
 /// </summary>
 public static class CLUIOtherObjPool
 {
-	public static CLDelegate OnSetPrefabCallbacks = new CLDelegate();
+	public static CLDelegate OnSetPrefabCallbacks = new CLDelegate ();
 	public static bool isFinishInitPool = false;
 	public static Hashtable objPubPool = new Hashtable ();
 	public static Hashtable prefabMap = new Hashtable ();
-	
-	public static void clean() {
+
+	public static void clean ()
+	{
 		isFinishInitPool = false;
-		objPubPool.Clear();
-		prefabMap.Clear();
+		objPubPool.Clear ();
+		prefabMap.Clear ();
 	}
-	
+
 	public static void initPool ()
 	{
 		if (isFinishInitPool)
@@ -26,40 +27,41 @@ public static class CLUIOtherObjPool
 		isFinishInitPool = true;
 		//TODO:
 	}
-	
+
 	#region 设置预设
+
 	//设置预设===========
 	public static bool havePrefab (string name)
 	{
 		return prefabMap.Contains (name);
 	}
-	
-	public static void setPrefab (string name, object finishCallback,  object args)
+
+	public static void setPrefab (string name, object finishCallback, object args)
 	{
 		if (name == null)
 			return;
-		if (havePrefab(name)) {
+		if (havePrefab (name)) {
 			if (finishCallback != null) {
 				if (typeof(LuaFunction) == finishCallback.GetType ()) {
-					((LuaFunction)finishCallback).Call (prefabMap[name], args);
+					((LuaFunction)finishCallback).Call (prefabMap [name], args);
 				} else if (typeof(Callback) == finishCallback.GetType ()) {
-					((Callback)finishCallback) (prefabMap[name], args);	
+					((Callback)finishCallback) (prefabMap [name], args);	
 				}
 			}
 		} else {
-			string path = PStr.begin(PathCfg.self.basePath,
-			                         "/" + PathCfg.upgradeRes + "/priority/ui/other/", 
-			                         PathCfg.self.platform, "/", name, ".unity3d").end();
+			string path = PStr.begin (PathCfg.self.basePath,
+				              "/" + PathCfg.upgradeRes + "/priority/ui/other/", 
+				              PathCfg.self.platform, "/", name, ".unity3d").end ();
 			Callback cb = onGetAssetsBundle;
-			CLVerManager.self.getNewestRes(path, 
-			                               CLAssetType.assetBundle, 
-			                               cb, finishCallback, name, args);
+			CLVerManager.self.getNewestRes (path, 
+				CLAssetType.assetBundle, 
+				cb, finishCallback, name, args);
 		}
 	}
-	
+
 	static void onGetAssetsBundle (params object[] paras)
 	{
-		string name ="";
+		string name = "";
 		string path = "";
 		try {
 			if (paras != null) {
@@ -68,30 +70,61 @@ public static class CLUIOtherObjPool
 				object[] org = (object[])(paras [2]);
 				object cb = org [0];
 				name = (org [1]).ToString ();
-				object args =  org [2];
+				object args = org [2];
 				//				GameObject go = asset.Load (name) as GameObject;
 				GameObject go = asset.mainAsset as GameObject;
-				CLPanelManager.resetAtlasAndFont(go.transform, false);
+				CLPanelManager.resetAtlasAndFont (go.transform, false);
 				go.name = name;
 				prefabMap [name] = go;
-				asset.Unload(false);
+				asset.Unload (false);
 				SAssetsManager.self.addAsset (name, asset, realseAsset);
-				
-				if (cb != null) {
-					if (typeof(LuaFunction) == cb.GetType ()) {
-						((LuaFunction)cb).Call (go, args);
-					} else if (typeof(Callback) == cb.GetType ()) {
-						((Callback)cb) (go, args);	
+
+				CLTextureMgr textureMgr = go.GetComponent<CLTextureMgr> ();
+				if (textureMgr != null) {
+					ArrayList param = new ArrayList();
+					param.Add(cb);
+					param.Add(go);
+					param.Add(args);
+					textureMgr.init ((Callback)onGetTextures, param);
+				} else {
+					if (cb != null) {
+						if (typeof(LuaFunction) == cb.GetType ()) {
+							((LuaFunction)cb).Call (go, args);
+						} else if (typeof(Callback) == cb.GetType ()) {
+							((Callback)cb) (go, args);	
+						}
 					}
 				}
 			} else {
 				Debug.LogError ("Get effect assetsbundle failed!");
 			}
-		} catch(System.Exception e) {
-			Debug.LogError("path==" + path + "," +e +name );
+		} catch (System.Exception e) {
+			Debug.LogError ("path==" + path + "," + e + name);
 		}
 	}
-	
+
+	static void onGetTextures(params object[] param) {
+		if (param == null) {
+			Debug.LogWarning ("param == null");
+			return;
+		}
+		ArrayList list = (ArrayList)(param[0]);
+		if (list.Count >= 3) {
+			object cb = list [0];
+			object obj = list [1];
+			object orgs = list [2];
+			if (cb != null) {
+				if (typeof(LuaFunction) == cb.GetType ()) {
+					((LuaFunction)cb).Call (obj, orgs);
+				} else if (typeof(Callback) == cb.GetType ()) {
+					((Callback)cb) (obj, orgs);	
+				}
+			}
+		} else {
+			Debug.LogWarning ("list.Count ====0");
+		}
+	}
+
 	//释放资源
 	static void realseAsset (params object[] paras)
 	{
@@ -108,25 +141,29 @@ public static class CLUIOtherObjPool
 			GameObject go = null;
 			while (pool.queue.Count > 0) {
 				go = pool.queue.Dequeue ();
-				if(go != null) {
+				if (go != null) {
 					GameObject.DestroyImmediate (go, true);
 				}
 				go = null;
 			}
 			pool.queue.Clear ();
 			
-			GameObject unit = (GameObject)(prefabMap[name]);
+			GameObject unit = (GameObject)(prefabMap [name]);
 			prefabMap.Remove (name);
 			//			SAssetsManager.unloadAsset(unit.gameObject);
-			GameObject.DestroyImmediate(unit, true);
+			CLTextureMgr textureMgr = unit.GetComponent<CLTextureMgr>();
+			if (textureMgr != null) {
+				textureMgr.returnTextures();
+			}
+			GameObject.DestroyImmediate (unit, true);
 			unit = null;
 		} catch (System.Exception e) {
-			Debug.LogError ("name==" + name +":" +e);
+			Debug.LogError ("name==" + name + ":" + e);
 		}
 	}
-	
+
 	#endregion
-	
+
 	public static UIOtherObjPubPool getObjPool (string name)
 	{
 		object obj = objPubPool [name];
@@ -139,17 +176,17 @@ public static class CLUIOtherObjPool
 		}
 		return pool;
 	}
-	
+
 	public static GameObject borrowObj (string name)
 	{
 		GameObject r = null;
-		UIOtherObjPubPool pool = getObjPool(name);
+		UIOtherObjPubPool pool = getObjPool (name);
 		r = pool.borrowObject (name);
 		objPubPool [name] = pool;
 		SAssetsManager.self.useAsset (name);
 		return r;
 	}
-	
+
 	/// <summary>
 	/// Borrows the texture asyn.
 	/// 异步取得texture
@@ -164,6 +201,7 @@ public static class CLUIOtherObjPool
 	{
 		borrowObjAsyn (name, onGetCallbak, null);
 	}
+
 	public static void borrowObjAsyn (string name, object onGetCallbak, object orgs)
 	{
 		if (havePrefab (name)) {
@@ -180,7 +218,7 @@ public static class CLUIOtherObjPool
 			setPrefab (name, (Callback)onFinishSetPrefab, name);
 		}
 	}
-	
+
 	public static void onFinishSetPrefab (object[] paras)
 	{
 		if (paras != null && paras.Length > 1) {
@@ -191,7 +229,7 @@ public static class CLUIOtherObjPool
 			ArrayList cell = null;
 			object cb = null;
 			object orgs = null;
-			for (int i=0; i< count; i++) {
+			for (int i = 0; i < count; i++) {
 				cell = list [i] as ArrayList;
 				if (cell != null && cell.Count > 1) {
 					cb = cell [0];
@@ -210,10 +248,10 @@ public static class CLUIOtherObjPool
 			OnSetPrefabCallbacks.removeDelegates (name);
 		}
 	}
-	
+
 	public static void returnObj (string name, GameObject go)
 	{
-		UIOtherObjPubPool pool = getObjPool(name);
+		UIOtherObjPubPool pool = getObjPool (name);
 		pool.returnObject (go);
 		objPubPool [name] = pool;
 		SAssetsManager.self.unUseAsset (name);
@@ -233,7 +271,7 @@ public class UIOtherObjPubPool : AbstractObjectPool<GameObject>
 		}
 		return null;
 	}
-	
+
 	public override GameObject resetObject (GameObject t)
 	{
 		return t;

@@ -144,6 +144,22 @@ static public class CoolapeMenu
             File.WriteAllBytes (path+".bio", ms.ToArray ());
         }
     }
+	
+	[MenuItem("Coolape/Reset TextureManager Materail", false, 6)]
+	static public void ResetTextureManagerMaterail ()
+	{
+		UnityEngine.Object[] objs = Selection.objects;
+		int count = objs.Length;
+		GameObject obj = null;
+		CLTextureMgr tm = null;
+		for (int i=0; i < count; i++) {
+			obj = (GameObject)(objs [i]);
+			tm = obj.GetComponent<CLTextureMgr>();
+			if(tm != null) {
+				tm.resetMat();
+			}
+		}
+	}
 
     //生成版本配置文件
 //  [MenuItem("Coolape/CreateVerCfg")]

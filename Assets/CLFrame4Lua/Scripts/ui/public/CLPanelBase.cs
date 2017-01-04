@@ -285,8 +285,9 @@ public abstract class CLPanelBase : CLBaseLua
 	
 	OnNetWorkData tmpNetWorkData = null;
 	// Update is called once per frame
-	public virtual void Update ()
+	public override void Update ()
 	{
+		base.Update ();
 		if (isOnNetWork) {
 			isOnNetWork = false;
 			if (networkQueue.Count > 0) {
@@ -347,7 +348,7 @@ public abstract class CLPanelBase : CLBaseLua
 	{
 	}
 	
-	[HideInInspector]
+//	[HideInInspector]
 	public bool
 		isFinishInit = false;
 	

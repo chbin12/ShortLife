@@ -593,6 +593,17 @@ public class SEffectWrap
 			LuaScriptMgr.Push(L, o);
 			return 1;
 		}
+		else if (count == 5)
+		{
+			string arg0 = LuaScriptMgr.GetLuaString(L, 1);
+			Vector3 arg1 = LuaScriptMgr.GetVector3(L, 2);
+			Transform arg2 = (Transform)LuaScriptMgr.GetUnityObject(L, 3, typeof(Transform));
+			object arg3 = LuaScriptMgr.GetVarObject(L, 4);
+			object arg4 = LuaScriptMgr.GetVarObject(L, 5);
+			SEffect o = SEffect.play(arg0,arg1,arg2,arg3,arg4);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
 		else if (count == 9)
 		{
 			string arg0 = LuaScriptMgr.GetLuaString(L, 1);

@@ -13,6 +13,7 @@ public class CLTextureMgrWrap
 			new LuaMethod("Start", Start),
 			new LuaMethod("init", init),
 			new LuaMethod("OnDestroy", OnDestroy),
+			new LuaMethod("returnTextures", returnTextures),
 			new LuaMethod("cleanMat", cleanMat),
 			new LuaMethod("resetMat", resetMat),
 			new LuaMethod("resetMat2", resetMat2),
@@ -23,6 +24,7 @@ public class CLTextureMgrWrap
 
 		LuaField[] fields = new LuaField[]
 		{
+			new LuaField("OnGetTextureCallbacks", get_OnGetTextureCallbacks, set_OnGetTextureCallbacks),
 			new LuaField("data", get_data, set_data),
 		};
 
@@ -42,6 +44,13 @@ public class CLTextureMgrWrap
 	static int GetClassType(IntPtr L)
 	{
 		LuaScriptMgr.Push(L, classType);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_OnGetTextureCallbacks(IntPtr L)
+	{
+		LuaScriptMgr.PushObject(L, CLTextureMgr.OnGetTextureCallbacks);
 		return 1;
 	}
 
@@ -67,6 +76,13 @@ public class CLTextureMgrWrap
 
 		LuaScriptMgr.PushObject(L, obj.data);
 		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_OnGetTextureCallbacks(IntPtr L)
+	{
+		CLTextureMgr.OnGetTextureCallbacks = (CLDelegate)LuaScriptMgr.GetNetObject(L, 3, typeof(CLDelegate));
+		return 0;
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
@@ -105,10 +121,11 @@ public class CLTextureMgrWrap
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int init(IntPtr L)
 	{
-		LuaScriptMgr.CheckArgsCount(L, 2);
+		LuaScriptMgr.CheckArgsCount(L, 3);
 		CLTextureMgr obj = (CLTextureMgr)LuaScriptMgr.GetUnityObjectSelf(L, 1, "CLTextureMgr");
 		object arg0 = LuaScriptMgr.GetVarObject(L, 2);
-		obj.init(arg0);
+		object arg1 = LuaScriptMgr.GetVarObject(L, 3);
+		obj.init(arg0,arg1);
 		return 0;
 	}
 
@@ -118,6 +135,15 @@ public class CLTextureMgrWrap
 		LuaScriptMgr.CheckArgsCount(L, 1);
 		CLTextureMgr obj = (CLTextureMgr)LuaScriptMgr.GetUnityObjectSelf(L, 1, "CLTextureMgr");
 		obj.OnDestroy();
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int returnTextures(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 1);
+		CLTextureMgr obj = (CLTextureMgr)LuaScriptMgr.GetUnityObjectSelf(L, 1, "CLTextureMgr");
+		obj.returnTextures();
 		return 0;
 	}
 

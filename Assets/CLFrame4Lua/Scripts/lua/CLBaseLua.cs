@@ -5,6 +5,9 @@ using System.IO;
 using System.Collections.Generic;
 
 //把mobobehaviour的处理都转到lua层
+using Toolkit;
+
+
 public class CLBaseLua : MonoBehaviour
 {
 	public bool isPause = false;
@@ -396,6 +399,69 @@ public class CLBaseLua : MonoBehaviour
 		if (canFixedInvoke) {
 			frameCounter++;
 			doFixedInvoke (frameCounter);
+		}
+	}
+
+
+	//================================================
+	// Update
+	//================================================
+	ArrayList _invokeByUpdateList = null;
+	ArrayList invokeByUpdateList{
+		get {
+			if (_invokeByUpdateList == null) {
+				_invokeByUpdateList = ArrayList.Synchronized (new ArrayList());
+			}
+			return _invokeByUpdateList;
+		}
+	}
+
+	static ListPool listPool = new ListPool();
+	public void invokeByUpdate (string callbakFunc, float sec)
+	{
+		invokeByUpdate (callbakFunc, null, sec);
+	}
+	/// <summary>
+	/// Invoke4s the lua.
+	/// </summary>
+	/// <param name="callbakFunc">Callbak func.lua函数</param>
+	/// <param name="orgs">Orgs.参数</param>
+	/// <param name="sec">Sec.等待时间</param>
+	public void invokeByUpdate (string callbakFunc, object orgs, float sec)
+	{
+		NewList list = listPool.borrowObject();
+		list.add (callbakFunc);
+		list.add (orgs);
+		list.add(Time.unscaledTime + sec);
+		invokeByUpdateList.Add(list);
+	}
+
+	void doInvokeByUpdate(){
+		int count = invokeByUpdateList.Count;
+		NewList list = null;
+		string callbakFunc;
+		object orgs;
+		float sec;
+		int index = 0;
+		while (index < invokeByUpdateList.Count) {
+			list = (NewList)(invokeByUpdateList [index]);
+			sec = (float)(list [2]);
+			if (sec <= Time.unscaledTime) {
+				Utl.doCallback (getLuaFunction (list [0].ToString ()), list [1]);
+				invokeByUpdateList.RemoveAt (index);
+				list.Clear ();
+				listPool.resetObject (list);
+			} else {
+				index++;
+			}
+		}
+
+	}
+
+	public virtual void Update()
+	{
+		if(invokeByUpdateList.Count > 0) {
+			doInvokeByUpdate ();
 		}
 	}
 }

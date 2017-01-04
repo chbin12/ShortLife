@@ -83,10 +83,10 @@ public class CLBullet : MonoBehaviour
 		this.target = target;
 		onFinishCallback = callbak;
 
-		int RandomFactor = NumEx.bio2Int (MapEx.getBytes (attr, "RandomFactor")) * 10;
+		int SpeedRandomFactor = NumEx.bio2Int (MapEx.getBytes (attr, "SpeedRandomFactor"));
 		speed = (NumEx.bio2Int (MapEx.getBytes (attr, "Speed"))) / 10.0f;
-		if (RandomFactor > 0) {
-			speed = speed + attacker.fakeRandom (-RandomFactor, RandomFactor) / 100.0f;
+		if (SpeedRandomFactor > 0) {
+			speed = speed + attacker.fakeRandom (-SpeedRandomFactor, SpeedRandomFactor) / 100.0f;
 		}
 		high = NumEx.bio2Int (MapEx.getBytes (attr, "High"));
 		if(MapEx.getBool(attr, "IsHighOffset")) {
@@ -110,6 +110,13 @@ public class CLBullet : MonoBehaviour
 			toPos = origin + dir.normalized * dis;
 			toPos.y = 0;
 		}
+
+		int PosRandomFactor = NumEx.bio2Int (MapEx.getBytes (attr, "PosRandomFactor"));
+		if (PosRandomFactor > 0) {
+			toPos.x += attacker.fakeRandom (-PosRandomFactor, PosRandomFactor) / 100.0f;
+			toPos.y += attacker.fakeRandom (-PosRandomFactor, PosRandomFactor) / 100.0f;
+		}
+
 		if (isZeroY) {
 			toPos.y = 0;
 		}

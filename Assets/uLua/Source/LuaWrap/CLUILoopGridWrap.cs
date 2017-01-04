@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using LuaInterface;
 using Object = UnityEngine.Object;
@@ -12,6 +13,8 @@ public class CLUILoopGridWrap
 			new LuaMethod("init", init),
 			new LuaMethod("resetClip", resetClip),
 			new LuaMethod("setList", setList),
+			new LuaMethod("ResortItemListByName", ResortItemListByName),
+			new LuaMethod("updateList", updateList),
 			new LuaMethod("New", _CreateCLUILoopGrid),
 			new LuaMethod("GetClassType", GetClassType),
 			new LuaMethod("__eq", Lua_Eq),
@@ -415,6 +418,29 @@ public class CLUILoopGridWrap
 			LuaDLL.luaL_error(L, "invalid arguments to method: CLUILoopGrid.setList");
 		}
 
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int ResortItemListByName(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 4);
+		CLUILoopGrid obj = (CLUILoopGrid)LuaScriptMgr.GetUnityObjectSelf(L, 1, "CLUILoopGrid");
+		List<UIWidget> arg0 = (List<UIWidget>)LuaScriptMgr.GetNetObject(L, 2, typeof(List<UIWidget>));
+		int arg1 = (int)LuaScriptMgr.GetNumber(L, 3);
+		int arg2 = (int)LuaScriptMgr.GetNumber(L, 4);
+		int o = obj.ResortItemListByName(arg0,arg1,arg2);
+		LuaScriptMgr.Push(L, o);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int updateList(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 2);
+		CLUILoopGrid obj = (CLUILoopGrid)LuaScriptMgr.GetUnityObjectSelf(L, 1, "CLUILoopGrid");
+		object[] objs0 = LuaScriptMgr.GetArrayObject<object>(L, 2);
+		obj.updateList(objs0);
 		return 0;
 	}
 

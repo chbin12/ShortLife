@@ -169,7 +169,12 @@ public class SEffect : MonoBehaviour
         }
         
     }
-    
+	
+	public static SEffect play(string name, Vector3 pos, Transform parent, object finishCallback, object finishCallbackPara)
+	{
+		return play(name, pos, parent, 0, null, null, finishCallback, finishCallbackPara, true);
+	}
+
     public static SEffect play(string name, Vector3 pos, object finishCallback, object finishCallbackPara)
 	{
 		return play(name, pos, null, 0, null, null, finishCallback, finishCallbackPara, true);
@@ -241,7 +246,9 @@ public class SEffect : MonoBehaviour
 	{
 #if UNITY_EDITOR
 		//因为是通过assetebundle加载的，在真机上不需要处理，只有在pc上需要重设置shader
-		Utl.setBodyMatEdit(transform);
+		if(Application.isPlaying) {
+			Utl.setBodyMatEdit(transform);
+		}
 #endif
 	}
 

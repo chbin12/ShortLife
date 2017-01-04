@@ -77,6 +77,26 @@ public class CreatUnity3dType
 			Debug.LogError("file==" + file);
 			return;
 		}
+
+		CLTextureMgr textureMgr = null;
+		CLModelMgr modelMgr = null;
+		if (obj != null && obj is GameObject) {
+			textureMgr = ((GameObject)obj).GetComponent<CLTextureMgr>();
+			modelMgr = ((GameObject)obj).GetComponent<CLModelMgr>();
+		} else {
+			modelMgr = null;
+			textureMgr = null;
+		}
+
+		if (textureMgr != null) {
+			textureMgr.cleanMat();
+		}
+		if (modelMgr != null) {
+			modelMgr.cleanModel();
+		}
+//		AssetDatabase.Refresh();
+
+		//==================================
         file = file.Replace ("/upgradeResMedium", "/upgradeRes4Publish");
 		
 		BuildAssetBundleOptions opt = BuildAssetBundleOptions.CollectDependencies;
@@ -107,6 +127,25 @@ public class CreatUnity3dType
 		} else {
 			Debug.Log (" size== " + size + "KB");
 		}
+
+
+		//==================================
+		if (obj != null && obj is GameObject) {
+			// 没搞明白，执行到这里时，textureMgr已经为null了，因此再取一次
+			textureMgr = ((GameObject)obj).GetComponent<CLTextureMgr>();
+			modelMgr = ((GameObject)obj).GetComponent<CLModelMgr>();
+		} else {
+			modelMgr = null;
+			textureMgr = null;
+		}
+
+		if (textureMgr != null) {
+			textureMgr.resetMat();
+		}
+		if (modelMgr != null) {
+			modelMgr.resetModel();
+		}
+//		AssetDatabase.Refresh();
 	}
 	
 	public static void createUnity3dFiles (string path, CreateDelegate procDelegate, bool isTraversal)

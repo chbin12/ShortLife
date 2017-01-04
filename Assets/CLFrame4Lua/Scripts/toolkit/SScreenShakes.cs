@@ -34,6 +34,7 @@ public class SScreenShakes : MonoBehaviour
 		}
 		if (twPos == null) {
 			twPos = gameObject.AddComponent<TweenPosition> ();
+			twPos.ignoreTimeScale = false;
 		}
 		
 		twPos.method = UITweener.Method.EaseInOut;

@@ -74,26 +74,56 @@ public class CLBulletPool
 			if (go != null) {
 				bullet = go.GetComponent<CLBullet> ();
 				prefabMap [bullet.name] = bullet;
-//				CLTextureMgr tm = go.GetComponent<CLTextureMgr>();
-//				if(tm != null) {
-//					tm.Start();
-//				}
+
 			} else {
 				Debug.LogError ("Get bullet assetsbundle failed!");
 			}
 			asset.Unload (false);
 			SAssetsManager.self.addAsset (bullet.name, asset, realseAsset);
-			if (cb != null) {
-				if (typeof(LuaFunction) == cb.GetType ()) {
-					((LuaFunction)cb).Call (bullet, args);
-				} else if (typeof(Callback) == cb.GetType ()) {
-					((Callback)cb) (bullet, args); 
+
+			CLTextureMgr textureMgr = go.GetComponent<CLTextureMgr>();
+			if (textureMgr != null) {
+				ArrayList param = new ArrayList();
+				param.Add(cb);
+				param.Add(bullet);
+				param.Add(args);
+				textureMgr.init ((Callback)onGetTextures, param);
+			} else {
+				if (cb != null) {
+					if (typeof(LuaFunction) == cb.GetType ()) {
+						((LuaFunction)cb).Call (bullet, args);
+					} else if (typeof(Callback) == cb.GetType ()) {
+						((Callback)cb) (bullet, args); 
+					}
 				}
 			}
 		} else {
 			Debug.LogError ("Get bullet assetsbundle failed!");
 		}
 	}
+
+	static void onGetTextures(params object[] param) {
+		if (param == null) {
+			Debug.LogWarning ("param == null");
+			return;
+		}
+		ArrayList list = (ArrayList)(param[0]);
+		if (list.Count >= 3) {
+			object cb = list [0];
+			object obj = list [1];
+			object orgs = list [2];
+			if (cb != null) {
+				if (typeof(LuaFunction) == cb.GetType ()) {
+					((LuaFunction)cb).Call (obj, orgs);
+				} else if (typeof(Callback) == cb.GetType ()) {
+					((Callback)cb) (obj, orgs);	
+				}
+			}
+		} else {
+			Debug.LogWarning ("list.Count ====0");
+		}
+	}
+
 	//释放资源
 	public static void realseAsset (params object[] paras)
 	{
@@ -110,11 +140,17 @@ public class CLBulletPool
 			}
 			pool.queue.Clear ();
             
+
 			CLBullet bullet = (CLBullet)(prefabMap [name]);
 			prefabMap.Remove (name);
 //			SAssetsManager.unloadAsset(bullet.gameObject);
 
 			if (bullet != null) {
+				CLTextureMgr textureMgr = bullet.GetComponent<CLTextureMgr>();
+				if (textureMgr != null) {
+					textureMgr.returnTextures();
+				}
+
 				GameObject.DestroyImmediate (bullet.gameObject, true);
 				bullet = null;
 			}

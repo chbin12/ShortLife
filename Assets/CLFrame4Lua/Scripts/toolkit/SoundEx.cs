@@ -23,7 +23,6 @@ namespace Toolkit
 		/// </param>
 		public static void PlaySoundWithCallback (MonoBehaviour go, AudioClip clip, float volume, object callback)
 		{
-//		audio.PlayOneShot (clip);
 			NGUITools.PlaySound (clip, volume);
 			go.StartCoroutine (DelayedCallback (clip, clip.length, callback));
 		}
@@ -65,17 +64,19 @@ namespace Toolkit
 						PlaySoundWithCallback (CLMain.self, clip, volume, cb);
 					}
 				} else {
-					SSoundPool.setPrefab(name, (Callback)onFinishSetAudio);
+					SSoundPool.setPrefab(name, (Callback)onFinishSetAudio, maxTimes);
 				}
 			}
 		}
 		
 		public static void onFinishSetAudio(params object[] args) {
 			if(args == null || args.Length == 0) return;
+
 			AudioClip ac =((AudioClip)args [0]); 
+			int maxTimes = (int)(args [1]);
 			if(ac != null) {
 				string name = ac.name;
-				playSound (name, 1);
+				playSound (name, 1, maxTimes);
 			}
 		}
 
@@ -161,14 +162,19 @@ namespace Toolkit
 		public static void onGetMainMusic (params object[] args)
 		{
 			string path = (string)(args[0]);
-			AssetBundle content = (AssetBundle)(args[1]);
-			if(content == null) {
+			mainClip = (AudioClip)(args[1]);
+			if(mainClip == null) {
 				return;
 			}
-			mainClip = (AudioClip)(content.mainAsset);
 			doPlayMainMusic (mainClip);
 		}
 		
+		public static void stopMainMusic () {
+			if (SCfg.self.mainAudio.isPlaying) {
+				SCfg.self.mainAudio.Stop ();
+			}
+		}
+
 		public static void doPlayMainMusic (AudioClip clip)
 		{
 			if (SCfg.self.mainAudio.clip != mainClip) {
@@ -181,20 +187,19 @@ namespace Toolkit
 			}
 		}
 		
-		public static void playMainMusic ()
+		public static void playMainMusic (string soundName)
 		{
 			if (SoundEx.musicSwitch) {
-				if (mainClip != null) {
-					doPlayMainMusic (mainClip);
-				} else {
-					string path = PathCfg.self.basePath + "/" + PathCfg.upgradeRes + "/other/sound/" + PathCfg.self.platform + "/MainScen.unity3d";
-					CLVerManager.self.getNewestRes (
-						path,
-						CLAssetType.assetBundle, 
-						(Callback)onGetMainMusic, null
-					); 
-				}
+//					string path = PathCfg.self.basePath + "/" + PathCfg.upgradeRes + "/other/sound/" + PathCfg.self.platform + "/MainScen.unity3d";
+//					CLVerManager.self.getNewestRes (
+//						path,
+//						CLAssetType.assetBundle, 
+//						(Callback)onGetMainMusic, null
+//					); 
+
+				SSoundPool.borrowAudioAsyn(soundName, (Callback)onGetMainMusic);
 			}
 		}
+
 	}
 }

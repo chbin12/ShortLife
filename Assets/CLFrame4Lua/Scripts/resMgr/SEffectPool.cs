@@ -8,17 +8,18 @@ using LuaInterface;
 /// </summary>
 public static class SEffectPool
 {
-	public static CLDelegate OnSetPrefabCallbacks = new CLDelegate();
+	public static CLDelegate OnSetPrefabCallbacks = new CLDelegate ();
 	public static bool isFinishInitPool = false;
 	public static Hashtable effectPubPool = new Hashtable ();
 	public static Hashtable prefabMap = new Hashtable ();
 
-	public static void clean() {
+	public static void clean ()
+	{
 		isFinishInitPool = false;
-		effectPubPool.Clear();
-		prefabMap.Clear();
+		effectPubPool.Clear ();
+		prefabMap.Clear ();
 	}
-	
+
 	public static void initPool ()
 	{
 		if (isFinishInitPool)
@@ -26,50 +27,52 @@ public static class SEffectPool
 		isFinishInitPool = true;
 		//TODO:
 	}
-	
+
 	#region 设置预设
+
 	//设置预设===========
 	public static bool havePrefab (string name)
 	{
 		return prefabMap.Contains (name);
 	}
-	
+
 	public static void setPrefab (string name, object finishCallback)
 	{
-		setPrefab (name, finishCallback,  null);
+		setPrefab (name, finishCallback, null);
 	}
-	public static void setPrefab (string name, object finishCallback,  object args)
+
+	public static void setPrefab (string name, object finishCallback, object args)
 	{
 		if (name == null)
 			return;
-		if (havePrefab(name)) {
+		if (havePrefab (name)) {
 			if (finishCallback != null) {
 				if (typeof(LuaFunction) == finishCallback.GetType ()) {
-                    ((LuaFunction)finishCallback).Call (prefabMap[name], args);
+					((LuaFunction)finishCallback).Call (prefabMap [name], args);
 				} else if (typeof(Callback) == finishCallback.GetType ()) {
-                    ((Callback)finishCallback) (prefabMap[name], args);	
+					((Callback)finishCallback) (prefabMap [name], args);	
 				}
 			}
 		} else {
 #if UNITY_EDITOR
-			string path = PStr.begin(PathCfg.self.basePath,
-				"/" + PathCfg.upgradeRes + "/other/effect/", 
-				PathCfg.self.platform, "/", name, ".unity3d").end();
+			string path = PStr.begin (PathCfg.self.basePath,
+				              "/" + PathCfg.upgradeRes + "/other/effect/", 
+				              PathCfg.self.platform, "/", name, ".unity3d").end ();
 #else
             string path = PStr.begin(PathCfg.self.basePath,
                  "/upgradeRes/other/effect/", 
                  PathCfg.self.platform, "/", name, ".unity3d").end();
 #endif
 			Callback cb = onGetAssetsBundle;
-			CLVerManager.self.getNewestRes(path, 
+			CLVerManager.self.getNewestRes (path, 
 				CLAssetType.assetBundle, 
-               cb, finishCallback, name, args);
+				cb, finishCallback, name, args);
 		}
 	}
 
 	static void onGetAssetsBundle (params object[] paras)
 	{
-		string name ="";
+		string name = "";
 		string path = "";
 		try {
 			if (paras != null) {
@@ -78,31 +81,58 @@ public static class SEffectPool
 				object[] org = (object[])(paras [2]);
 				object cb = org [0];
 				name = (org [1]).ToString ();
-                object args =  org [2];
+				object args = org [2];
 //				GameObject go = asset.Load (name) as GameObject;
 				GameObject go = asset.mainAsset as GameObject;
-                go.name = name;
+				go.name = name;
 				SEffect unit = go.GetComponent<SEffect> ();
 				prefabMap [unit.name] = unit;
-//				CLTextureMgr tm = go.GetComponent<CLTextureMgr>();
-//				if(tm != null) {
-//					tm.Start();
-//				}
-                asset.Unload(false);
+				asset.Unload (false);
 				SAssetsManager.self.addAsset (unit.name, asset, realseAsset);
-			
-				if (cb != null) {
-					if (typeof(LuaFunction) == cb.GetType ()) {
-                        ((LuaFunction)cb).Call (unit, args);
-					} else if (typeof(Callback) == cb.GetType ()) {
-                        ((Callback)cb) (unit, args);	
+
+				CLTextureMgr textureMgr = go.GetComponent<CLTextureMgr> ();
+				if (textureMgr != null) {
+					ArrayList param = new ArrayList();
+					param.Add(cb);
+					param.Add(unit);
+					param.Add(args);
+					textureMgr.init ((Callback)onGetTextures, param);
+				} else {
+					if (cb != null) {
+						if (typeof(LuaFunction) == cb.GetType ()) {
+							((LuaFunction)cb).Call (unit, args);
+						} else if (typeof(Callback) == cb.GetType ()) {
+							((Callback)cb) (unit, args);	
+						}
 					}
 				}
 			} else {
 				Debug.LogError ("Get effect assetsbundle failed!");
 			}
-		} catch(System.Exception e) {
-			Debug.LogError("path==" + path + "," +e +name );
+		} catch (System.Exception e) {
+			Debug.LogError ("path==" + path + "," + e + name);
+		}
+	}
+
+	static void onGetTextures(params object[] param) {
+		if (param == null) {
+			Debug.LogWarning ("param == null");
+			return;
+		}
+		ArrayList list = (ArrayList)(param[0]);
+		if (list.Count >= 3) {
+			object cb = list [0];
+			object obj = list [1];
+			object orgs = list [2];
+			if (cb != null) {
+				if (typeof(LuaFunction) == cb.GetType ()) {
+					((LuaFunction)cb).Call (obj, orgs);
+				} else if (typeof(Callback) == cb.GetType ()) {
+					((Callback)cb) (obj, orgs);	
+				}
+			}
+		} else {
+			Debug.LogWarning ("list.Count ====0");
 		}
 	}
 	
@@ -122,31 +152,36 @@ public static class SEffectPool
 			SEffect effect = null;
 			while (pool.queue.Count > 0) {
 				effect = pool.queue.Dequeue ();
-				if(effect != null) {
-                    GameObject.DestroyImmediate (effect.gameObject, true);
+				if (effect != null) {
+					GameObject.DestroyImmediate (effect.gameObject, true);
 				}
-                effect = null;
+				effect = null;
 			}
 			pool.queue.Clear ();
 
-            SEffect unit = (SEffect)(prefabMap[name]);
-            prefabMap.Remove (name);
-//			SAssetsManager.unloadAsset(unit.gameObject);
-            GameObject.DestroyImmediate(unit.gameObject, true);
-            unit = null;
+			SEffect unit = (SEffect)(prefabMap [name]);
+			prefabMap.Remove (name);
+			//			SAssetsManager.unloadAsset(unit.gameObject);
+			CLTextureMgr textureMgr = unit.GetComponent<CLTextureMgr>();
+			if (textureMgr != null) {
+				textureMgr.returnTextures();
+			}
+			GameObject.DestroyImmediate (unit.gameObject, true);
+			unit = null;
 		} catch (System.Exception e) {
-			Debug.LogError ("name==" + name +":" +e);
+			Debug.LogError ("name==" + name + ":" + e);
 		}
 	}
 	
-//	public static void setPrefab (SEffect unit)
-//	{
-//		if (unit == null)
-//			return;
-//		prefabMap [unit.name] = unit;
-//	}
+	//	public static void setPrefab (SEffect unit)
+	//	{
+	//		if (unit == null)
+	//			return;
+	//		prefabMap [unit.name] = unit;
+	//	}
+
 	#endregion
-	
+
 	public static EffectPubPool getEffectPool (string name)
 	{
 		object obj = effectPubPool [name];
@@ -159,7 +194,7 @@ public static class SEffectPool
 		}
 		return pool;
 	}
-	
+
 	public static SEffect borrowEffect (string name)
 	{
 		SEffect r = null;
@@ -177,7 +212,7 @@ public static class SEffectPool
 		SAssetsManager.self.useAsset (name);
 		return r;
 	}
-	
+
 	/// <summary>
 	/// Borrows the texture asyn.
 	/// 异步取得texture
@@ -192,6 +227,7 @@ public static class SEffectPool
 	{
 		borrowEffectAsyn (name, onGetCallbak, null);
 	}
+
 	public static void borrowEffectAsyn (string name, object onGetCallbak, object orgs)
 	{
 		if (havePrefab (name)) {
@@ -208,7 +244,7 @@ public static class SEffectPool
 			setPrefab (name, (Callback)onFinishSetPrefab, name);
 		}
 	}
-	
+
 	public static void onFinishSetPrefab (object[] paras)
 	{
 		if (paras != null && paras.Length > 1) {
@@ -219,7 +255,7 @@ public static class SEffectPool
 			ArrayList cell = null;
 			object cb = null;
 			object orgs = null;
-			for (int i=0; i< count; i++) {
+			for (int i = 0; i < count; i++) {
 				cell = list [i] as ArrayList;
 				if (cell != null && cell.Count > 1) {
 					cb = cell [0];
@@ -269,7 +305,7 @@ public class EffectPubPool : AbstractObjectPool<SEffect>
 		}
 		return null;
 	}
-	
+
 	public override SEffect resetObject (SEffect t)
 	{
 		return t;

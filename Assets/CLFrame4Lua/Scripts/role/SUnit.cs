@@ -89,6 +89,29 @@ public abstract class  SUnit : CLBehaviour4Lua
 		}
 	}
 
+	public Vector3 size  = Vector3.one;
+
+	public float minSize {
+		get {
+			if (collider == null)
+				return 0;
+			Vector3 v3 = size;
+			//			float ret = v3.x < v3.y ? v3.x : (v3.y < v3.z ? v3.y : v3.z);
+			float ret = v3.x < v3.z ? v3.x : v3.z;
+			return ret;
+		}
+	}
+
+
+	#if UNITY_EDITOR
+	Matrix4x4  boundsMatrix;
+	public virtual void OnDrawGizmos() {
+		Gizmos.color = Color.blue;
+		Gizmos.DrawWireCube(transform.position, size);
+		Gizmos.color = Color.white;
+	}
+	#endif
+
 	Material _materials;
 	public Material materials {		//Old materials
 		get {
@@ -210,7 +233,7 @@ public abstract class  SUnit : CLBehaviour4Lua
 			rd.sharedMaterial = mat;
 		} else {
 			SkinnedMeshRenderer smr = tr.GetComponent<SkinnedMeshRenderer> ();
-			if (smr != null && smr.sharedMaterial.mainTexture == mat.mainTexture) {
+			if (smr != null && smr.sharedMaterial != null && smr.sharedMaterial.mainTexture == mat.mainTexture) {
 				smr.sharedMaterial = mat;
 			}
 		}

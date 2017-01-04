@@ -17,7 +17,7 @@ using UnityEditor;
 /// </summary>
 public class CLTextureMgr : MonoBehaviour
 {
-	object finishCallback = null;
+	public static CLDelegate OnGetTextureCallbacks = new CLDelegate ();
 	[SerializeField]
 	public List<CLTexture>
 		data = new List<CLTexture> ();
@@ -32,25 +32,28 @@ public class CLTextureMgr : MonoBehaviour
 		resetMat ();
 	}
 
-	public void init (object finishCallback)
+	public void init (object finishCallback, object orgs)
 	{
-		this.finishCallback = finishCallback;
-		
 		if (isAllTextureLoaded) {
 			if (finishCallback != null) {
 				if (finishCallback is LuaInterface.LuaFunction) {
-					((LuaInterface.LuaFunction)finishCallback).Call ();
+					((LuaInterface.LuaFunction)finishCallback).Call (orgs);
 				} else if (finishCallback is Callback) {
-					((Callback)finishCallback) ();
+					((Callback)finishCallback) (orgs);
 				}
 			}
 		} else {
+			OnGetTextureCallbacks.add (gameObject.GetInstanceID().ToString(), finishCallback, orgs);
 			Start ();
 		}
 	}
 
 	public void OnDestroy ()
 	{
+		returnTextures ();
+	}
+
+	public void returnTextures() {
 		CLTexture clMat;
 		Texture tex = null;
 		for (int i=0; i < data.Count; i++) {
@@ -60,7 +63,6 @@ public class CLTextureMgr : MonoBehaviour
 			}
 		}
 	}
-
 	
 	/// <summary>
 	/// Cleans the mat.清除对材质球的引用
@@ -136,13 +138,27 @@ public class CLTextureMgr : MonoBehaviour
 				}
 				if (counter >= data.Count) {
 					isAllTextureLoaded = true;
-					if (finishCallback != null) {
-						if (finishCallback is LuaInterface.LuaFunction) {
-							((LuaInterface.LuaFunction)finishCallback).Call ();
-						} else if (finishCallback is Callback) {
-							((Callback)finishCallback) ();
+					ArrayList callbackList = OnGetTextureCallbacks.getDelegates (gameObject.GetInstanceID().ToString());
+					int count = callbackList.Count;
+					ArrayList cell = null;
+					object cb = null;
+					object orgs = null;
+					for (int i=0; i< count; i++) {
+						cell = callbackList [i] as ArrayList;
+						if (cell != null && cell.Count > 1) {
+							cb = cell [0];
+							orgs = cell [1];
+							if (cb != null) {
+								if (cb is LuaInterface.LuaFunction) {
+									((LuaInterface.LuaFunction)cb).Call (orgs);
+								} else if (cb is Callback) {
+									((Callback)cb) (orgs);
+								}
+							}
 						}
 					}
+					callbackList.Clear ();
+					OnGetTextureCallbacks.removeDelegates (gameObject.GetInstanceID().ToString());
 				}
 			} catch (System.Exception e) {
 				Debug.LogError ("name===" + name + ",err:" + e);

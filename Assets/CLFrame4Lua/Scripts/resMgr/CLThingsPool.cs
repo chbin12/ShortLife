@@ -86,12 +86,21 @@ public static class CLThingsPool
 				prefabMap [name] = go;
 				asset.Unload (false);
 				SAssetsManager.self.addAsset (name, asset, realseAsset);
-					
-				if (cb != null) {
-					if (typeof(LuaFunction) == cb.GetType ()) {
-						((LuaFunction)cb).Call (go, args);
-					} else if (typeof(Callback) == cb.GetType ()) {
-						((Callback)cb) (go, args);	
+
+				CLTextureMgr textureMgr = go.GetComponent<CLTextureMgr>();
+				if(textureMgr != null) {
+					ArrayList param = new ArrayList();
+					param.Add(cb);
+					param.Add(go);
+					param.Add(args);
+					textureMgr.init ((Callback)onGetTextures, param);
+				} else {
+					if (cb != null) {
+						if (typeof(LuaFunction) == cb.GetType ()) {
+							((LuaFunction)cb).Call (go, args);
+						} else if (typeof(Callback) == cb.GetType ()) {
+							((Callback)cb) (go, args);	
+						}
 					}
 				}
 			} else {
@@ -101,7 +110,29 @@ public static class CLThingsPool
 			Debug.LogError ("path==" + path + "," + e + name);
 		}
 	}
-		
+
+	static void onGetTextures(params object[] param) {
+		if (param == null) {
+			Debug.LogWarning ("param == null");
+			return;
+		}
+		ArrayList list = (ArrayList)(param[0]);
+		if (list.Count >= 3) {
+			object cb = list [0];
+			object obj = list [1];
+			object orgs = list [2];
+			if (cb != null) {
+				if (typeof(LuaFunction) == cb.GetType ()) {
+					((LuaFunction)cb).Call (obj, orgs);
+				} else if (typeof(Callback) == cb.GetType ()) {
+					((Callback)cb) (obj, orgs);	
+				}
+			}
+		} else {
+			Debug.LogWarning ("list.Count ====0");
+		}
+	}
+
 	//释放资源
 	static void realseAsset (params object[] paras)
 	{
@@ -128,6 +159,12 @@ public static class CLThingsPool
 			GameObject unit = (GameObject)(prefabMap [name]);
 			prefabMap.Remove (name);
 			//			SAssetsManager.unloadAsset(unit.gameObject);
+
+			CLTextureMgr textureMgr = unit.GetComponent<CLTextureMgr>();
+			if (textureMgr != null) {
+				textureMgr.returnTextures();
+			}
+
 			GameObject.DestroyImmediate (unit, true);
 			unit = null;
 		} catch (System.Exception e) {

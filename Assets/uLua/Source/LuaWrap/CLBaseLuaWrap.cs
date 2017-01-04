@@ -32,6 +32,8 @@ public class CLBaseLuaWrap
 			new LuaMethod("fixedInvoke", fixedInvoke),
 			new LuaMethod("cancelFixedInvoke4Lua", cancelFixedInvoke4Lua),
 			new LuaMethod("FixedUpdate", FixedUpdate),
+			new LuaMethod("invokeByUpdate", invokeByUpdate),
+			new LuaMethod("Update", Update),
 			new LuaMethod("New", _CreateCLBaseLua),
 			new LuaMethod("GetClassType", GetClassType),
 			new LuaMethod("__eq", Lua_Eq),
@@ -759,6 +761,45 @@ public class CLBaseLuaWrap
 		LuaScriptMgr.CheckArgsCount(L, 1);
 		CLBaseLua obj = (CLBaseLua)LuaScriptMgr.GetUnityObjectSelf(L, 1, "CLBaseLua");
 		obj.FixedUpdate();
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int invokeByUpdate(IntPtr L)
+	{
+		int count = LuaDLL.lua_gettop(L);
+
+		if (count == 3)
+		{
+			CLBaseLua obj = (CLBaseLua)LuaScriptMgr.GetUnityObjectSelf(L, 1, "CLBaseLua");
+			string arg0 = LuaScriptMgr.GetLuaString(L, 2);
+			float arg1 = (float)LuaScriptMgr.GetNumber(L, 3);
+			obj.invokeByUpdate(arg0,arg1);
+			return 0;
+		}
+		else if (count == 4)
+		{
+			CLBaseLua obj = (CLBaseLua)LuaScriptMgr.GetUnityObjectSelf(L, 1, "CLBaseLua");
+			string arg0 = LuaScriptMgr.GetLuaString(L, 2);
+			object arg1 = LuaScriptMgr.GetVarObject(L, 3);
+			float arg2 = (float)LuaScriptMgr.GetNumber(L, 4);
+			obj.invokeByUpdate(arg0,arg1,arg2);
+			return 0;
+		}
+		else
+		{
+			LuaDLL.luaL_error(L, "invalid arguments to method: CLBaseLua.invokeByUpdate");
+		}
+
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int Update(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 1);
+		CLBaseLua obj = (CLBaseLua)LuaScriptMgr.GetUnityObjectSelf(L, 1, "CLBaseLua");
+		obj.Update();
 		return 0;
 	}
 

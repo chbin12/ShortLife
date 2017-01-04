@@ -786,29 +786,8 @@ public class CoolapeProject : EditorWindow
 				//				result = result + path + "\n";
 				resultPstr.a(path).a("\n");
 				if (!isOnlyGetResult) {
-					//					GameObject obj = (GameObject)(AssetDatabase.LoadAssetAtPath("Assets/" + path, typeof(GameObject)));
 					UnityEngine.Object obj = CLEditorTools.getObjectByPath("Assets/" + path);
-					if (obj != null && obj is GameObject) {
-						textureMgr = ((GameObject)obj).GetComponent<CLTextureMgr>();
-						modelMgr = ((GameObject)obj).GetComponent<CLModelMgr>();
-					} else {
-						modelMgr = null;
-						textureMgr = null;
-					}
-
-					if (textureMgr != null) {
-						textureMgr.cleanMat();
-					}
-					if (modelMgr != null) {
-						modelMgr.cleanModel();
-					}
 					CreatUnity3dType.createAssets4Upgrade("Assets/" + path);
-					if (textureMgr != null) {
-						textureMgr.resetMat();
-					}
-					if (modelMgr != null) {
-						modelMgr.resetModel();
-					}
 				}
 			}
 		}

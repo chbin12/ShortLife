@@ -275,7 +275,7 @@ public class CLRoleAvataInspector : CLBehaviour4LuaInspector
 								mat = (Material)(EditorGUILayout.ObjectField (null, typeof(Material)));
 							}
 							if (mat != null) {
-								aBodyPart.materialNames [i] = mat.name;
+								aBodyPart.materialNames [i] = getMatName (mat);
 							}
 							if (GUILayout.Button ("-")) {
 								aBodyPart.cellNames.RemoveAt (i);
@@ -299,8 +299,7 @@ public class CLRoleAvataInspector : CLBehaviour4LuaInspector
 								EditorUtility.DisplayDialog ("Alert", "名字和对象不能为空!", "ok");
 							} else {
 								aBodyPart.cellNames.Add (cellName);
-//                                aBodyPart.materials.Add (material);
-								aBodyPart.materialNames.Add (material.name);
+								aBodyPart.materialNames.Add (getMatName(material));
 								cellName = "";
 								material = null;
 							}
@@ -373,6 +372,13 @@ public class CLRoleAvataInspector : CLBehaviour4LuaInspector
 		EditorUtility.SetDirty (avata);
 		newBodyPart = null;
 		isShowNewBodyPart = false;
+	}
+
+	string getMatName(Material mat) {
+		string materialPath = CLEditorTools.getPathByObject(mat);
+		materialPath = materialPath.Replace (PathCfg.self.basePath + "/upgradeResMedium/other/Materials/", "");
+		materialPath = materialPath.Replace (".mat", "");
+		return materialPath;
 	}
 
 	Material getMat (string matName)

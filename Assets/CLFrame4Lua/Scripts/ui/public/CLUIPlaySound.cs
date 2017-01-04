@@ -3,7 +3,7 @@ using System.Collections;
 
 public class CLUIPlaySound : UIPlaySound {
 	[HideInInspector]
-	public string soundFileName = "Tap.wav";
+	public string soundFileName = "Tap.ogg";
 	public string soundName = "Tap";
 
 	public override void Play ()

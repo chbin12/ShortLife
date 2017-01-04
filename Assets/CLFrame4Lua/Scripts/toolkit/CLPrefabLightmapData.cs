@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Rendering;
 
+/// <summary>
+/// CL prefab lightmap data. for unity 5.x version
+/// </summary>
 public class CLPrefabLightmapData : MonoBehaviour
 {
 	[System.Serializable]
@@ -14,10 +17,17 @@ public class CLPrefabLightmapData : MonoBehaviour
 	}
 
 	[SerializeField]
+	public LightmapsMode lightmapsMode;
+
+	[SerializeField]
+	public LightProbes lightProbes;
+
+	[SerializeField]
 	public List<RendererInfo>	m_RendererInfo = new List<RendererInfo> ();
 
 	[SerializeField]
 	public Texture2D[] m_Lightmaps;
+
 
 	void Awake ()
 	{
@@ -27,7 +37,9 @@ public class CLPrefabLightmapData : MonoBehaviour
 	public void SaveLightmap ()
 	{
 		m_RendererInfo.Clear ();
-		
+		lightmapsMode = LightmapSettings.lightmapsMode;
+		lightProbes = LightmapSettings.lightProbes;
+
 		var renderers = GetComponentsInChildren<MeshRenderer> ();
 		Texture2D lightmapTexture;
 		LightmapData lightMapData;
@@ -79,6 +91,7 @@ public class CLPrefabLightmapData : MonoBehaviour
 			combinedLightmaps [preIndex + i] = lightMapData;
 		}
 //				ApplyRendererInfo(m_RendererInfo, lightmaps.Length);
+		LightmapSettings.lightmapsMode = lightmapsMode;
 		LightmapSettings.lightmaps = combinedLightmaps;
 
 		foreach (var item in m_RendererInfo) {

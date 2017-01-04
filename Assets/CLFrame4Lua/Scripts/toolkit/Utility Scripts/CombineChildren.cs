@@ -66,8 +66,9 @@ public class CombineChildren : MonoBehaviour {
 					if(materials[m] == null) continue;
 					instance.subMeshIndex = System.Math.Min(m, instance.mesh.subMeshCount - 1);
 				
-//					ArrayList objects = (ArrayList)materialToMesh[materials[m]];
-					ArrayList objects = (ArrayList)(materialMap[materials[m].mainTexture.GetInstanceID()]);
+					//					ArrayList objects = (ArrayList)materialToMesh[materials[m]];
+//					ArrayList objects = (ArrayList)(materialMap[materials[m].mainTexture.GetInstanceID()]);
+					ArrayList objects = (ArrayList)(materialMap[materials[m].name]);
 					if (objects != null) {
 						objects.Add(instance);
 					}
@@ -75,7 +76,8 @@ public class CombineChildren : MonoBehaviour {
 					{
 						objects = new ArrayList ();
 						objects.Add(instance);
-						materialMap[materials[m].mainTexture.GetInstanceID()] = objects;
+						//						materialMap[materials[m].mainTexture.GetInstanceID()] = objects;
+						materialMap[materials[m].name] = objects;
 						materialToMesh.Add(materials[m], objects);
 					}
 				}

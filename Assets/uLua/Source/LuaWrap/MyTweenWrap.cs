@@ -12,6 +12,7 @@ public class MyTweenWrap
 			new LuaMethod("flyout", flyout),
 			new LuaMethod("onFinishTween", onFinishTween),
 			new LuaMethod("stop", stop),
+			new LuaMethod("Update", Update),
 			new LuaMethod("FixedUpdate", FixedUpdate),
 			new LuaMethod("moveForward", moveForward),
 			new LuaMethod("stopMoveForward", stopMoveForward),
@@ -31,6 +32,8 @@ public class MyTweenWrap
 			new LuaField("shadowHeight", get_shadowHeight, set_shadowHeight),
 			new LuaField("curveSpeed", get_curveSpeed, set_curveSpeed),
 			new LuaField("curveHigh", get_curveHigh, set_curveHigh),
+			new LuaField("orgParams", get_orgParams, set_orgParams),
+			new LuaField("ignoreTimeScale", get_ignoreTimeScale, set_ignoreTimeScale),
 			new LuaField("isMoveNow", get_isMoveNow, set_isMoveNow),
 			new LuaField("runOnStart", get_runOnStart, set_runOnStart),
 			new LuaField("style", get_style, set_style),
@@ -271,6 +274,54 @@ public class MyTweenWrap
 		}
 
 		LuaScriptMgr.PushObject(L, obj.curveHigh);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_orgParams(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		MyTween obj = (MyTween)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name orgParams");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index orgParams on a nil value");
+			}
+		}
+
+		LuaScriptMgr.PushVarObject(L, obj.orgParams);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_ignoreTimeScale(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		MyTween obj = (MyTween)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name ignoreTimeScale");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index ignoreTimeScale on a nil value");
+			}
+		}
+
+		LuaScriptMgr.Push(L, obj.ignoreTimeScale);
 		return 1;
 	}
 
@@ -635,6 +686,54 @@ public class MyTweenWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_orgParams(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		MyTween obj = (MyTween)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name orgParams");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index orgParams on a nil value");
+			}
+		}
+
+		obj.orgParams = LuaScriptMgr.GetVarObject(L, 3);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_ignoreTimeScale(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		MyTween obj = (MyTween)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name ignoreTimeScale");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index ignoreTimeScale on a nil value");
+			}
+		}
+
+		obj.ignoreTimeScale = LuaScriptMgr.GetBoolean(L, 3);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int set_isMoveNow(IntPtr L)
 	{
 		object o = LuaScriptMgr.GetLuaObject(L, 1);
@@ -771,16 +870,29 @@ public class MyTweenWrap
 			obj.flyout(arg0,arg1,arg2,arg3,arg4,arg5);
 			return 0;
 		}
-		else if (count == 8)
+		else if (count == 8 && LuaScriptMgr.CheckTypes(L, 1, typeof(MyTween), typeof(LuaTable), typeof(float), typeof(float), typeof(float), typeof(object), typeof(object), typeof(bool)))
 		{
 			MyTween obj = (MyTween)LuaScriptMgr.GetUnityObjectSelf(L, 1, "MyTween");
 			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 2);
-			float arg1 = (float)LuaScriptMgr.GetNumber(L, 3);
-			float arg2 = (float)LuaScriptMgr.GetNumber(L, 4);
-			float arg3 = (float)LuaScriptMgr.GetNumber(L, 5);
+			float arg1 = (float)LuaDLL.lua_tonumber(L, 3);
+			float arg2 = (float)LuaDLL.lua_tonumber(L, 4);
+			float arg3 = (float)LuaDLL.lua_tonumber(L, 5);
 			object arg4 = LuaScriptMgr.GetVarObject(L, 6);
 			object arg5 = LuaScriptMgr.GetVarObject(L, 7);
-			bool arg6 = LuaScriptMgr.GetBoolean(L, 8);
+			bool arg6 = LuaDLL.lua_toboolean(L, 8);
+			obj.flyout(arg0,arg1,arg2,arg3,arg4,arg5,arg6);
+			return 0;
+		}
+		else if (count == 8 && LuaScriptMgr.CheckTypes(L, 1, typeof(MyTween), typeof(LuaTable), typeof(float), typeof(float), typeof(object), typeof(object), typeof(object), typeof(bool)))
+		{
+			MyTween obj = (MyTween)LuaScriptMgr.GetUnityObjectSelf(L, 1, "MyTween");
+			Vector3 arg0 = LuaScriptMgr.GetVector3(L, 2);
+			float arg1 = (float)LuaDLL.lua_tonumber(L, 3);
+			float arg2 = (float)LuaDLL.lua_tonumber(L, 4);
+			object arg3 = LuaScriptMgr.GetVarObject(L, 5);
+			object arg4 = LuaScriptMgr.GetVarObject(L, 6);
+			object arg5 = LuaScriptMgr.GetVarObject(L, 7);
+			bool arg6 = LuaDLL.lua_toboolean(L, 8);
 			obj.flyout(arg0,arg1,arg2,arg3,arg4,arg5,arg6);
 			return 0;
 		}
@@ -821,6 +933,15 @@ public class MyTweenWrap
 		LuaScriptMgr.CheckArgsCount(L, 1);
 		MyTween obj = (MyTween)LuaScriptMgr.GetUnityObjectSelf(L, 1, "MyTween");
 		obj.stop();
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int Update(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 1);
+		MyTween obj = (MyTween)LuaScriptMgr.GetUnityObjectSelf(L, 1, "MyTween");
+		obj.Update();
 		return 0;
 	}
 

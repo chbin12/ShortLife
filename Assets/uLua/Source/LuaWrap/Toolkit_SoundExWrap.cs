@@ -15,6 +15,7 @@ public class Toolkit_SoundExWrap
 			new LuaMethod("onFinishSetAudio4Singleton", onFinishSetAudio4Singleton),
 			new LuaMethod("playSound2", playSound2),
 			new LuaMethod("onGetMainMusic", onGetMainMusic),
+			new LuaMethod("stopMainMusic", stopMainMusic),
 			new LuaMethod("doPlayMainMusic", doPlayMainMusic),
 			new LuaMethod("playMainMusic", playMainMusic),
 			new LuaMethod("New", _CreateToolkit_SoundEx),
@@ -190,6 +191,14 @@ public class Toolkit_SoundExWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int stopMainMusic(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 0);
+		Toolkit.SoundEx.stopMainMusic();
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int doPlayMainMusic(IntPtr L)
 	{
 		LuaScriptMgr.CheckArgsCount(L, 1);
@@ -201,8 +210,9 @@ public class Toolkit_SoundExWrap
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int playMainMusic(IntPtr L)
 	{
-		LuaScriptMgr.CheckArgsCount(L, 0);
-		Toolkit.SoundEx.playMainMusic();
+		LuaScriptMgr.CheckArgsCount(L, 1);
+		string arg0 = LuaScriptMgr.GetLuaString(L, 1);
+		Toolkit.SoundEx.playMainMusic(arg0);
 		return 0;
 	}
 }

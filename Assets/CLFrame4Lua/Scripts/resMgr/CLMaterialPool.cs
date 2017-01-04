@@ -34,22 +34,26 @@ public class CLMaterialPool
 				}
 			}
 		} else {
-			#if UNITY_EDITOR
-			string path = PStr.begin(PathCfg.self.basePath,
-			                         "/"+PathCfg.upgradeRes+"/other/Materials/", 
-			                         PathCfg.self.platform, "/", name, ".unity3d").end();
-			#else
-			string path = PStr.begin(PathCfg.self.basePath,
-			                         "/upgradeRes/other/Materials/", 
-			                         PathCfg.self.platform, "/", name, ".unity3d").end();
-			#endif
+			string path = wrapPath(name);
 			Callback cb = onGetPrefab;
 			CLVerManager.self.getNewestRes(path, 
 			                               CLAssetType.assetBundle, 
 			                               cb, finishCallback, name, args);
 		}
 	}
-	
+
+	public static string wrapPath(string thingName) {
+		string[] strs = thingName.Split ('/');
+		string path = PStr.begin (PathCfg.self.basePath,
+			"/", PathCfg.upgradeRes, "/other/Materials/").end ();
+		int len = strs.Length;
+		for(int i =0; i < len-1; i++) {
+			path = PStr.begin(path).a (strs[i]).a ("/").end();
+		}
+		path = PStr.begin(path).a(PathCfg.self.platform).a ("/").a (strs[len -1]).a (".unity3d").end ();
+		return path;
+	}
+
 	static void onGetPrefab (params object[] paras)
 	{
 		if (paras != null && paras.Length > 2) {

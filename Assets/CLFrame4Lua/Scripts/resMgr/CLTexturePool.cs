@@ -88,6 +88,7 @@ public class CLTexturePool
 			if (ac != null) {
 				UnityEngine.Resources.UnloadAsset(ac);
 				GameObject.DestroyImmediate(ac, true);
+				Debug.Log("======="  +ac.name);
 				ac = null;
 				prefabMap.Remove(path);
 			}
