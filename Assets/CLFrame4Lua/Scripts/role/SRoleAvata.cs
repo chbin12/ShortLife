@@ -137,29 +137,22 @@ public class CLBodyPart
 	}
 
     public void setMat(Renderer render, string name) {
-		if(!CLMaterialPool.havePrefab(name)) {
-            ArrayList list = new ArrayList();
-            list.Add(render);
-            list.Add(name);
-			CLMaterialPool.setPrefab(name, (Callback)onSetPrefab, list);
-            return;
-        }
-
-		Material mat = CLMaterialPool.borrowMat(name);
-        render.material = mat;
-
-		#if UNITY_EDITOR
-		Utl.setBodyMatEdit (render.transform);
-		#endif
+        ArrayList list = new ArrayList();
+        list.Add(render);
+        list.Add(name);
+		CLMaterialPool.borrowMatAsyn(name,(Callback)onSetPrefab, list);
     }
 
     void onSetPrefab(params object[] args) {
-        Material mat = (Material)(args[0]);
+        Material mat = (Material)(args[1]);
         if(mat != null) {
-            ArrayList list = (ArrayList)(args[1]);
+            ArrayList list = (ArrayList)(args[2]);
             Renderer render = (Renderer)(list[0]);
             string name = list[1].ToString();
-            setMat(render, name);
+//            setMat(render, name);
+			string shName = mat.shader.name;
+			render.material = mat;
+			render.material.shader =  Shader.Find(shName);
         }
     }
 }

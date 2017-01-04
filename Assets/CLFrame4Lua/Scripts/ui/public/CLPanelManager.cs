@@ -261,17 +261,20 @@ public class CLPanelManager :MonoBehaviour
 					// 设置startingRenderQueue是为了可以在ui中使用粒子效果，注意在粒子中要绑定CLUIParticle角本
 					topPanel.panel.startingRenderQueue = Const_RenderQueue + depth;
 				}
-				if (CLPBackplate.self != null) {
-					CLPBackplate.self.proc(topPanel);
-				}
+
+				CLPBackplateProc(topPanel);
 			} else {
-				if (CLPBackplate.self != null) {
-					CLPBackplate.self.proc(null);
-				}
+				CLPBackplateProc(null);
 			}
 			
 		}
 		
+	}
+
+	void CLPBackplateProc(CLPanelBase p) {
+		CLPanelBase panel = getPanel ("PanelBackplate");
+		if(panel == null) return;
+		CLPBackplate.self.proc (p);
 	}
 	
 	
@@ -398,6 +401,10 @@ public class CLPanelManager :MonoBehaviour
 		finishGetPanel(pName, (AssetBundle)(content), callback, paras);
     }
 	public static void finishGetPanel(string pName, AssetBundle ab, object callback, object paras) {
+		onGetPanel(pName, ab, callback, paras);
+	}
+
+	public static CLPanelBase onGetPanel(string pName, AssetBundle ab, object callback, object paras) {
 		if (ab != null) {
 			GameObject prefab = ab.mainAsset as GameObject;
             ab.Unload(false);
@@ -424,7 +431,9 @@ public class CLPanelManager :MonoBehaviour
 					((Callback)callback)(p, paras);
 				}
 			}
+			return p;
 		}
+		return null;
 	}
 	
 	public static void resetAtlasAndFont(Transform tr, bool isClean)
@@ -545,21 +554,16 @@ public class CLPanelManager :MonoBehaviour
 		if (self.isUnity3dType) {
 			string path = PStr.begin().a(PathCfg.persistentDataPath).a("/")
 				.a(PathCfg.self.panelDataPath).a(PathCfg.self.platform).a("/").a(pName).a(".unity3d").end();
+#if UNITY_EDITOR
+			path = path.Replace("/upgradeRes/", "/upgradeRes4Publish/");
+#endif
 			AssetBundle ab = AssetBundle.LoadFromFile(path);
 #if UNITY_EDITOR
 			if(ab == null) {
 				Debug.LogError(pName + " is null");
 			}
 #endif
-			GameObject prefab = ab.mainAsset as GameObject;
-			GameObject go = GameObject.Instantiate(prefab) as GameObject;
-			go.transform.parent = self.transform;
-			go.transform.localScale = Vector3.one;
-			go.transform.localPosition = Vector3.zero;
-			
-			CLPanelBase p = go.GetComponent<CLPanelBase>();
-			panelBuff [go.name] = p;
-			return p;
+			return onGetPanel(pName, ab, null, null);
 		}
         return null;
 	}
