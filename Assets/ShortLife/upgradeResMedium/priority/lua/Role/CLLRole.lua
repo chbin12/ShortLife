@@ -180,7 +180,7 @@ do
             if (SCfg.self.player == csSelf) then
                 CLLRole.moveForward(Vector3.zero);
             else
-                csSelf:fixedInvoke4Lua("moveForward", Vector3.zero, NumEx.NextInt(10, 30)/100);
+                csSelf:fixedInvoke4Lua(CLLRole.moveForward, Vector3.zero, NumEx.NextInt(10, 30)/100);
             end
         else
             CLLRole.IamIdel(false);
@@ -253,7 +253,7 @@ do
         csSelf.aiPath:stop();
         CLLRole.setAction("idel");
         if (isGoSomeWhere) then
-            csSelf:invoke4Lua("goSomeWhere", NumEx.NextInt(0, 5) / 10);
+            csSelf:invoke4Lua(CLLRole.goSomeWhere, NumEx.NextInt(0, 5) / 10);
         end
     end
 
@@ -286,8 +286,8 @@ do
             speciLua.clean();
         end
         if (csSelf ~= nil) then
-            csSelf:cancelFixedInvoke4Lua("");
-            csSelf:cancelInvoke4Lua("");
+            csSelf:cancelFixedInvoke4Lua();
+            csSelf:cancelInvoke4Lua();
         end
 
         nextAtkTime = 0;
@@ -391,7 +391,7 @@ do
             end
 
             if (mState == State.attack and SCfg.self.player ~= csSelf) then
-                csSelf:cancelFixedInvoke4Lua("_doAttack");
+                csSelf:cancelFixedInvoke4Lua(CLLRole._doAttack);
                 mState = State.idel;
                 CLLRole.doAttack();
             else
@@ -453,7 +453,7 @@ do
                 isFalling = true;
                 rigidbody.isKinematic = false;
                 CLLRole.onDead();
-                csSelf:invoke4Lua("IamDead", 1.5);
+                csSelf:invoke4Lua(CLLRole.IamDead, 1.5);
                 return true;
             end
 --        end
@@ -462,12 +462,12 @@ do
 
     -- 当完成寻路
     function CLLRole.onPathComplete(p)
-        --        csSelf:cancelFixedInvoke4Lua("setCanMove");
+        --        csSelf:cancelFixedInvoke4Lua(CLLRole.setCanMove);
         --        local leftFrame = callMoveToTime + WAIT_AIPATH_TIME - csSelf.frameCounter;
         --        if (leftFrame > 0) then
-        --            csSelf:fixedInvoke4Lua("setCanMove", leftFrame * Time.fixedDeltaTime);
+        --            csSelf:fixedInvoke4Lua(CLLRole.setCanMove, leftFrame * Time.fixedDeltaTime);
         --        else
-        --            csSelf:fixedInvoke4Lua("setCanMove", 0);
+        --            csSelf:fixedInvoke4Lua(CLLRole.setCanMove, 0);
         --        end
         CLLRole.setCanMove();
     end
@@ -494,7 +494,7 @@ do
             end
             -- 如果是探索模式时，需要加载地图
             if (SCfg.self.mode == GameMode.explore) then
-                --                csSelf:invoke4Lua("onMoving4Explore", 0)
+                --                csSelf:invoke4Lua(CLLRole.onMoving4Explore, 0)
                 CLLRole.onMoving4Explore();
             end
         end
@@ -618,8 +618,8 @@ do
         lockingTarget = nil;
         csSelf.mTarget = CLBattleToolkit.getNearestTarget(csSelf, bio2Int(attr.base.TriggerRadius) / 10, -1);
         if (csSelf.mTarget ~= nil and (not csSelf.mTarget.isDead)) then
-            csSelf:cancelInvoke4Lua("goSomeWhere")
-            csSelf:cancelFixedInvoke4Lua("_doAttack");
+            csSelf:cancelInvoke4Lua(CLLRole.goSomeWhere)
+            csSelf:cancelFixedInvoke4Lua(CLLRole._doAttack);
             mState = State.searchTarget;
             CLLRole.moveTo(csSelf.mTarget.transform.position);
         else
@@ -629,8 +629,8 @@ do
                 CLLRole.IamIdel(true);
             end
 
-            csSelf:cancelFixedInvoke4Lua("doSearchTarget");
-            csSelf:fixedInvoke4Lua("doSearchTarget", 0.3);
+            csSelf:cancelFixedInvoke4Lua(CLLRole.doSearchTarget);
+            csSelf:fixedInvoke4Lua(CLLRole.doSearchTarget, 0.3);
         end
     end
 
@@ -734,7 +734,7 @@ do
     function CLLRole._doAttack()
         CLLRole.log("CLLRole._doAttack");
         if (CLLRole.canDoAttack()) then
-            csSelf:cancelInvoke4Lua("goSomeWhere")
+            csSelf:cancelInvoke4Lua(CLLRole.goSomeWhere)
             -- 可以播放技能
             if (attackConter > 3 and skillAttr ~= nil and (not CLLBattle.isPlayingSkill)) then
                 CLLBattle.chgHeroSkillState(csSelf, true);
@@ -742,8 +742,8 @@ do
             -- 判断是否可以攻击（满足攻击频率）
             local diff = nextAtkTime - csSelf.frameCounter;
             if (diff > 0.00001) then
-                csSelf:cancelFixedInvoke4Lua("_doAttack");
-                csSelf:fixedInvoke4Lua("_doAttack", diff * Time.fixedDeltaTime);
+                csSelf:cancelFixedInvoke4Lua(CLLRole._doAttack);
+                csSelf:fixedInvoke4Lua(CLLRole._doAttack, diff * Time.fixedDeltaTime);
             else
                 if (speciLua ~= nil and speciLua.doAttack ~= nil) then
                     speciLua.doAttack();
@@ -751,10 +751,10 @@ do
 
                 attackConter = attackConter + 1;
                 nextAtkTime = csSelf.frameCounter + data.atkSpeed;
-                csSelf:fixedInvoke4Lua("_doAttack", data.atkSpeed * Time.fixedDeltaTime);
+                csSelf:fixedInvoke4Lua(CLLRole._doAttack, data.atkSpeed * Time.fixedDeltaTime);
             end
         else
-            csSelf:cancelFixedInvoke4Lua("_doAttack");
+            csSelf:cancelFixedInvoke4Lua(CLLRole._doAttack);
             mState = State.none;
             CLLRole.doSearchTarget();
         end
@@ -782,8 +782,8 @@ do
     -- 受伤害
     function CLLRole.onHurt(hurt, skill, attacker)
         if (csSelf.isDead or CLBattle.self.isEndBattle) then return end
-        csSelf:cancelFixedInvoke4Lua("doSearchTarget");
-        csSelf:cancelFixedInvoke4Lua("_doAttack");
+        csSelf:cancelFixedInvoke4Lua(CLLRole.doSearchTarget);
+        csSelf:cancelFixedInvoke4Lua(CLLRole._doAttack);
 
         -- 说明是技能攻击
         if (skill ~= nil) then
@@ -839,7 +839,7 @@ do
         --        end
         mState = State.none;
         if (csSelf ~= SCfg.self.player) then
-            csSelf:invoke4Lua("doSearchTarget", 0.3);
+            csSelf:invoke4Lua(CLLRole.doSearchTarget, 0.3);
         end
     end
 
@@ -852,8 +852,8 @@ do
     function CLLRole.onDead()
         if (csSelf.isDead) then return end
         csSelf.isDead = true;
-        csSelf:cancelFixedInvoke4Lua("");
-        csSelf:cancelInvoke4Lua("");
+        csSelf:cancelFixedInvoke4Lua();
+        csSelf:cancelInvoke4Lua();
         csSelf.aiPath:stop();
         csSelf.tween:stop();
         csSelf.tween:stopMoveForward();
@@ -913,7 +913,7 @@ do
     function CLLRole.playSkill(pos)
         if (skillAttr == nil) then return end
 
-        csSelf:invoke4Lua("releaseSkillRange", 1.5);
+        csSelf:invoke4Lua(CLLRole.releaseSkillRange, 1.5);
 
         CLLBattle.setHeroCollider(true);
         attackConter = 0;
@@ -1010,7 +1010,7 @@ do
                 csSelf.tween:stopMoveForward();
                 CLLRole.setAction("idel");
 
-                csSelf:fixedInvoke4Lua("doOnTurn", NumEx.NextInt(10, 40) / 100);
+                csSelf:fixedInvoke4Lua(CLLRole.doOnTurn, NumEx.NextInt(10, 40) / 100);
             else
                 CLLRole.moveTo(turnPoints:Peek())
             end

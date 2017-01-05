@@ -134,23 +134,23 @@ do
             CLLPBattle.playAttackRepeat();
         else
             isDoAttack = false;
-            csSelf:cancelInvoke4Lua("playAttackRepeat");
+            csSelf:cancelInvoke4Lua(CLLPBattle.playAttackRepeat);
         end
     end
 
     function CLLPBattle.playAttackRepeat()
         if(SCfg.self.player == nil or SCfg.self.player.isDead) then
-            csSelf:cancelInvoke4Lua("playAttackRepeat");
+            csSelf:cancelInvoke4Lua(CLLPBattle.playAttackRepeat);
             return;
         end
 
         if(isDoAttack) then
             SCfg.self.player.luaTable.playAttack();
-            csSelf:cancelInvoke4Lua("playAttackRepeat");
-            csSelf:invoke4Lua("playAttackRepeat", 0.2);
+            csSelf:cancelInvoke4Lua(CLLPBattle.playAttackRepeat);
+            csSelf:invoke4Lua(CLLPBattle.playAttackRepeat, 0.2);
             CLLPBattle.onMainRoleAttack();
         else
-            csSelf:cancelInvoke4Lua("playAttackRepeat");
+            csSelf:cancelInvoke4Lua(CLLPBattle.playAttackRepeat);
         end
     end
 

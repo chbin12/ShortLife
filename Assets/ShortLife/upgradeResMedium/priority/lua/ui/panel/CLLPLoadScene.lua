@@ -46,11 +46,11 @@ do
 
 
         if (data.type == "home") then
-            csSelf:invoke4Lua("gotoHome", 0.1);
+            csSelf:invoke4Lua(PanelLoadScene.gotoHome, 0.1);
         elseif (data.type == "battle") then
-            csSelf:invoke4Lua("gotoBattle", 0.1);
+            csSelf:invoke4Lua(PanelLoadScene.gotoBattle, 0.1);
         elseif (data.type == "explore") then
-            csSelf:invoke4Lua("gotoExplore", 0.1);
+            csSelf:invoke4Lua(PanelLoadScene.gotoExplore, 0.1);
         end
     end
 
@@ -228,7 +228,7 @@ do
 
     function PanelLoadScene.showCityUI(...)
         if (data.isGuid) then
-            csSelf:invoke4Lua("showExplore4Guid", 1);
+            csSelf:invoke4Lua(PanelLoadScene.showExplore4Guid, 1);
         else
             CLPanelManager.hideTopPanel();
             CLPanelManager.getPanelAsy("PanelMain", onLoadedPanel);

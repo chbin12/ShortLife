@@ -26,6 +26,7 @@ public class CLPanelManagerWrap
 			new LuaMethod("getPanelAsy", getPanelAsy),
 			new LuaMethod("onGetPanelAssetBundle", onGetPanelAssetBundle),
 			new LuaMethod("finishGetPanel", finishGetPanel),
+			new LuaMethod("onGetPanel", onGetPanel),
 			new LuaMethod("resetAtlasAndFont", resetAtlasAndFont),
 			new LuaMethod("getPanel", getPanel),
 			new LuaMethod("destroyPanel", destroyPanel),
@@ -602,6 +603,19 @@ public class CLPanelManagerWrap
 		object arg3 = LuaScriptMgr.GetVarObject(L, 4);
 		CLPanelManager.finishGetPanel(arg0,arg1,arg2,arg3);
 		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int onGetPanel(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 4);
+		string arg0 = LuaScriptMgr.GetLuaString(L, 1);
+		AssetBundle arg1 = (AssetBundle)LuaScriptMgr.GetUnityObject(L, 2, typeof(AssetBundle));
+		object arg2 = LuaScriptMgr.GetVarObject(L, 3);
+		object arg3 = LuaScriptMgr.GetVarObject(L, 4);
+		CLPanelBase o = CLPanelManager.onGetPanel(arg0,arg1,arg2,arg3);
+		LuaScriptMgr.Push(L, o);
+		return 1;
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

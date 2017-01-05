@@ -107,7 +107,7 @@ do
     function _cell.onNotifyLua(...)
         if (isPlayFall) then
             rigidbody.isKinematic = false;
-            csSelf:invoke4Lua("onFinishFallEffcet", 1.5);
+            csSelf:invoke4Lua(_cell.onFinishFallEffcet, 1.5);
         else
             Utl.doCallback(onFinishEffectNew, csSelf);
         end

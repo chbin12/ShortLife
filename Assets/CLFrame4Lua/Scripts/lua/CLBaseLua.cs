@@ -121,10 +121,23 @@ public class CLBaseLua : MonoBehaviour
 	{
 		return invoke4Lua (callbakFunc, "", sec);
 	}
+	public Coroutine invoke4Lua (LuaFunction callbakFunc, float sec)
+	{
+		return invoke4Lua (callbakFunc, "", sec, false);
+	}
 	
 	public Coroutine invoke4Lua (string callbakFunc, object orgs, float sec)
 	{
 		return invoke4Lua (callbakFunc, orgs, sec, false);
+	}
+	public Coroutine invoke4Lua (LuaFunction callbakFunc, object orgs, float sec)
+	{
+		return invoke4Lua (callbakFunc, orgs, sec, false);
+	}
+	public Coroutine invoke4Lua (string callbakFunc, object orgs, float sec,  bool onlyOneCoroutine)
+	{
+		LuaFunction f = getLuaFunction (callbakFunc);
+		return invoke4Lua (f, orgs, sec,  onlyOneCoroutine);
 	}
 	/// <summary>
 	/// Invoke4s the lua.
@@ -132,8 +145,12 @@ public class CLBaseLua : MonoBehaviour
 	/// <param name="callbakFunc">Callbak func.lua函数</param>
 	/// <param name="orgs">Orgs.参数</param>
 	/// <param name="sec">Sec.等待时间</param>
-	public Coroutine invoke4Lua (string callbakFunc, object orgs, float sec,  bool onlyOneCoroutine)
+	public Coroutine invoke4Lua (LuaFunction callbakFunc, object orgs, float sec,  bool onlyOneCoroutine)
 	{
+		if (callbakFunc == null) {
+			Debug.LogError ("callbakFunc is null ......");
+			return null;
+		}
 		try {
 			Coroutine ct = null;
 			if(onlyOneCoroutine) {
@@ -149,7 +166,7 @@ public class CLBaseLua : MonoBehaviour
 		}
 	}
 
-	public int getCoroutineIndex(string callbakFunc) {
+	public int getCoroutineIndex(LuaFunction callbakFunc) {
 		int ret = 0;
 		if (coroutineIndex.Contains (callbakFunc)) {
 			ret = Toolkit.MapEx.getInt(coroutineIndex, callbakFunc);
@@ -158,23 +175,23 @@ public class CLBaseLua : MonoBehaviour
 		return ret;
 	}
 	
-	public void setCoroutineIndex(string callbakFunc, int val) {
+	public void setCoroutineIndex(LuaFunction callbakFunc, int val) {
 		coroutineIndex[callbakFunc] = val;
 	}
 
-	public Hashtable getCoroutines(string callbakFunc) {
+	public Hashtable getCoroutines(LuaFunction callbakFunc) {
 		if (coroutineMap [callbakFunc] == null) {
 			coroutineMap [callbakFunc] = new Hashtable();
 		}
 		return (Hashtable)(coroutineMap [callbakFunc]);
 	}
-	public void setCoroutine(string callbakFunc, Coroutine ct, int index) {
+	public void setCoroutine(LuaFunction callbakFunc, Coroutine ct, int index) {
 		Hashtable map = getCoroutines (callbakFunc);
 		map[index] = ct;
 		coroutineMap [callbakFunc] = map;
 	}
 
-	public void cleanCoroutines(string callbakFunc) {
+	public void cleanCoroutines(LuaFunction callbakFunc) {
 		Hashtable list = getCoroutines (callbakFunc);
 		foreach(DictionaryEntry cell in list) {
 			StopCoroutine((Coroutine)(cell.Value));
@@ -185,20 +202,30 @@ public class CLBaseLua : MonoBehaviour
 	}
 
 	
-	public void rmCoroutine(string callbakFunc, int index) {
+	public void rmCoroutine(LuaFunction callbakFunc, int index) {
 		Hashtable list = getCoroutines (callbakFunc);
 		list.Remove (index);
 		coroutineMap[callbakFunc] = list;
 	}
 
-	public void cancelInvoke4Lua (string callbakFunc)
+	public void cancelInvoke4Lua2 (string callbakFunc)
 	{
-		if (string.IsNullOrEmpty (callbakFunc)) {
+		LuaFunction func = getLuaFunction (callbakFunc);
+		cancelInvoke4Lua (func);
+	}
+
+	public void cancelInvoke4Lua ()
+	{
+		cancelInvoke4Lua (null);
+	}
+	public void cancelInvoke4Lua (LuaFunction callbakFunc)
+	{
+		if (callbakFunc == null) {
 			#if UNITY_4_6 || UNITY_5
 			Hashtable list = null;
 
 			foreach(DictionaryEntry item in coroutineMap) {
-				list = getCoroutines(item.Key.ToString());
+				list = getCoroutines((LuaFunction)(item.Key));
 				foreach(DictionaryEntry cell in list) {
 					StopCoroutine((Coroutine)(cell.Value));
 				}
@@ -215,28 +242,22 @@ public class CLBaseLua : MonoBehaviour
 	
 	Queue invokeFuncs = new Queue ();
 	
-	IEnumerator doInvoke4Lua (string callbakFunc, float sec, object orgs, int index)
+	IEnumerator doInvoke4Lua (LuaFunction callbakFunc, float sec, object orgs, int index)
 	{
 		yield return new WaitForSeconds (sec);
 		try {
-//			if (coroutineMap [callbakFunc] != null) {
-//				coroutineMap.Remove (callbakFunc);
 			rmCoroutine(callbakFunc, index);
-
-			LuaFunction f = getLuaFunction (callbakFunc);
-			if (f != null) {
+			if (callbakFunc != null) {
 				if (!isPause) {
-					f.Call (orgs);
-
+					callbakFunc.Call (orgs);
 				} else {
 					ArrayList list = new ArrayList();
-					list.Add(f);
+					list.Add(callbakFunc);
 					list.Add(orgs);
 					list.Add(index);
 					invokeFuncs.Enqueue (list);
 				}
 			}
-//			}
 		} catch (System.Exception e) {
 			string msg = "call err:doInvoke4Lua" + ",callbakFunc=[" + callbakFunc + "]";
 			NAlertTxt.add (msg, Color.red, -1);
@@ -311,10 +332,14 @@ public class CLBaseLua : MonoBehaviour
 	//	public Dictionary<long, List<LuaFunction>> fixedInvokeMap = new Dictionary<long, List<LuaFunction>> ();
 	Hashtable _fixedInvokeMap = new Hashtable ();
 	public Hashtable fixedInvokeMap = null;
-	
+
 	public void fixedInvoke4Lua (string luaFunc,  float waitSec)
 	{
 		fixedInvoke4Lua (luaFunc,  null, waitSec);
+	}
+	public void fixedInvoke4Lua (LuaFunction luaFunc,  float waitSec)
+	{
+		fixedInvoke (luaFunc,  null, waitSec);
 	}
 	public void fixedInvoke4Lua (string luaFunc, object paras, float waitSec)
 	{
@@ -322,6 +347,10 @@ public class CLBaseLua : MonoBehaviour
 		if (func == null)
 			return;
 		fixedInvoke (func, paras, waitSec);
+	}
+	public void fixedInvoke4Lua (LuaFunction luaFunc, object paras, float waitSec)
+	{
+		fixedInvoke (luaFunc, paras, waitSec);
 	}
 
 	public void fixedInvoke(object callback, object paras, float waitSec) {
@@ -343,7 +372,7 @@ public class CLBaseLua : MonoBehaviour
 		fixedInvokeMap [key] = funcList;
 	}
 
-	public void cancelFixedInvoke4Lua (string funcName)
+	public void cancelFixedInvoke4Lua2 (string funcName)
 	{
 		if (fixedInvokeMap == null)
 			return;
@@ -352,8 +381,21 @@ public class CLBaseLua : MonoBehaviour
 			return;
 		}
 		LuaFunction func = getLuaFunction (funcName);
-		if (func == null)
+		cancelFixedInvoke4Lua (func);
+	}
+
+	public void cancelFixedInvoke4Lua ()
+	{
+		cancelFixedInvoke4Lua (null);
+	}
+	public void cancelFixedInvoke4Lua (LuaFunction func)
+	{
+		if (func == null) {
+			if (fixedInvokeMap != null) {
+				fixedInvokeMap.Clear ();
+			}
 			return;
+		}
 		List<object[]> list = null;
 		int count = 0;
 		object[] content = null;
@@ -371,6 +413,8 @@ public class CLBaseLua : MonoBehaviour
 	
 	void doFixedInvoke (long key)
 	{
+		if (fixedInvokeMap == null)
+			return;
 		object[] content = null;
 		List<object[]> funcList = (List<object[]>)(fixedInvokeMap [key]);
 		object callback = null;
@@ -419,6 +463,11 @@ public class CLBaseLua : MonoBehaviour
 	static ListPool listPool = new ListPool();
 	public void invokeByUpdate (string callbakFunc, float sec)
 	{
+		LuaFunction f = getLuaFunction (callbakFunc);
+		invokeByUpdate (f, null, sec);
+	}
+	public void invokeByUpdate (LuaFunction callbakFunc, float sec)
+	{
 		invokeByUpdate (callbakFunc, null, sec);
 	}
 	/// <summary>
@@ -427,8 +476,10 @@ public class CLBaseLua : MonoBehaviour
 	/// <param name="callbakFunc">Callbak func.lua函数</param>
 	/// <param name="orgs">Orgs.参数</param>
 	/// <param name="sec">Sec.等待时间</param>
-	public void invokeByUpdate (string callbakFunc, object orgs, float sec)
+	public void invokeByUpdate (LuaFunction callbakFunc, object orgs, float sec)
 	{
+		if (callbakFunc == null)
+			return;
 		NewList list = listPool.borrowObject();
 		list.add (callbakFunc);
 		list.add (orgs);
@@ -447,7 +498,7 @@ public class CLBaseLua : MonoBehaviour
 			list = (NewList)(invokeByUpdateList [index]);
 			sec = (float)(list [2]);
 			if (sec <= Time.unscaledTime) {
-				Utl.doCallback (getLuaFunction (list [0].ToString ()), list [1]);
+				Utl.doCallback ((LuaFunction)(list [0]), list [1]);
 				invokeByUpdateList.RemoveAt (index);
 				list.Clear ();
 				listPool.resetObject (list);

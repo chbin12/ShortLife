@@ -85,8 +85,8 @@ do
     end
 
     function CLLBattle.clean()
-        csSelf:cancelInvoke4Lua("");
-        csSelf:cancelFixedInvoke4Lua("");
+        csSelf:cancelInvoke4Lua();
+        csSelf:cancelFixedInvoke4Lua();
         CLLBattle.isPaused = false;
         local count = csSelf.offense.Count;
         local unit;
@@ -146,8 +146,8 @@ do
 
     function CLLBattle.onFinishAddSideTiles(sideRight)
         -- 因为地表块还要掉落下来，有一个过程，因些简单处理下，等待一下
-        csSelf:invoke4Lua("addMonster", sideRight , 2.5);
-        csSelf:invoke4Lua("addProp", sideRight , 2.5);
+        csSelf:invoke4Lua(CLLBattle.addMonster, sideRight , 2.5);
+        csSelf:invoke4Lua(CLLBattle.addProp, sideRight , 2.5);
     end
 
     function CLLBattle.addMonster(sideRight)

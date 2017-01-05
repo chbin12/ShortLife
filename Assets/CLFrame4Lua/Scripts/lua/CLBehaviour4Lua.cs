@@ -52,7 +52,7 @@ public class CLBehaviour4Lua : CLBaseLua
 		if (flclean != null) {
 			flclean.Call ();
 		}
-		cancelInvoke4Lua ("");
+		cancelInvoke4Lua (null);
 		canFixedInvoke = false;
 		cancelFixedInvoke4Lua (null);
 		CancelInvoke();

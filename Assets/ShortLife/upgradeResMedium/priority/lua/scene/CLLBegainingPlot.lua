@@ -80,9 +80,9 @@ do
             finishCallback = CLLBegainingPlot.onFinishShowPulse,
         };
 
-        csSelf:invoke4Lua("doTask1", task, 4);
-        csSelf:invoke4Lua("doTask2", _task2, 4);
-        csSelf:invoke4Lua("doTask3", _task3, 4);
+        csSelf:invoke4Lua(CLLBegainingPlot.doTask1, task, 4);
+        csSelf:invoke4Lua(CLLBegainingPlot.doTask2, _task2, 4);
+        csSelf:invoke4Lua(CLLBegainingPlot.doTask3, _task3, 4);
     end
 
 
@@ -106,7 +106,7 @@ do
             nextDelaySec = 0, -- 下一个任务等待时间
             finishCallback = nil,
         };
-        csSelf:invoke4Lua("doTask1", _task, 2);
+        csSelf:invoke4Lua(CLLBegainingPlot.doTask1, _task, 2);
 
         local _task2 = {
             type=2, -- 改变smoothFollow的distance
@@ -135,8 +135,8 @@ do
             nextDelaySec = 0,
             finishCallback=CLLBegainingPlot.onFinshShowPlot,
         }
-        csSelf:invoke4Lua("doTask2", _task2, 3);
-        csSelf:invoke4Lua("doTask3", _task3, 5);
+        csSelf:invoke4Lua(CLLBegainingPlot.doTask2, _task2, 3);
+        csSelf:invoke4Lua(CLLBegainingPlot.doTask3, _task3, 5);
     end
 
     function CLLBegainingPlot.onFinshShowPlot()
@@ -231,7 +231,7 @@ do
             -- 处理下一个任务
             task = task.next;
             if (task ~= nil) then
-                csSelf:invoke4Lua("doTask" .. i, task, task.nextDelaySec);
+                csSelf:invoke4Lua(CLLBegainingPlot.doTask .. i, task, task.nextDelaySec);
             end
         end
     end

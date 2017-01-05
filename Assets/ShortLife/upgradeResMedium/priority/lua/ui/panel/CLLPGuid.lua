@@ -75,7 +75,7 @@ do
   function PanelGuid.uiEventDelegate( go )
     local btnName = go.name;
     if(btnName == "Mask") then
-      panel:cancelInvoke4Lua("refreshGuidPosition");
+      panel:cancelInvoke4Lua(PanelGuid.refreshGuidPosition);
       NGUITools.SetActive(go, false);
       NGUITools.SetActive(background, false);
 
@@ -147,7 +147,7 @@ do
       and CLPanelManager.topPanel.isActive ) then
       return true;
     else
-      panel:invoke4Lua("_doGuid", 1);
+      panel:invoke4Lua(PanelGuid._doGuid, 1);
       return false;
     end;
   end;
@@ -195,7 +195,7 @@ do
     pos.z = -10;
     trsfMark.transform.localPosition = pos;
 
-    panel:invoke4Lua("refreshGuidPosition", 0.2)
+    panel:invoke4Lua(PanelGuid.refreshGuidPosition, 0.2)
   end;
 
   function PanelGuid.showClickFinger( ... )
@@ -308,7 +308,7 @@ do
     clBattle.regain();
     NGUITools.SetActive(backgroundCollider, false);
     PanelGuid.checkisShowingMonster1();
-    panel:invoke4Lua("addMonster1", 2);
+    panel:invoke4Lua(PanelGuid.addMonster1, 2);
   end;
 
   function PanelGuid.pauseBattle( ... )
@@ -323,9 +323,9 @@ do
 
   function PanelGuid.checkisShowingMonster1( ... )
     if(CLBattle.self.defense.Count < 1) then
-      panel:invoke4Lua("checkisShowingMonster1", 1);
+      panel:invoke4Lua(PanelGuid.checkisShowingMonster1, 1);
     else
-      panel:invoke4Lua("pauseBattle", 1);
+      panel:invoke4Lua(PanelGuid.pauseBattle, 1);
     end;
   end;
 
@@ -351,9 +351,9 @@ do
       NGUITools.SetActive(trsfMark.gameObject, false);
       trsfMark.gameObject.collider.enabled = true;
       PanelGuid.addMonster2();
-      panel:invoke4Lua("pauseBattle", 2);
+      panel:invoke4Lua(PanelGuid.pauseBattle, 2);
     else
-      panel:invoke4Lua("checkAllMonsterDead", 1);
+      panel:invoke4Lua(PanelGuid.checkAllMonsterDead, 1);
     end;
   end;
 
@@ -380,9 +380,9 @@ do
       NGUITools.SetActive(trsfMark.gameObject, false);
       trsfMark.gameObject.collider.enabled = true;
       PanelGuid.addMonster3();
-      panel:invoke4Lua("pauseBattle", 2);
+      panel:invoke4Lua(PanelGuid.pauseBattle, 2);
     else
-      panel:invoke4Lua("checkAllMonsterDead2", 1);
+      panel:invoke4Lua(PanelGuid.checkAllMonsterDead2, 1);
     end;
   end;
 
@@ -410,10 +410,10 @@ do
       NGUITools.SetActive(trsfMark.gameObject, false);
       trsfMark.gameObject.collider.enabled = true;
       PanelBattle.showBossComing();
-      panel:invoke4Lua("addMonster4", 2);
-      panel:invoke4Lua("pauseBattle", 4);
+      panel:invoke4Lua(PanelGuid.addMonster4, 2);
+      panel:invoke4Lua(PanelGuid.pauseBattle, 4);
     else
-      panel:invoke4Lua("checkAllMonsterDead3", 1);
+      panel:invoke4Lua(PanelGuid.checkAllMonsterDead3, 1);
     end;
   end;
 
@@ -434,7 +434,7 @@ do
     clBattle.regain();
     PanelBattle.onClickIntegrated4Guid();
     NGUITools.SetActive(backgroundCollider, false);
-    panel:invoke4Lua("onFinishIntegrated", 5);
+    panel:invoke4Lua(PanelGuid.onFinishIntegrated, 5);
   end;
 
   -- 完成合体
@@ -465,11 +465,11 @@ do
 
   function PanelGuid.onClikcSthBtn()
     PanelBattleResult.showSth();
-    panel:invoke4Lua("finishOneGuid", 1);
+    panel:invoke4Lua(PanelGuid.finishOneGuid, 1);
   end;
 
   function PanelGuid.invoke2NextStep( ... )
-    panel:invoke4Lua("finishOneGuid", 1);
+    panel:invoke4Lua(PanelGuid.finishOneGuid, 1);
   end;
 
   function PanelGuid.OnCloseEquip()
@@ -479,14 +479,14 @@ do
 
   function PanelGuid.onClickGiftBox( ... )
     clBattle.onClickBox(clBattle.getGiftBox4Guid());
-    panel:invoke4Lua("finishOneGuid", 1.5);
+    panel:invoke4Lua(PanelGuid.finishOneGuid, 1.5);
   end;
 
   function PanelGuid.onClickGetGift()
     PanelPackage.clickBuy();
     -- PanelGuid.stopGuid();
     PanelGuid.showGuid2Attack();
-    panel:invoke4Lua("trigger4ShowtalkaboutChgMainrole", 3);
+    panel:invoke4Lua(PanelGuid.trigger4ShowtalkaboutChgMainrole, 3);
   end;
   function PanelGuid.trigger4ShowtalkaboutChgMainrole( ... )
     NGUITools.SetActive(background, false);
@@ -502,7 +502,7 @@ do
     PanelBattle.onClickBtnMainRol4Guid();
     PanelGuid.showGuid2Attack();
     -- PanelBattle.onPressAttack (nil, true);
-    panel:invoke4Lua("hideFinger", 5);
+    panel:invoke4Lua(PanelGuid.hideFinger, 5);
   end;
 
   function PanelGuid.hideFinger()
@@ -519,7 +519,7 @@ do
     clBattle.regain();
     PanelGuid.showGuid2Attack();
     -- PanelBattle.onPressAttack (nil, true);
-    panel:invoke4Lua("trigger4ShowtalkaboutChgMainrole", 10);
+    panel:invoke4Lua(PanelGuid.trigger4ShowtalkaboutChgMainrole, 10);
   end;
 
 

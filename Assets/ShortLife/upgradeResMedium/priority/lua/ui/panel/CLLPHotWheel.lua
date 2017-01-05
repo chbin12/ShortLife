@@ -28,7 +28,7 @@ do
 
   function PanelHotWheel.show ()
     times = times + 1;
-    panel:invoke4Lua("hideSelf", MaxShowTime);
+    panel:invoke4Lua(PanelHotWheel.hideSelf, MaxShowTime);
   end;
 
   function PanelHotWheel.refresh ()
@@ -44,15 +44,15 @@ do
     if(times <= 0) then
       times = 0;
       -- NAlertTxt.add("hide PanelHotWheel==", Color.red, 2);
-      panel:cancelInvoke4Lua("");
+      panel:cancelInvoke4Lua();
       CLPanelManager.hidePanel(panel);
     else
-      panel:invoke4Lua("hideSelf", MaxShowTime);
+      panel:invoke4Lua(PanelHotWheel.hideSelf, MaxShowTime);
     end;
   end;
 
   function PanelHotWheel.hide ()
-    panel:cancelInvoke4Lua("");
+    panel:cancelInvoke4Lua();
   end;
 
   return PanelHotWheel;

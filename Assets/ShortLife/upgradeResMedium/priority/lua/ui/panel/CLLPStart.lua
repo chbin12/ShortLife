@@ -68,7 +68,7 @@ do
         -- CLUIDrag4World.setCanClickPanel("PanelBattle");
 
         -- 处理热更新
-        csSelf:invoke4Lua("updateRes", 0.2);
+        csSelf:invoke4Lua(PanelStart.updateRes, 0.2);
 
         -- 添加屏蔽字
         -- PanelStart.addShieldWords();
@@ -95,7 +95,7 @@ do
             local chanelPath = "channels.txt";
             csSelf:StartCoroutine(FileEx.readNewAllText(chanelPath, PanelStart.onGetCanUpgradeChannels));
         else
-            csSelf:invoke4Lua("updateRes", 0.3);
+            csSelf:invoke4Lua(PanelStart.updateRes, 0.3);
         end
     end
 
@@ -151,13 +151,13 @@ do
 
                     -- 表明已经更新完成
                     if (value == 1) then
-                        csSelf:cancelInvoke4Lua("onProgressCell");
+                        csSelf:cancelInvoke4Lua(PanelStart.onProgressCell);
                         NGUITools.SetActive(progressBarTotal.gameObject, false);
                         NGUITools.SetActive(LabelTip.gameObject, false);
                         NGUITools.SetActive(progressBar.gameObject, false);
                     end
                 else
-                    csSelf:cancelInvoke4Lua("onProgressCell");
+                    csSelf:cancelInvoke4Lua(PanelStart.onProgressCell);
                     progressBarTotal.value = 0;
                     NGUITools.SetActive(progressBarTotal.gameObject, false);
                     NGUITools.SetActive(LabelTip.gameObject, false);
@@ -173,11 +173,11 @@ do
         if (www4UpgradeCell ~= nil) then
             NGUITools.SetActive(progressBar.gameObject, true);
             progressBar.value = www4UpgradeCell.progress;
-            csSelf:cancelInvoke4Lua("onProgressCell");
-            csSelf:invoke4Lua("onProgressCell", 0.1);
+            csSelf:cancelInvoke4Lua(PanelStart.onProgressCell);
+            csSelf:invoke4Lua(PanelStart.onProgressCell, 0.1);
         else
             NGUITools.SetActive(progressBar.gameObject, false);
-            csSelf:cancelInvoke4Lua("onProgressCell");
+            csSelf:cancelInvoke4Lua(PanelStart.onProgressCell);
         end
     end
 
@@ -195,9 +195,9 @@ do
         else
             if (CLLVerManager.isHaveUpgrade()) then
                 -- 说明有更新，重新启动
-                csSelf:cancelInvoke4Lua("");
+                csSelf:cancelInvoke4Lua();
                 -- NAlertTxt.add("CLMain.self:reStart", Color.red, 1);
-                csSelf:invoke4Lua("reLoadGame", 0.3);
+                csSelf:invoke4Lua(PanelStart.reLoadGame, 0.3);
                 return;
             end
         end
@@ -231,7 +231,7 @@ do
             end
 
             if (progressBar ~= nil) then
-                csSelf:cancelInvoke4Lua("onProgressCell");
+                csSelf:cancelInvoke4Lua(PanelStart.onProgressCell);
                 NGUITools.SetActive(progressBar.gameObject, false);
                 NGUITools.SetActive(progressBarTotal.gameObject, false);
                 NGUITools.SetActive(LabelTip.gameObject, false);
@@ -260,7 +260,7 @@ do
         PanelStart.onProgress(table.getn(beforeLoadPanels), loadedPanelCount);
         if (loadedPanelCount >= table.getn(beforeLoadPanels)) then
             -- 页面已经加载完成，加载地图资源
-            csSelf:invoke4Lua("checkSignCode", 0.5);
+            csSelf:invoke4Lua(PanelStart.checkSignCode, 0.5);
         end
     end
 
@@ -311,7 +311,7 @@ do
 
     -- 关闭页面
     function PanelStart.hide()
-        csSelf:cancelInvoke4Lua("");
+        csSelf:cancelInvoke4Lua();
     end
 
     -- 刷新页面
@@ -431,7 +431,7 @@ do
         PanelStart.onProgress(count, panelIndex);
         if (panelIndex >= count) then
             --已经加载完
-             csSelf:invoke4Lua("doEnterGame", 0.01);
+             csSelf:invoke4Lua(PanelStart.doEnterGame, 0.01);
 --            clPrefabInit.init4MainCityRoles(PanelStart.doEnterGame, PanelStart.onProgress);
         end
     end

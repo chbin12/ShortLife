@@ -27,7 +27,7 @@ do
         dragSetting.canRotation = false;
         dragSetting.canScale = false;
         LabelContentTyperWriter.text = Localization.Get("OpeningPlot");
-        csSelf:invoke4Lua("showPlot", 5);
+        csSelf:invoke4Lua(CLLPOpeningPlot.showPlot, 5);
     end
 
     function CLLPOpeningPlot.showPlot()
@@ -58,7 +58,7 @@ do
         local goName = go.name;
         if (goName == "LabelContent") then
             -- typewriter finish
-            csSelf:invoke4Lua("hideLabelContent", 2);
+            csSelf:invoke4Lua(CLLPOpeningPlot.hideLabelContent, 2);
         end
     end
 

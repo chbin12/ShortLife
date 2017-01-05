@@ -107,7 +107,7 @@ do
         CLLScene.loadGround(currTerrain);
 
         CLLScene.newMap(currTerrain, speed, onFinishLoadMap);
-        --        csSelf:invoke4Lua("checkLeftSideTilesTimeout", tileTimeout, tileTimeout);
+        --        csSelf:invoke4Lua(CLLScene.checkLeftSideTilesTimeout, tileTimeout, tileTimeout);
     end
 
     -- 加载地表（水，草地。。。）
@@ -257,7 +257,7 @@ do
         local _sideRight = data[4];
 
         if (#(list) > i) then
-            csSelf:invoke4Lua("createTile", { list, i + 1, speed, onFinishLoadMap }, speed);
+            csSelf:invoke4Lua(CLLScene.createTile, { list, i + 1, speed, onFinishLoadMap }, speed);
         else
             -- 已经加载完成
             list = nil;
@@ -567,7 +567,7 @@ do
 
         CLLScene.releaseGroundOranmentWhenSoFar();
 
-        csSelf:invoke4Lua("checkLeftSideTilesTimeout", tileTimeout, tileTimeout);
+        csSelf:invoke4Lua(CLLScene.checkLeftSideTilesTimeout, tileTimeout, tileTimeout);
     end
 
     function CLLScene.releaseGroundOranmentWhenSoFar()
@@ -613,7 +613,7 @@ do
         specifiedShow = nil;
 
         RenderSettings.skybox = nil;
-        csSelf:cancelInvoke4Lua("");
+        csSelf:cancelInvoke4Lua();
         for k, tile in pairs(tiles) do
             NGUITools.SetActive(tile.gameObject, false);
             tile.luaTable.clean();

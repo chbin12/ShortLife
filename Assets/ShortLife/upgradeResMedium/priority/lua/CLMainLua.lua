@@ -142,7 +142,7 @@ do
 
             --主初始化完后，打开下一个页面
             -- CLMainLua.showPanelStart();
-            CLMain.self:invoke4Lua("showPanelStart", 0.5);
+            CLMain.self:invoke4Lua(CLMainLua.showPanelStart, 0.5);
         end
     end
 
