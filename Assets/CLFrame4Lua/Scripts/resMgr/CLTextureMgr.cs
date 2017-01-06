@@ -126,7 +126,7 @@ public class CLTextureMgr : MonoBehaviour
 			string path = paras [0].ToString ();
 			Texture tex = paras [1] as Texture;
 			CLTexture mat = paras [2] as CLTexture;
-			try {
+//			try {
 				if (mat != null && mat.material != null) {
 					mat.material.mainTexture = tex;
 					#if UNITY_EDITOR
@@ -160,9 +160,9 @@ public class CLTextureMgr : MonoBehaviour
 					callbackList.Clear ();
 					OnGetTextureCallbacks.removeDelegates (gameObject.GetInstanceID().ToString());
 				}
-			} catch (System.Exception e) {
-				Debug.LogError ("name===" + name + ",err:" + e);
-			}
+//			} catch (System.Exception e) {
+//				Debug.LogError ("name===" + name + ",err:" + e);
+//			}
 		}
 	}
 }

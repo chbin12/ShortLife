@@ -145,15 +145,19 @@ public class CLBodyPart
 
     void onSetPrefab(params object[] args) {
         Material mat = (Material)(args[1]);
-        if(mat != null) {
-            ArrayList list = (ArrayList)(args[2]);
-            Renderer render = (Renderer)(list[0]);
-            string name = list[1].ToString();
+		if (mat != null) {
+			ArrayList list = (ArrayList)(args [2]);
+			Renderer render = (Renderer)(list [0]);
+			string name = list [1].ToString ();
 //            setMat(render, name);
 			string shName = mat.shader.name;
 			render.material = mat;
-			render.material.shader =  Shader.Find(shName);
-        }
+			#if UNITY_EDITOR
+			render.material.shader = Shader.Find (shName);
+			#endif
+		} else {
+			Debug.LogWarning ("Get material is null: " + args[0]);
+		}
     }
 }
 

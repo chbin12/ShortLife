@@ -19,11 +19,11 @@ public class CLBaseLuaWrap
 			new LuaMethod("invoke4Lua", invoke4Lua),
 			new LuaMethod("getCoroutineIndex", getCoroutineIndex),
 			new LuaMethod("setCoroutineIndex", setCoroutineIndex),
+			new LuaMethod("getKey4InvokeMap", getKey4InvokeMap),
 			new LuaMethod("getCoroutines", getCoroutines),
 			new LuaMethod("setCoroutine", setCoroutine),
 			new LuaMethod("cleanCoroutines", cleanCoroutines),
 			new LuaMethod("rmCoroutine", rmCoroutine),
-			new LuaMethod("cancelInvoke4Lua2", cancelInvoke4Lua2),
 			new LuaMethod("cancelInvoke4Lua", cancelInvoke4Lua),
 			new LuaMethod("pause", pause),
 			new LuaMethod("regain", regain),
@@ -31,10 +31,10 @@ public class CLBaseLuaWrap
 			new LuaMethod("destoryLua", destoryLua),
 			new LuaMethod("fixedInvoke4Lua", fixedInvoke4Lua),
 			new LuaMethod("fixedInvoke", fixedInvoke),
-			new LuaMethod("cancelFixedInvoke4Lua2", cancelFixedInvoke4Lua2),
 			new LuaMethod("cancelFixedInvoke4Lua", cancelFixedInvoke4Lua),
 			new LuaMethod("FixedUpdate", FixedUpdate),
 			new LuaMethod("invokeByUpdate", invokeByUpdate),
+			new LuaMethod("cancelInvokeByUpdate", cancelInvokeByUpdate),
 			new LuaMethod("Update", Update),
 			new LuaMethod("New", _CreateCLBaseLua),
 			new LuaMethod("GetClassType", GetClassType),
@@ -555,62 +555,32 @@ public class CLBaseLuaWrap
 	{
 		int count = LuaDLL.lua_gettop(L);
 
-		if (count == 3 && LuaScriptMgr.CheckTypes(L, 1, typeof(CLBaseLua), typeof(LuaInterface.LuaFunction), typeof(float)))
+		if (count == 3)
 		{
 			CLBaseLua obj = (CLBaseLua)LuaScriptMgr.GetUnityObjectSelf(L, 1, "CLBaseLua");
-			LuaFunction arg0 = LuaScriptMgr.ToLuaFunction(L, 2);
-			float arg1 = (float)LuaDLL.lua_tonumber(L, 3);
+			object arg0 = LuaScriptMgr.GetVarObject(L, 2);
+			float arg1 = (float)LuaScriptMgr.GetNumber(L, 3);
 			Coroutine o = obj.invoke4Lua(arg0,arg1);
 			LuaScriptMgr.PushObject(L, o);
 			return 1;
 		}
-		else if (count == 3 && LuaScriptMgr.CheckTypes(L, 1, typeof(CLBaseLua), typeof(string), typeof(float)))
+		else if (count == 4)
 		{
 			CLBaseLua obj = (CLBaseLua)LuaScriptMgr.GetUnityObjectSelf(L, 1, "CLBaseLua");
-			string arg0 = LuaScriptMgr.GetString(L, 2);
-			float arg1 = (float)LuaDLL.lua_tonumber(L, 3);
-			Coroutine o = obj.invoke4Lua(arg0,arg1);
-			LuaScriptMgr.PushObject(L, o);
-			return 1;
-		}
-		else if (count == 4 && LuaScriptMgr.CheckTypes(L, 1, typeof(CLBaseLua), typeof(LuaInterface.LuaFunction), typeof(object), typeof(float)))
-		{
-			CLBaseLua obj = (CLBaseLua)LuaScriptMgr.GetUnityObjectSelf(L, 1, "CLBaseLua");
-			LuaFunction arg0 = LuaScriptMgr.ToLuaFunction(L, 2);
+			object arg0 = LuaScriptMgr.GetVarObject(L, 2);
 			object arg1 = LuaScriptMgr.GetVarObject(L, 3);
-			float arg2 = (float)LuaDLL.lua_tonumber(L, 4);
+			float arg2 = (float)LuaScriptMgr.GetNumber(L, 4);
 			Coroutine o = obj.invoke4Lua(arg0,arg1,arg2);
 			LuaScriptMgr.PushObject(L, o);
 			return 1;
 		}
-		else if (count == 4 && LuaScriptMgr.CheckTypes(L, 1, typeof(CLBaseLua), typeof(string), typeof(object), typeof(float)))
+		else if (count == 5)
 		{
 			CLBaseLua obj = (CLBaseLua)LuaScriptMgr.GetUnityObjectSelf(L, 1, "CLBaseLua");
-			string arg0 = LuaScriptMgr.GetString(L, 2);
+			object arg0 = LuaScriptMgr.GetVarObject(L, 2);
 			object arg1 = LuaScriptMgr.GetVarObject(L, 3);
-			float arg2 = (float)LuaDLL.lua_tonumber(L, 4);
-			Coroutine o = obj.invoke4Lua(arg0,arg1,arg2);
-			LuaScriptMgr.PushObject(L, o);
-			return 1;
-		}
-		else if (count == 5 && LuaScriptMgr.CheckTypes(L, 1, typeof(CLBaseLua), typeof(LuaInterface.LuaFunction), typeof(object), typeof(float), typeof(bool)))
-		{
-			CLBaseLua obj = (CLBaseLua)LuaScriptMgr.GetUnityObjectSelf(L, 1, "CLBaseLua");
-			LuaFunction arg0 = LuaScriptMgr.ToLuaFunction(L, 2);
-			object arg1 = LuaScriptMgr.GetVarObject(L, 3);
-			float arg2 = (float)LuaDLL.lua_tonumber(L, 4);
-			bool arg3 = LuaDLL.lua_toboolean(L, 5);
-			Coroutine o = obj.invoke4Lua(arg0,arg1,arg2,arg3);
-			LuaScriptMgr.PushObject(L, o);
-			return 1;
-		}
-		else if (count == 5 && LuaScriptMgr.CheckTypes(L, 1, typeof(CLBaseLua), typeof(string), typeof(object), typeof(float), typeof(bool)))
-		{
-			CLBaseLua obj = (CLBaseLua)LuaScriptMgr.GetUnityObjectSelf(L, 1, "CLBaseLua");
-			string arg0 = LuaScriptMgr.GetString(L, 2);
-			object arg1 = LuaScriptMgr.GetVarObject(L, 3);
-			float arg2 = (float)LuaDLL.lua_tonumber(L, 4);
-			bool arg3 = LuaDLL.lua_toboolean(L, 5);
+			float arg2 = (float)LuaScriptMgr.GetNumber(L, 4);
+			bool arg3 = LuaScriptMgr.GetBoolean(L, 5);
 			Coroutine o = obj.invoke4Lua(arg0,arg1,arg2,arg3);
 			LuaScriptMgr.PushObject(L, o);
 			return 1;
@@ -628,7 +598,7 @@ public class CLBaseLuaWrap
 	{
 		LuaScriptMgr.CheckArgsCount(L, 2);
 		CLBaseLua obj = (CLBaseLua)LuaScriptMgr.GetUnityObjectSelf(L, 1, "CLBaseLua");
-		LuaFunction arg0 = LuaScriptMgr.GetLuaFunction(L, 2);
+		object arg0 = LuaScriptMgr.GetVarObject(L, 2);
 		int o = obj.getCoroutineIndex(arg0);
 		LuaScriptMgr.Push(L, o);
 		return 1;
@@ -639,10 +609,22 @@ public class CLBaseLuaWrap
 	{
 		LuaScriptMgr.CheckArgsCount(L, 3);
 		CLBaseLua obj = (CLBaseLua)LuaScriptMgr.GetUnityObjectSelf(L, 1, "CLBaseLua");
-		LuaFunction arg0 = LuaScriptMgr.GetLuaFunction(L, 2);
+		object arg0 = LuaScriptMgr.GetVarObject(L, 2);
 		int arg1 = (int)LuaScriptMgr.GetNumber(L, 3);
 		obj.setCoroutineIndex(arg0,arg1);
 		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int getKey4InvokeMap(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 3);
+		CLBaseLua obj = (CLBaseLua)LuaScriptMgr.GetUnityObjectSelf(L, 1, "CLBaseLua");
+		object arg0 = LuaScriptMgr.GetVarObject(L, 2);
+		Hashtable arg1 = (Hashtable)LuaScriptMgr.GetNetObject(L, 3, typeof(Hashtable));
+		object o = obj.getKey4InvokeMap(arg0,arg1);
+		LuaScriptMgr.PushVarObject(L, o);
+		return 1;
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
@@ -650,7 +632,7 @@ public class CLBaseLuaWrap
 	{
 		LuaScriptMgr.CheckArgsCount(L, 2);
 		CLBaseLua obj = (CLBaseLua)LuaScriptMgr.GetUnityObjectSelf(L, 1, "CLBaseLua");
-		LuaFunction arg0 = LuaScriptMgr.GetLuaFunction(L, 2);
+		object arg0 = LuaScriptMgr.GetVarObject(L, 2);
 		Hashtable o = obj.getCoroutines(arg0);
 		LuaScriptMgr.PushObject(L, o);
 		return 1;
@@ -661,7 +643,7 @@ public class CLBaseLuaWrap
 	{
 		LuaScriptMgr.CheckArgsCount(L, 4);
 		CLBaseLua obj = (CLBaseLua)LuaScriptMgr.GetUnityObjectSelf(L, 1, "CLBaseLua");
-		LuaFunction arg0 = LuaScriptMgr.GetLuaFunction(L, 2);
+		object arg0 = LuaScriptMgr.GetVarObject(L, 2);
 		Coroutine arg1 = (Coroutine)LuaScriptMgr.GetNetObject(L, 3, typeof(Coroutine));
 		int arg2 = (int)LuaScriptMgr.GetNumber(L, 4);
 		obj.setCoroutine(arg0,arg1,arg2);
@@ -673,7 +655,7 @@ public class CLBaseLuaWrap
 	{
 		LuaScriptMgr.CheckArgsCount(L, 2);
 		CLBaseLua obj = (CLBaseLua)LuaScriptMgr.GetUnityObjectSelf(L, 1, "CLBaseLua");
-		LuaFunction arg0 = LuaScriptMgr.GetLuaFunction(L, 2);
+		object arg0 = LuaScriptMgr.GetVarObject(L, 2);
 		obj.cleanCoroutines(arg0);
 		return 0;
 	}
@@ -683,19 +665,9 @@ public class CLBaseLuaWrap
 	{
 		LuaScriptMgr.CheckArgsCount(L, 3);
 		CLBaseLua obj = (CLBaseLua)LuaScriptMgr.GetUnityObjectSelf(L, 1, "CLBaseLua");
-		LuaFunction arg0 = LuaScriptMgr.GetLuaFunction(L, 2);
+		object arg0 = LuaScriptMgr.GetVarObject(L, 2);
 		int arg1 = (int)LuaScriptMgr.GetNumber(L, 3);
 		obj.rmCoroutine(arg0,arg1);
-		return 0;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int cancelInvoke4Lua2(IntPtr L)
-	{
-		LuaScriptMgr.CheckArgsCount(L, 2);
-		CLBaseLua obj = (CLBaseLua)LuaScriptMgr.GetUnityObjectSelf(L, 1, "CLBaseLua");
-		string arg0 = LuaScriptMgr.GetLuaString(L, 2);
-		obj.cancelInvoke4Lua2(arg0);
 		return 0;
 	}
 
@@ -713,7 +685,7 @@ public class CLBaseLuaWrap
 		else if (count == 2)
 		{
 			CLBaseLua obj = (CLBaseLua)LuaScriptMgr.GetUnityObjectSelf(L, 1, "CLBaseLua");
-			LuaFunction arg0 = LuaScriptMgr.GetLuaFunction(L, 2);
+			object arg0 = LuaScriptMgr.GetVarObject(L, 2);
 			obj.cancelInvoke4Lua(arg0);
 			return 0;
 		}
@@ -766,37 +738,20 @@ public class CLBaseLuaWrap
 	{
 		int count = LuaDLL.lua_gettop(L);
 
-		if (count == 3 && LuaScriptMgr.CheckTypes(L, 1, typeof(CLBaseLua), typeof(LuaInterface.LuaFunction), typeof(float)))
+		if (count == 3)
 		{
 			CLBaseLua obj = (CLBaseLua)LuaScriptMgr.GetUnityObjectSelf(L, 1, "CLBaseLua");
-			LuaFunction arg0 = LuaScriptMgr.ToLuaFunction(L, 2);
-			float arg1 = (float)LuaDLL.lua_tonumber(L, 3);
+			object arg0 = LuaScriptMgr.GetVarObject(L, 2);
+			float arg1 = (float)LuaScriptMgr.GetNumber(L, 3);
 			obj.fixedInvoke4Lua(arg0,arg1);
 			return 0;
 		}
-		else if (count == 3 && LuaScriptMgr.CheckTypes(L, 1, typeof(CLBaseLua), typeof(string), typeof(float)))
+		else if (count == 4)
 		{
 			CLBaseLua obj = (CLBaseLua)LuaScriptMgr.GetUnityObjectSelf(L, 1, "CLBaseLua");
-			string arg0 = LuaScriptMgr.GetString(L, 2);
-			float arg1 = (float)LuaDLL.lua_tonumber(L, 3);
-			obj.fixedInvoke4Lua(arg0,arg1);
-			return 0;
-		}
-		else if (count == 4 && LuaScriptMgr.CheckTypes(L, 1, typeof(CLBaseLua), typeof(LuaInterface.LuaFunction), typeof(object), typeof(float)))
-		{
-			CLBaseLua obj = (CLBaseLua)LuaScriptMgr.GetUnityObjectSelf(L, 1, "CLBaseLua");
-			LuaFunction arg0 = LuaScriptMgr.ToLuaFunction(L, 2);
+			object arg0 = LuaScriptMgr.GetVarObject(L, 2);
 			object arg1 = LuaScriptMgr.GetVarObject(L, 3);
-			float arg2 = (float)LuaDLL.lua_tonumber(L, 4);
-			obj.fixedInvoke4Lua(arg0,arg1,arg2);
-			return 0;
-		}
-		else if (count == 4 && LuaScriptMgr.CheckTypes(L, 1, typeof(CLBaseLua), typeof(string), typeof(object), typeof(float)))
-		{
-			CLBaseLua obj = (CLBaseLua)LuaScriptMgr.GetUnityObjectSelf(L, 1, "CLBaseLua");
-			string arg0 = LuaScriptMgr.GetString(L, 2);
-			object arg1 = LuaScriptMgr.GetVarObject(L, 3);
-			float arg2 = (float)LuaDLL.lua_tonumber(L, 4);
+			float arg2 = (float)LuaScriptMgr.GetNumber(L, 4);
 			obj.fixedInvoke4Lua(arg0,arg1,arg2);
 			return 0;
 		}
@@ -821,16 +776,6 @@ public class CLBaseLuaWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int cancelFixedInvoke4Lua2(IntPtr L)
-	{
-		LuaScriptMgr.CheckArgsCount(L, 2);
-		CLBaseLua obj = (CLBaseLua)LuaScriptMgr.GetUnityObjectSelf(L, 1, "CLBaseLua");
-		string arg0 = LuaScriptMgr.GetLuaString(L, 2);
-		obj.cancelFixedInvoke4Lua2(arg0);
-		return 0;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int cancelFixedInvoke4Lua(IntPtr L)
 	{
 		int count = LuaDLL.lua_gettop(L);
@@ -844,7 +789,7 @@ public class CLBaseLuaWrap
 		else if (count == 2)
 		{
 			CLBaseLua obj = (CLBaseLua)LuaScriptMgr.GetUnityObjectSelf(L, 1, "CLBaseLua");
-			LuaFunction arg0 = LuaScriptMgr.GetLuaFunction(L, 2);
+			object arg0 = LuaScriptMgr.GetVarObject(L, 2);
 			obj.cancelFixedInvoke4Lua(arg0);
 			return 0;
 		}
@@ -870,26 +815,18 @@ public class CLBaseLuaWrap
 	{
 		int count = LuaDLL.lua_gettop(L);
 
-		if (count == 3 && LuaScriptMgr.CheckTypes(L, 1, typeof(CLBaseLua), typeof(LuaInterface.LuaFunction), typeof(float)))
+		if (count == 3)
 		{
 			CLBaseLua obj = (CLBaseLua)LuaScriptMgr.GetUnityObjectSelf(L, 1, "CLBaseLua");
-			LuaFunction arg0 = LuaScriptMgr.ToLuaFunction(L, 2);
-			float arg1 = (float)LuaDLL.lua_tonumber(L, 3);
-			obj.invokeByUpdate(arg0,arg1);
-			return 0;
-		}
-		else if (count == 3 && LuaScriptMgr.CheckTypes(L, 1, typeof(CLBaseLua), typeof(string), typeof(float)))
-		{
-			CLBaseLua obj = (CLBaseLua)LuaScriptMgr.GetUnityObjectSelf(L, 1, "CLBaseLua");
-			string arg0 = LuaScriptMgr.GetString(L, 2);
-			float arg1 = (float)LuaDLL.lua_tonumber(L, 3);
+			object arg0 = LuaScriptMgr.GetVarObject(L, 2);
+			float arg1 = (float)LuaScriptMgr.GetNumber(L, 3);
 			obj.invokeByUpdate(arg0,arg1);
 			return 0;
 		}
 		else if (count == 4)
 		{
 			CLBaseLua obj = (CLBaseLua)LuaScriptMgr.GetUnityObjectSelf(L, 1, "CLBaseLua");
-			LuaFunction arg0 = LuaScriptMgr.GetLuaFunction(L, 2);
+			object arg0 = LuaScriptMgr.GetVarObject(L, 2);
 			object arg1 = LuaScriptMgr.GetVarObject(L, 3);
 			float arg2 = (float)LuaScriptMgr.GetNumber(L, 4);
 			obj.invokeByUpdate(arg0,arg1,arg2);
@@ -898,6 +835,32 @@ public class CLBaseLuaWrap
 		else
 		{
 			LuaDLL.luaL_error(L, "invalid arguments to method: CLBaseLua.invokeByUpdate");
+		}
+
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int cancelInvokeByUpdate(IntPtr L)
+	{
+		int count = LuaDLL.lua_gettop(L);
+
+		if (count == 1)
+		{
+			CLBaseLua obj = (CLBaseLua)LuaScriptMgr.GetUnityObjectSelf(L, 1, "CLBaseLua");
+			obj.cancelInvokeByUpdate();
+			return 0;
+		}
+		else if (count == 2)
+		{
+			CLBaseLua obj = (CLBaseLua)LuaScriptMgr.GetUnityObjectSelf(L, 1, "CLBaseLua");
+			object arg0 = LuaScriptMgr.GetVarObject(L, 2);
+			obj.cancelInvokeByUpdate(arg0);
+			return 0;
+		}
+		else
+		{
+			LuaDLL.luaL_error(L, "invalid arguments to method: CLBaseLua.cancelInvokeByUpdate");
 		}
 
 		return 0;

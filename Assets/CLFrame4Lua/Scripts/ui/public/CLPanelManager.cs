@@ -551,20 +551,22 @@ public class CLPanelManager :MonoBehaviour
 				return p;
 			}
 		}
-		if (self.isUnity3dType) {
-			string path = PStr.begin().a(PathCfg.persistentDataPath).a("/")
-				.a(PathCfg.self.panelDataPath).a(PathCfg.self.platform).a("/").a(pName).a(".unity3d").end();
-#if UNITY_EDITOR
-			path = path.Replace("/upgradeRes/", "/upgradeRes4Publish/");
-#endif
-			AssetBundle ab = AssetBundle.LoadFromFile(path);
-#if UNITY_EDITOR
-			if(ab == null) {
-				Debug.LogError(pName + " is null");
-			}
-#endif
-			return onGetPanel(pName, ab, null, null);
-		}
+//		if (self.isUnity3dType) {
+//#if !UNITY_ANDROID
+//			string path = PStr.begin().a(PathCfg.persistentDataPath).a("/")
+//				.a(PathCfg.self.panelDataPath).a(PathCfg.self.platform).a("/").a(pName).a(".unity3d").end();
+//#if UNITY_EDITOR
+//			path = path.Replace("/upgradeRes/", "/upgradeRes4Publish/");
+//#endif
+//			AssetBundle ab = AssetBundle.LoadFromFile(path);
+//#if UNITY_EDITOR
+//			if(ab == null) {
+//				Debug.LogError(pName + " is null");
+//			}
+//#endif
+//			return onGetPanel(pName, ab, null, null);
+//#endif
+//		}
         return null;
 	}
 
